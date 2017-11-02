@@ -29,6 +29,11 @@ a:hover {
   color: #fff;
 }
 
+ul {
+
+  list-style-type: none;
+}
+
 /* Custom default button */
 .button-default {
   font-size: 25px;

@@ -7,8 +7,9 @@
     <meta name="author" content="Keiwan Donyagard">
     <link rel="icon" href="resources/images/favicon2.ico">
 
-    <title>{{ layout.title }}</title>
+    <title>{{ layout.title | default: page.title }}</title>
 
     <link href="libraries/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="resources/css/default.css" rel="stylesheet">
+    {{ layout.addedCSS }}
 </head>
