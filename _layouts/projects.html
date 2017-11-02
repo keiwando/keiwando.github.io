@@ -1,0 +1,40 @@
+---
+layout: default-no-footer
+title: Projects
+pageName: projects
+addedCSS: <link href="resources/css/projects.css" rel="stylesheet">
+addedScript: <script src="resources/js/projects.js"></script>
+---
+
+<div id="projects-container">
+	
+	{% include project-filter.html %}
+
+	<div class="projects-grid">
+		
+		{% for project in site.data.projects %}
+
+		<a href= {{ project.link }} class="{{ project.filters }}">
+	      <div class="project-container" id={{ project.id }}>
+	          
+	        <div class="image-container">
+	          <span class="centerer"></span>
+	          
+	          {% if project.imgSrc %}
+	          <img class="centered" src={{ project.imgSrc }}>
+	          {% endif %}
+	          
+	        </div>
+
+	        <div class="description-container">
+	          <p>{{ project.description }}<p>
+	          <p class="subtitle-description">{{ project.subtitle-description }}</p>
+	        </div>
+	      </div>
+	    </a>
+
+		{% endfor %}
+
+	</div>
+
+</div>

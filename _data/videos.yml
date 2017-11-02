@@ -1,0 +1,53 @@
+- id: evolution-project
+  link: https://www.youtube.com/watch?v=yQTurXpXd1M
+  filters: other-filter
+  description: Evolution
+  subtitle-description: Neural Networks. Genetic Algorithm.
+
+- id: zu-spaet-project
+  link: https://youtu.be/Em-5sARCoBY
+  filters: german-filter short-film-filter
+  description: ZU SPÄT
+  subtitle-description: Bullying
+
+- id: expressionism-project
+  link: https://youtu.be/SMqcqHa-ul4
+  filters: german-filter educational-filter
+  description: Expressionismus
+  subtitle-description: Literatur. Kunst. Musik.
+
+- id: got-piano-project
+  link: https://youtu.be/aMw1NCIy8Z8
+  filters: other-filter
+  description: Game of Thrones
+  subtitle-description: Piano
+
+- id: change-project
+  link: https://youtu.be/IELO0I-3Mxg
+  filters: animation-filter short-film-filter
+  description: Change
+  subtitle-description: "99"
+
+- id: just-a-game-project
+  link: https://youtu.be/dbFIRiBIqwk
+  filters: animation-filter short-film-filter
+  description: Just a Game
+  subtitle-description: Drones
+
+- id: rhino-project
+  link: https://youtu.be/t3tdoetMhIk
+  filters: animation-filter
+  description: Rhinoceros
+  subtitle-description: Poaching
+
+- id: verwandlung-project
+  link: https://youtu.be/7GR4O0eykD4
+  filters: short-film-filter german-filter
+  description: Die Verwandlung
+  subtitle-description: Gregor!
+
+- id: huayra-project
+  link: https://youtu.be/lrXmU0JoxJM
+  filters: other-filter
+  description: Pagani Huayra Drawing
+  subtitle-description: Time lapse
