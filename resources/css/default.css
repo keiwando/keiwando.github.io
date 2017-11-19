@@ -212,6 +212,9 @@ ul {
   background-color: #222;
 }
 
+.social-media-list {
+  margin-left: -40px;
+}
 
 /*
 *	CAROUSEL
@@ -277,8 +280,54 @@ ul {
   position: relative;
   color: rgba(0,0,0,.75);
   padding: 30px;
+  padding-left: 0px;
+  padding-right: 0px;
   z-index: 10;
   margin-top: 100vh;
+}
+
+.standard-text a {
+  color: black;
+}
+
+.standard-text a:hover, a:visited, a:link, a:active {
+  text-decoration: none;
+}
+
+.standard-text h2 {
+  font-family: "Lovelo";
+}
+
+.standard-text ul {
+
+  text-align: center;
+  margin: auto;
+  max-width: 500px;
+}
+
+.standard-text ul li {
+  display: inline-block;
+}
+
+.image-container-block {
+
+  width: 100vw;
+  height: 290px;
+  
+  max-height: 55vw;
+
+  background-color: #1f1f1f;
+
+  overflow: hidden;
+  border-radius: 0px;
+}
+
+.image-container-block img {
+
+  width: 90%;
+  max-width: 500px;
+  
+  margin: 20px auto;
 }
 
 .fill {
@@ -297,7 +346,7 @@ ul {
 }
 
 .scrollable-size {
-  height: 1000px;
+  height: 100vh;
 }
 
 .window {
