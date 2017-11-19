@@ -1,0 +1,37 @@
+---
+layout: default-no-masthead
+title: Evolution Gifs
+pageName: projects
+addedCSS: <link href="resources/css/evolution-gifs.css" rel="stylesheet">
+addedScript: <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+---
+
+<h1><a href="https://keiwan.itch.io/evolution">Evolution Gifs</a></h1>
+
+<div id="gif-container-grid">
+
+	{% for gif in site.data.evolution-gifs %}
+
+	<div class="gif-container">
+		<a href={{ gif.pageLink }} target="_blank">
+			<img src={{ gif.gifLink }}>	
+		</a>
+	</div>
+
+	{% endfor %}
+
+	{% for embedded in site.data.evolution-gif-tweets %}
+
+	<!--<div class="gif-container">
+		<blockquote class="twitter-tweet" data-lang="de">
+			{{ embedded }}
+		</blockquote>
+	</div>-->
+
+	{% endfor %}
+	
+</div>
+
+<iframe class="itch-embed" frameborder="0" src="https://itch.io/embed/91201" width="552" height="167"></iframe>
+
+<h3><a href="index.html">Home</a></h3>

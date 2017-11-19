@@ -1,0 +1,53 @@
+@font-face {
+  font-family: "BebasNeue";
+  src: url("fonts/BebasNeue.otf") format("opentype");
+}
+
+a:hover, a:visited, a:link, a:active {
+    text-decoration: none;
+}
+
+h1 {
+	font-family: "BebasNeue";
+	font-size: 40px;
+}
+
+#gif-container-grid {
+	
+	min-width: 100%;
+	min-height: 100%;
+	overflow: hidden;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+.gif-container {
+
+	max-width: 24%;
+	max-height: 30%;
+
+	margin: 5px 5px 5px 5px;
+
+	float: left;
+}
+
+.gif-container a img {
+
+	max-width: 100%;
+}
+
+.itch-embed {
+	margin-top: 20px;
+	max-width: 100%;
+}
+
+@media(max-width: 500px) {
+
+	.gif-container {
+
+		max-width: 43%;
+		max-height: 30%;
+	}
+}
+
