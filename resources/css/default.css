@@ -309,12 +309,19 @@ ul {
   display: inline-block;
 }
 
+.highlightable-text {
+  transition: 0.3s;
+}
+
+.highlightable-text:hover {
+  color: rgb(243, 156, 18);
+  transition: 0.3s;
+}
+
 .image-container-block {
 
   width: 100vw;
-  height: 290px;
-  
-  max-height: 55vw;
+  height: auto;
 
   background-color: #1f1f1f;
 
@@ -324,9 +331,38 @@ ul {
 
 .image-container-block img {
 
-  width: 90%;
-  max-width: 500px;
+  width: auto;
+  height: auto;
+  max-width: 35%;
+  max-height: 90%;
   
+  margin: 20px auto;
+
+  transition: 0.3s;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.image-container-block img:hover {
+
+  -webkit-transform: scale(0.95); /* Saf3.1+, Chrome */
+     -moz-transform: scale(0.95); /* FF3.5+ */
+      -ms-transform: scale(0.95); /* IE9 */
+       -o-transform: scale(0.95); /* Opera 10.5+ */
+          transform: scale(0.95);
+
+  margin: 20px auto;
+  transition: 0.3s;
+}
+
+.image-container-block .evolution-preview-gif {
+  height: auto;
+  width: auto;
+  max-width: 25%;
+  max-height: 10vw;
+
+  display: inline-block;
+
   margin: 20px auto;
 }
 
@@ -346,7 +382,7 @@ ul {
 }
 
 .scrollable-size {
-  height: 100vh;
+  /*height: 100vh;*/
 }
 
 .window {
@@ -391,6 +427,8 @@ ul {
     visibility: hidden;
     width: 0px;
     height: 0px;
+    padding: 0px;
+    margin: 0px;
   }
 
   .show-on-mobile {
@@ -553,6 +591,27 @@ ul {
     margin-top: 0px;
   }
 
+  .image-container-block { 
+
+    height: auto;
+    max-height: none;
+
+  }
+
+  .image-container-block img {
+  
+    width: auto;
+    height: auto;
+    max-width: 90%;
+    display: block;
+  }
+
+  .image-container-block .evolution-preview-gif {
+    height: auto;
+    width: 90%;
+    max-width: 90%;
+    max-height: 50vh;
+  }
 
   /*
     ANIMATIONS
