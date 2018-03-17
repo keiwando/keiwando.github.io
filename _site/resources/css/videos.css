@@ -1,0 +1,71 @@
+#evolution-project .image-container {
+	background-image: url('../images/evolution-thumb.png');
+}
+
+#zu-spaet-project .description-container {
+	background-color: #1f1f1f;
+}
+
+#zu-spaet-project .image-container {
+	background-image: url('../images/zu-spaet-thumb.jpg');
+}
+
+#zu-spaet-project .description-container {
+	background-color: #A39C7F;
+}
+
+#expressionism-project .image-container {
+	background-image: url('../images/expressionism-thumb.jpg');
+}
+
+#expressionism-project .description-container {
+	background-color: #F39C12;
+}
+
+#got-piano-project .image-container {
+	background-image: url('../images/got-thumb.jpg');
+}
+
+#got-piano-project .description-container {
+	background-color: #93BBC9;
+}
+
+#change-project .image-container {
+	background-image: url('../images/change-thumb.jpg');
+}
+
+#change-project .description-container {
+	background-color: #F39C12;
+}
+
+#just-a-game-project .image-container {
+	background-image: url('../images/just-a-game-thumb.jpg');
+}
+
+#just-a-game-project .description-container {
+	background-color: #F39C12;
+}
+
+#rhino-project .image-container {
+	background-image: url('../images/rhino-thumb.png');
+}
+
+#rhino-project .description-container {
+	background-color: #A6D2D4;
+}
+
+#verwandlung-project .image-container {
+	background-image: url('../images/verwandlung-thumb.jpg');
+}
+
+#verwandlung-project .description-container {
+	background-color: #524236;
+}
+
+#huayra-project .image-container {
+	background-image: url('../images/huayra-thumb.jpg');
+}
+
+#huayra-project .description-container {
+	background-color: #FC6C70;
+}

@@ -1,0 +1,307 @@
+div {
+	-webkit-transition: 0.2s ease-out;
+	-moz-transition: 0.2s ease-out;
+	-ms-transition:  0.2s ease-out;
+	-o-transition: 0.2s ease-out;
+	transition: 0.2s ease-out;
+}
+
+a:hover,
+a:focus {
+	text-decoration: none;
+}
+
+
+#filter-container {
+	position: relative;
+	background-color: #2a2b2d;
+	height: 100px;
+	color: white;
+	font-family: "OpenSans";
+}
+
+.filter-controls {
+	font-size: 13px;
+	position: absolute;
+	bottom: 10px;
+	left: 50%;
+	color: #d1d1d1;
+}
+
+/*.filter-controls p {
+	word-spacing: 1vw;
+}*/
+
+.filter-controls p a {
+	padding-left: 1vw;
+}
+
+#selected-filter {
+	left: 20%;
+	bottom: 3px;
+	font-size: 20px;
+}
+
+
+/* Projects */
+
+#projects-container {
+	position: relative;
+	padding-top: 50px;
+}
+
+.projects-grid {
+	position: relative;
+	width: 100vw;
+	overflow: auto;
+	background-color: white;
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+/** Container for a single project. */
+.project-container {
+	text-align: center;
+	position: relative;
+	overflow: hidden;
+	float: left;
+	width: 25vw;
+	height: 17vw;
+	background-color: white;
+}
+
+.project-container p {
+	margin: 0;
+}
+
+.image-container {
+	top: 0;
+	text-align: center;
+	position: relative;
+	height: 100%;
+	width: 100%;
+	background-size: cover;
+	background-position: center;
+	transition: 0.2s ease-out;
+}
+
+.image-container img {
+	width: 30%;
+	transition: 0.2s ease-out;
+}
+
+.project-container:hover .image-container {
+	/*padding-bottom: 40%;*/
+	top: -10%;	
+}
+
+.project-container:hover .description-container {
+	bottom: 0;
+}
+
+/*.project-container img {
+	position: absolute;
+	width: 25%;
+	height: auto;
+	bottom: 0;
+
+	transition: 0.2s ease-out;
+}*/
+
+
+
+
+
+.description-container {
+	position: absolute;
+	bottom: -25%;
+	background-color: yellow;
+	width: 100%;
+	height: 25%;
+	text-align: left;
+	font-size: 1.2vw;
+	letter-spacing: 2px;
+	padding-left: 4%;
+	padding-top: 4%;
+}
+
+.description-container .subtitle-description {
+	font-size: 0.7vw;
+	color: rgba(256, 256, 256, 0.8);
+}
+
+.oversize-centered {
+	position: absolute;
+	min-width: 100%;
+	min-height: 100%;
+    top: -100px;
+    bottom: -100px;
+    left: -100px;
+    right: -100px;
+
+    margin: auto;
+}
+
+
+/** Specific project styles */
+#lob-project .image-container {
+	background-image: url('../images/lob_background_blurred.png');
+}
+
+#lob-project .description-container {
+	background-color: #CF6B1C;
+}
+
+#sheets-project img {
+	width: 40%;
+}
+
+#sheets-project .image-container {
+	background-color: white;
+}
+
+#sheets-project .description-container {
+	background-color: #031C24;
+}
+
+#evolution-project .image-container {
+	background-color: #1f1f1f;
+	/*background-image: url('../images/evolution-icon.png');*/
+}
+
+#evolution-project .description-container {
+	background-color: #a82825; /*#c82622;*/
+}
+
+#rocket-project .image-container {
+	background-image: url('../images/rocket-banner.png');
+}
+
+#rocket-project .description-container {
+	background-color: #3C252B;
+}
+
+#musicgenerator-project .image-container {
+	background-image: url('../images/musicgenerator-thumb.jpg');
+}
+
+#musicgenerator-project .description-container {
+	background-color: #333333;
+}
+
+#personal-website-project .image-container {
+	background-image: url('../images/this-website.png');
+}
+
+#personal-website-project .description-container {
+	background-color: #F39C12;
+}
+
+/**#lob-project img {
+
+	width: 10vw;
+	height: 10vw;
+}*/
+
+.centerer {
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.centered {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#github-link {
+	padding-top: 2vw;
+}
+
+
+@media (max-width: 420px) {
+
+	#projects-container {
+		padding-top: 0px;
+	}
+
+	#filter-container {
+		height: 50px;
+	}
+
+	.filter-controls {
+		font-size: 10px;
+		position: absolute;
+		bottom: 10px;
+		left: 20vw;
+		color: #d1d1d1;
+	}
+
+	.filter-controls p a {
+		padding-left: 1vw;
+	}
+
+	#selected-filter {
+		left: 10%;
+		bottom: 7px;
+		font-size: 15px;
+	}
+
+	.project-container {
+		width: 50vw;
+		height: 34vw;
+	}
+
+	/** No hovering on mobile. */
+	/**
+	.project-container .image-container {
+		
+		top: -10%;	
+	}
+
+	.project-container .description-container {
+		bottom: 0;
+	}*/
+
+	/** Descriptions */
+
+	.description-container {
+		font-size: 2.5vw;
+	}
+
+	.description-container .subtitle-description {
+		
+		font-size: 2vw;
+	}
+}
+
+@media (max-width: 400px) {
+	.project-container {
+		width: 100vw;
+		height: 68vw;
+	}
+
+	.description-container {
+		font-size: 5vw;
+	}
+
+	.description-container .subtitle-description {
+		
+		font-size: 3vw;
+	}
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
