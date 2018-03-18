@@ -677,14 +677,19 @@ ul {
  */
 .icon > svg {
   display: inline-block;
-  vertical-align: middle; }
+  vertical-align: middle; 
+  max-width: 20px;
+  max-height: 20px;
+}
   .icon > svg path {
     fill: #828282; }
 
 .social-media-list .icon {
-  padding-right: 5px; }
+  padding-right: 5px; 
+}
 .social-media-list li + li {
-  padding-top: 5px; }
+  padding-top: 5px; 
+}
 
 
 
