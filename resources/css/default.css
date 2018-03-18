@@ -698,6 +698,11 @@ ul {
   max-height: 20px; 
 }
 
+.contact-list,
+.social-media-list {
+  list-style: none;
+  margin-left: 0; }
+
 .social-media-list a:hover {
     text-decoration: none; }
     .social-media-list a:hover .username {
