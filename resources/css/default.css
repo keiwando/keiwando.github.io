@@ -698,6 +698,11 @@ ul {
   max-height: 20px; 
 }
 
+.social-media-list a:hover {
+    text-decoration: none; }
+    .social-media-list a:hover .username {
+      text-decoration: underline; }
+
 
 
 
