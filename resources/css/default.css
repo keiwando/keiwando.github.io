@@ -691,6 +691,7 @@ ul {
   padding-right: 5px; 
   max-width: 20px;
   max-height: 20px;
+  display: inline-block;
 }
 .social-media-list li + li {
   padding-top: 5px;
