@@ -271,6 +271,10 @@ ul {
   margin-bottom: 50px;
 }
 
+.carousel-caption .smaller-h1 {
+  font-size: 5em;
+}
+
 .carousel-control {
   margin-right: -50px;
   margin-left: -50px;
@@ -671,13 +675,15 @@ ul {
     padding: 3vw;
   }
 
+  .carousel-caption .smaller-h1 {
+    font-size: 2em;
+  }
+
   .button-default {
     border-color: rgba(256,256,256,0.8);
     font-size: 5vw;
     padding: 5vw;
   }
-
-
 }
 
 
