@@ -91,7 +91,7 @@ $(document).ready(function(){
         var offset = 20;
         var opacity = "" + 100/(Math.abs(top - $('carousel').height()));
         var text = $('.item').find('.carousel-caption');
-        console.log("top: " + top + " opacity " + opacity);
+        //console.log("top: " + top + " opacity " + opacity);
 
         var textPosition = (Math.abs(top)/6).toFixed(0);
         //text.css('transform','translateY(' + textPosition + "px)");
@@ -103,15 +103,16 @@ $(document).ready(function(){
         
 
         if (top >= offset) {
-            $('.masthead').addClass('scroll-masthead');
-            $('#K').addClass("hidden");
-            $('#K_blk').removeClass("hidden");
-            $('.menu-button').addClass("scrolling");
+
+          if (!$('.masthead').hasClass('scroll-masthead')) {
+            activateScrollMasthead();
+          }
+            
         } else {
-            $('.masthead').removeClass('scroll-masthead');
-            $('#K').removeClass("hidden");
-            $('#K_blk').addClass("hidden");
-            $('.menu-button').removeClass("scrolling");
+
+          if ($('.masthead').hasClass('scroll-masthead')) {
+            deactivateScrollMasthead();
+          }
         }
       }    
 
