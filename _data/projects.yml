@@ -32,7 +32,7 @@
   subtitle-description: Random
 
 - id: personal-website-project
-  link: #
+  link: "#"
   filters: web-filter
   description: This Website
   subtitle-description: Recursion
