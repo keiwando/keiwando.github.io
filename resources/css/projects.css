@@ -226,7 +226,7 @@ a:focus {
 
 /** Specific project styles */
 #lob-project .image-container {
-	background-image: url('../images/lob_background_blurred.png');
+	background-image: url('../images/lob_background_blurred_small.jpg');
 }
 
 #lob-project .description-container {
@@ -255,7 +255,7 @@ a:focus {
 }
 
 #rocket-project .image-container {
-	background-image: url('../images/rocket-banner.png');
+	background-image: url('../images/rocket-banner_small.jpg');
 }
 
 #rocket-project .description-container {
@@ -271,7 +271,7 @@ a:focus {
 }
 
 #personal-website-project .image-container {
-	background-image: url('../images/this-website.png');
+	background-image: url('../images/this-website_small.jpg');
 }
 
 #personal-website-project .description-container {

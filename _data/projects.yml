@@ -1,7 +1,7 @@
 - id: lob-project
   link: https://keiwan.itch.io/library-of-babel-3d
   filters: multiplatform-filter ios-filter android-filter
-  imgSrc: resources/images/lob-icon.png
+  imgSrc: resources/images/lob-icon_small.png
   description: Library of Babel
   subtitle-description: The Universe
 
@@ -15,7 +15,7 @@
 - id: evolution-project
   link: http://keiwan.itch.io/evolution
   filters: web-filter multiplatform-filter ios-filter android-filter
-  imgSrc: resources/images/evolution-icon.png
+  imgSrc: resources/images/evolution-icon_small.jpg
   description: Evolution
   subtitle-description: Neural Network. Genetic Algorithm.
 
