@@ -72,6 +72,21 @@ ul {
   text-decoration: none;
 }
 
+@media (max-width: 1200px) {
+  .button-default {
+    font-size: 2.1vw;
+    padding: 2vw;
+  }
+}
+
+@media (max-width: 500px) {
+  .button-default {
+    border-color: rgba(256,256,256,0.8);
+    font-size: 5vw;
+    padding: 5vw;
+  }
+}
+
 .smaller-button-text {
   font-size: 18px;
 }
@@ -111,6 +126,24 @@ ul {
     transition: 0.3s ease-out;
 }
 
+@media (max-width: 640px) {
+
+  .masthead {
+    position: relative;
+    padding-top: 16px;
+    padding-bottom: 10px;
+  }
+
+  .scroll-masthead {
+    padding-top: 12px;
+    padding-bottom: 4px;
+  }
+
+  .scroll-masthead .masthead-brand {
+    font-size: 35px;
+  }
+}
+
 .masthead-brand {
   float: left;
   margin-left: 2px;
@@ -120,6 +153,14 @@ ul {
   /*color: rgba(140, 218, 235,1);*/
   color: rgba(256,256,256,1);
   transition: 0.3s ease-out;
+}
+
+@media (max-width: 640px) {
+  .masthead-brand {
+    margin: 0px;
+    margin-top: 10px;
+    display: inline-block;
+  }
 }
 
 .masthead-nav {
@@ -177,10 +218,25 @@ ul {
   box-shadow: 0px -1px 12px -6px rgba(61,61,61,1); 
 }
 
+@media (max-width: 640px) {
+
+  .scroll-masthead {
+    padding-top: 12px;
+    padding-bottom: 4px;
+  }
+}
+
 .scroll-masthead  .masthead-brand {
   transition: 0.3s ease-out;
   color: rgba(32 ,32 ,32 ,1);
   font-size: 30px;
+}
+
+@media (max-width: 640px) {
+
+  .scroll-masthead .masthead-brand {
+    font-size: 35px;
+  }
 }
 
 .scroll-masthead .logo {
@@ -248,6 +304,13 @@ ul {
   position: fixed;
 }
 
+@media(max-width: 640px) {
+  .carousel {
+    position: relative;
+    margin-top: -61px;
+  }
+}
+
 .carousel.noparallax {
   position: relative;
 }
@@ -255,10 +318,52 @@ ul {
 .carousel,
 .item, 
 .active{
-  height:100%;
+  height: 100%;
 }
 .carousel-inner{
-  height:100%;
+  height: 100%;
+  background-size: cover;
+}
+
+.carousel-inner #sheet-slide {
+  background-image: url("../images/sheets_backdrop.jpg");
+}
+
+@media(max-width: 640px) {
+  .carousel-inner #sheet-slide {
+    background-image: url("../images/sheets_backdrop_vert.jpg");
+  }  
+}
+
+.carousel-inner #evolution-slide {
+  background-image: url("../images/evolution_backdrop3.jpg");
+}
+
+@media(max-width: 640px) {
+  .carousel-inner #evolution-slide {
+    background-image: url("../images/evolution_backdrop_vert.jpg");
+  }  
+}
+
+.carousel-inner #lob-slide {
+  background-image: url("../images/LOB1.jpg");
+}
+
+@media (max-width: 640px),
+(max-width: 768px) and (min-height: 768px) {
+  .carousel-inner #lob-slide {
+    background-image: url("../images/lob_backdrop_vert.jpg");
+  }  
+}
+
+.carousel-inner #youtube-slide {
+  background-image: url("../images/camera1.jpg");
+}
+
+@media(max-width: 640px) {
+  .carousel-inner #youtube-slide {
+    background-image: url("../images/youtube_backdrop_vert.jpg");
+  }  
 }
 
 .full-screen {
@@ -278,13 +383,61 @@ ul {
   top: 40%;
 }
 
+@media (max-width: 768px) {
+  .carousel-caption {
+    top: 55%;
+  }
+}
+
+@media (max-width: 500px){
+  .carousel-caption {
+    top: 50%;
+  }
+}
+
 .carousel-caption > h1 {
   font-size: 100px;
   margin-bottom: 50px;
 }
 
+@media (max-width: 1200px) {
+
+  .carousel-caption > h1 {
+    font-size: 8.3vw;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .carousel-caption > h1 {
+    font-size: 80px;
+  }
+}
+
+@media (max-width: 500px){
+
+  .carousel-caption > h1 {
+    font-size: 12vw;
+    margin-bottom: 30px;
+    padding: 3vw;
+  }
+}
+
 .carousel-caption .smaller-h1 {
   font-size: 5em;
+  top: 45%;
+}
+
+@media (max-width: 500px){
+  .carousel-caption .smaller-h1 {
+    font-size: 3em;
+  }
+}
+
+@media (max-width: 350px) {
+  .carousel-caption .smaller-h1 {
+    font-size: 2.5em;
+  }
 }
 
 .carousel-control {
@@ -428,26 +581,11 @@ ul {
   display: none;
 }
 
-/*
-  Responsive CSS
-*/
-@media (max-width: 1200px) {
- 	.masthead {
-		/*border: 2px solid red;*/
-	}
+@media (max-width: 640px) {
 
-  .carousel-caption > h1 {
-    font-size: 8.3vw;
-    margin-bottom: 50px;
+  .show-on-mobile {
+    display: block;
   }
-
-  .button-default {
-    font-size: 2.1vw;
-    padding: 2vw;
-  }
-}
-
-@media (max-width: 768px) {
   
   .hide-on-mobile {
     visibility: hidden;
@@ -456,17 +594,17 @@ ul {
     padding: 0px;
     margin: 0px;
   }
+}
 
-  .show-on-mobile {
-    display: block;
-  }
 
-  /* MENU */
+
+@media (max-width: 640px) {
 
   #menu {
     min-height: 100vh;
     width: 100vw;
     position: fixed;
+    overflow-y: scroll;
     background-color: #1f1f1f;/*rgba(50,50,50,1);*/
     transform: translateY(-100vh);
     z-index: 50;
@@ -574,44 +712,7 @@ ul {
     padding: 0px;
     margin: 0 auto;
     margin-top: 5px;
-   }
-
-  .masthead {
-    position: relative;
-    padding-top: 16px;
-    padding-bottom: 10px;
   }
-
-  .masthead-brand {
-    margin: 0px;
-    margin-top: 10px;
-    display: inline-block;
-  }
-
-  .scroll-masthead {
-    padding-top: 12px;
-    padding-bottom: 4px;
-  }
-
-  .scroll-masthead .masthead-brand {
-    font-size: 35px;
-  }
-
-
-  /*
-    CAROUSEL
-  */
-
-  .carousel {
-    position: relative;
-    margin-top: -61px;
-  }
-
-  .carousel-caption > h1 {
-    font-size: 60px;
-    margin-bottom: 50px;
-  }
-
 
   .standard-text {
     margin-top: 0px;
@@ -642,7 +743,6 @@ ul {
   /*
     ANIMATIONS
   */
-
 
   .sandwich-button span {
     -webkit-transition-duration: 0s; transition-duration: 0s;
@@ -676,30 +776,7 @@ ul {
 
 }
 
-@media (max-width: 500px){
-  .carousel-caption {
-    top: 30%;
-  }
-
-  .carousel-caption > h1 {
-    font-size: 10vw;
-    margin-bottom: 30px;
-    padding: 3vw;
-  }
-
-  .carousel-caption .smaller-h1 {
-    font-size: 2em;
-  }
-
-  .button-default {
-    border-color: rgba(256,256,256,0.8);
-    font-size: 5vw;
-    padding: 5vw;
-  }
-}
-
-
-/* GITHUB PAGES BUG */
+/* GITHUB PAGES FIX -- The updated version of the jekyll theme on GitHub Pages apparently doesn't contain some of the assets anymore. */
 /**
  * Icons
  */

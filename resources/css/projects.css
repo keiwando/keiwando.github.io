@@ -28,6 +28,12 @@ a:focus {
 	color: #d1d1d1;
 }
 
+@media(max-width: 768px) {
+	.filter-controls {
+		left: 40%;	
+	}
+}
+
 .filter-controls p a {
 	padding-left: 1vw;
 }
@@ -36,6 +42,14 @@ a:focus {
 	left: 20%;
 	bottom: 3px;
 	font-size: 20px;
+	text-align: center;
+}
+
+@media(max-width: 768px) {
+	#selected-filter {
+		left: 15%;
+		text-align: center;
+	}
 }
 
 @media(max-width: 420px) {
@@ -113,6 +127,13 @@ a:focus {
 	width: 25vw;
 	height: 17vw;
 	background-color: white;
+}
+
+@media(max-width: 768px) {
+	.project-container {
+		width: 33.33vw;
+		height: 22.66vw;
+	}
 }
 
 @media(max-width: 420px) {
