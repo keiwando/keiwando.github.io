@@ -38,7 +38,7 @@ $(document).ready(function(){
   });
 
   function setupMasthead(){
-    if($(window).width() <= 768){
+    if($(window).width() <= 640){
       activateScrollMasthead();
     }
   }
@@ -73,7 +73,7 @@ $(document).ready(function(){
       //menu activated
       $(this).addClass('selected');
       $('#menu').addClass('activated');
-      if($(window).width() >= 768){
+      if($(window).width() >= 640){
         deactivateScrollMasthead();
       }
     }
@@ -85,7 +85,7 @@ $(document).ready(function(){
     $(window).scroll(function(){
 
 
-      if($(window).width() > 768){
+      if($(window).width() > 640){
         // we round here to reduce a little workload
         var top = Math.round($(window).scrollTop());
         var offset = 20;

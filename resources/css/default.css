@@ -51,45 +51,7 @@ ul {
   list-style-type: none;
 }
 
-/* Custom default button */
-.button-default {
-  font-size: 25px;
-  text-align: center;
-  color: rgba(256,256,256,1);
-  border: 4px solid;  
-  border-color: rgba(256,256,256,.5);
-  border-radius: 4px;
-  border-spacing: 5px;
-  padding: 25px;
-  margin: 10px;
-  text-decoration: none;
-  transition: .3s ease-out;
-}
 
-.button-default:hover,
-.button-default:focus {
-  border-color: rgba(256,256,256,1);
-  text-decoration: none;
-}
-
-@media (max-width: 1200px) {
-  .button-default {
-    font-size: 2.1vw;
-    padding: 2vw;
-  }
-}
-
-@media (max-width: 500px) {
-  .button-default {
-    border-color: rgba(256,256,256,0.8);
-    font-size: 5vw;
-    padding: 5vw;
-  }
-}
-
-.smaller-button-text {
-  font-size: 18px;
-}
 
 
 /*
@@ -218,7 +180,7 @@ ul {
   box-shadow: 0px -1px 12px -6px rgba(61,61,61,1); 
 }
 
-@media (max-width: 640px) {
+@media (max-width: 640px) and (orientation: portrait) {
 
   .scroll-masthead {
     padding-top: 12px;
@@ -239,12 +201,20 @@ ul {
   }
 }
 
+@media (max-height: 500px) and (orientation: landscape) {
+  .scroll-masthead .masthead-brand {
+    padding-top: 0px;
+  }  
+}
+
 .scroll-masthead .logo {
   transition: 0.3s ease-out;
   width: 30px;
   height: 30px;
   margin-top: 16px;
 }
+
+
 
 .scroll-masthead .masthead-nav > li > a {
   font-size: 20px;
@@ -273,6 +243,14 @@ ul {
   padding-top: 15px;
   padding-bottom: 15px;
 }
+
+@media (max-height: 640px) and (orientation: landscape) {
+  .masthead-default-size {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+}
+
 
 
 /*
@@ -320,40 +298,62 @@ ul {
 .active{
   height: 100%;
 }
+
 .carousel-inner{
   height: 100%;
   background-size: cover;
 }
 
-.carousel-inner #sheet-slide {
-  background-image: url("../images/sheets_backdrop.jpg");
+.carousel-inner .item {
+  height: 100%;
 }
 
-@media(max-width: 640px) {
-  .carousel-inner #sheet-slide {
-    background-image: url("../images/sheets_backdrop_vert.jpg");
-  }  
-}
-
-.carousel-inner #evolution-slide {
-  background-image: url("../images/evolution_backdrop3.jpg");
-}
-
-@media(max-width: 640px) {
-  .carousel-inner #evolution-slide {
-    background-image: url("../images/evolution_backdrop_vert.jpg");
-  }  
+@media(max-width: 640px) and (orientation: landscape) {
+  .carousel-inner .item {
+    background-position: center top 20px;
+  }
 }
 
 .carousel-inner #lob-slide {
   background-image: url("../images/LOB1.jpg");
 }
 
-@media (max-width: 640px),
-(max-width: 768px) and (min-height: 768px) {
+@media screen and (orientation: portrait) {
   .carousel-inner #lob-slide {
-    background-image: url("../images/lob_backdrop_vert.jpg");
+    background-image: url("../images/lob_backdrop_vert_ipad.jpg");
+  } 
+
+  @media (max-width: 640px) {
+    .carousel-inner #lob-slide {
+      background-image: url("../images/lob_backdrop_vert.jpg");
+    }  
+  } 
+}
+
+.carousel-inner #evolution-slide {
+  background-image: url("../images/evolution_backdrop3.jpg");
+}
+
+@media screen and (max-width: 640px) and (orientation: portrait) {
+  .carousel-inner #evolution-slide {
+    background-image: url("../images/evolution_backdrop_vert.jpg");
   }  
+}
+
+.carousel-inner #sheet-slide {
+  background-image: url("../images/sheets_backdrop.jpg");
+}
+
+@media screen and (orientation: portrait) {
+  .carousel-inner #sheet-slide {
+    background-image: url("../images/sheets_backdrop_vert_ipad.jpg");
+  }  
+
+  @media (max-width: 640px) {
+    .carousel-inner #sheet-slide {
+      background-image: url("../images/sheets_backdrop_vert.jpg");
+    }  
+  }
 }
 
 .carousel-inner #youtube-slide {
@@ -372,10 +372,6 @@ ul {
   background-repeat: no-repeat;
 }
 
-.item {
-  height: 100%;
-}
-
 .carousel-caption {
   position: fixed;
   width: 100%;
@@ -383,15 +379,31 @@ ul {
   top: 40%;
 }
 
-@media (max-width: 768px) {
-  .carousel-caption {
-    top: 55%;
+@media screen and (orientation: landscape) {
+  
+  @media (max-height: 640px) {
+    .carousel-caption {
+      top: 35%;
+    }
   }
 }
 
-@media (max-width: 500px){
+@media screen and (orientation: portrait) {
+  
   .carousel-caption {
-    top: 50%;
+    top: 60%;
+  }
+
+  @media (max-width: 768px) {
+    .carousel-caption {
+      top: 55%;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .carousel-caption {
+      top: 50%;
+    }
   }
 }
 
@@ -400,28 +412,44 @@ ul {
   margin-bottom: 50px;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1200px) and (orientation: landscape) {
 
   .carousel-caption > h1 {
     font-size: 8.3vw;
   }
-}
 
-@media (max-width: 768px) {
+  @media (max-width: 640px)  {
 
-  .carousel-caption > h1 {
-    font-size: 80px;
+    .carousel-caption > h1 {
+      font-size: 7vw;
+      margin-bottom: 30px;
+    }
   }
 }
 
-@media (max-width: 500px){
-
+@media screen and (orientation: portrait) {
+  
   .carousel-caption > h1 {
-    font-size: 12vw;
-    margin-bottom: 30px;
-    padding: 3vw;
+    font-size: 10vw;
+  }
+
+  @media (max-width: 768px) {
+
+    .carousel-caption > h1 {
+      font-size: 80px;
+    }
+  }
+
+  @media (max-width: 500px) {
+
+    .carousel-caption > h1 {
+      font-size: 12vw;
+      margin-bottom: 30px;
+      padding: 3vw;
+    }
   }
 }
+
 
 .carousel-caption .smaller-h1 {
   font-size: 5em;
@@ -443,6 +471,55 @@ ul {
 .carousel-control {
   margin-right: -50px;
   margin-left: -50px;
+}
+
+/* Custom default button */
+.button-default {
+  font-size: 25px;
+  text-align: center;
+  color: rgba(256,256,256,1);
+  border: 4px solid;  
+  border-color: rgba(256,256,256,.5);
+  border-radius: 4px;
+  border-radius: 0.8em;
+  border-spacing: 5px;
+  padding: 25px;
+  margin: 10px;
+  text-decoration: none;
+  transition: .3s ease-out;
+}
+
+.button-default:hover,
+.button-default:focus {
+  border-color: rgba(256,256,256,1);
+  text-decoration: none;
+}
+
+@media (max-width: 1200px) {
+  .button-default {
+    font-size: 2.1vw;
+    padding: 2vw;
+  }
+}
+
+
+@media screen and (orientation: portrait) {
+  .button-default {
+    font-size: 2.8vw;
+    padding: 2.4vw;
+  }
+
+  @media (max-width: 500px) {
+    .button-default {
+      border-color: rgba(256,256,256,0.8);
+      font-size: 5vw;
+      padding: 5vw;
+    }
+  }
+}
+
+.smaller-button-text {
+  font-size: 18px;
 }
 
 
@@ -508,6 +585,15 @@ ul {
   border-radius: 0px;
 }
 
+@media (max-width: 640px) {
+  .image-container-block { 
+
+    height: auto;
+    max-height: none;
+
+  }
+}
+
 .image-container-block img {
 
   width: auto;
@@ -520,6 +606,16 @@ ul {
   transition: 0.3s;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+@media (max-width: 640px) {
+  .image-container-block img {
+  
+    width: auto;
+    height: auto;
+    max-width: 90%;
+    display: block;
+  }
 }
 
 .image-container-block img:hover {
@@ -543,6 +639,21 @@ ul {
   display: inline-block;
 
   margin: 20px auto;
+}
+
+@media (max-width: 640px) {
+  .image-container-block .evolution-preview-gif {
+    height: auto;
+    width: 90%;
+    max-width: 90%;
+    max-height: 50vh;
+  }
+
+  @media (orientation: landscape) {
+    .image-container-block .evolution-preview-gif {
+      max-width: 50%;
+    }  
+  }
 }
 
 .fill {
@@ -603,10 +714,10 @@ ul {
   #menu {
     min-height: 100vh;
     width: 100vw;
-    position: fixed;
+    position: absolute;
     overflow-y: scroll;
     background-color: #1f1f1f;/*rgba(50,50,50,1);*/
-    transform: translateY(-100vh);
+    transform: translateY(-100%);
     z-index: 50;
     transition: 0.2s ease-out;
   }
@@ -614,6 +725,10 @@ ul {
   #menu.activated {
     transform: translateY(0vh);
     transition: 0.2s ease-out;
+  }
+
+  .menu-list {
+    position: relative;
   }
 
   .menu-list ul {
@@ -667,6 +782,12 @@ ul {
     top: 12px;
   }
 
+  @media (orientation: landscape) {
+    .menu-button span {
+      top: 17px;
+    }
+  }
+
   .menu-button span:before, 
   .menu-button span:after {
     position: absolute;
@@ -704,6 +825,12 @@ ul {
     margin-left: -50px;
   }
 
+  @media (orientation: landscape) {
+    .logo-container {
+      top: 5px;
+    }
+  }
+
   #K,
   #K_blk {
     width: 35px;
@@ -718,27 +845,7 @@ ul {
     margin-top: 0px;
   }
 
-  .image-container-block { 
-
-    height: auto;
-    max-height: none;
-
-  }
-
-  .image-container-block img {
   
-    width: auto;
-    height: auto;
-    max-width: 90%;
-    display: block;
-  }
-
-  .image-container-block .evolution-preview-gif {
-    height: auto;
-    width: 90%;
-    max-width: 90%;
-    max-height: 50vh;
-  }
 
   /*
     ANIMATIONS

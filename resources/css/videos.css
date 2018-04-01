@@ -69,3 +69,11 @@
 #huayra-project .description-container {
 	background-color: #FC6C70;
 }
+
+
+@media (max-height: 350px) and (orientation: landscape) {
+	.filter-controls {
+		left: 35%;
+		bottom: 0px;
+	}
+}

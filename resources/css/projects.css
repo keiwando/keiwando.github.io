@@ -20,6 +20,18 @@ a:focus {
 	font-family: "OpenSans";
 }
 
+@media (max-width: 640px) {
+	#filter-container {
+		height: 80px;
+	}
+}
+
+@media (max-width: 580px) and (orientation: landscape) {
+	#filter-container {
+		height: 55px;
+	}
+}
+
 .filter-controls {
 	font-size: 13px;
 	position: absolute;
@@ -28,15 +40,51 @@ a:focus {
 	color: #d1d1d1;
 }
 
-@media(max-width: 768px) {
+@media (max-width: 850px) {
 	.filter-controls {
 		left: 40%;	
+	}
+}
+
+@media (max-width: 640px) {
+	.filter-controls {
+		font-size: 12px;
+		position: relative;
+		width: 100%;
+		/*bottom: 10px;*/
+		top: 15px;
+		left: 0;
+		color: #d1d1d1;
+	}
+}
+
+@media (max-width: 350px) {
+	.filter-controls {
+		font-size: 11px;
+		width: 90%;
+		margin: 0 auto;
+		padding-top: 0px; 
+	}
+}
+
+@media (max-height: 350px) and (orientation: landscape) {
+	.filter-controls {
+		position: absolute;
+		left: 40%;
+		max-width: 60%;
 	}
 }
 
 .filter-controls p a {
 	padding-left: 1vw;
 }
+
+@media (max-width: 640px) {
+	.filter-controls p a {
+		padding-left: 1vw;
+	}
+}
+
 
 #selected-filter {
 	left: 20%;
@@ -45,34 +93,14 @@ a:focus {
 	text-align: center;
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
 	#selected-filter {
 		left: 15%;
 		text-align: center;
 	}
 }
 
-@media(max-width: 420px) {
-
-	#filter-container {
-		height: 50px;
-		height: 80px;
-	}
-
-	.filter-controls {
-		font-size: 13keiwpx;
-		position: relative;
-		width: 100%;
-		/*bottom: 10px;*/
-		top: 15px;
-		left: 0;
-		color: #d1d1d1;
-	}
-
-	.filter-controls p a {
-		padding-left: 1vw;
-	}
-
+@media (max-width: 640px) {
 	#selected-filter {
 		display: inline-block;
 		top: 15px;
@@ -82,10 +110,17 @@ a:focus {
 	}
 }
 
-@media(max-width: 400px) {
+@media (max-width: 580px) and (orientation: landscape) {
+	#selected-filter {
+		position: absolute;
+		left: 0%;
+		max-width: 40%;
+	}
+}
 
-	.filter-controls {
-		font-size: 10px;
+@media (max-width: 350px) and (orientation: portrait) {
+	#selected-filter {
+		top: 10px;
 	}
 }
 
@@ -96,7 +131,14 @@ a:focus {
 	padding-top: 50px;
 }
 
-@media(max-width: 420px) {
+@media (max-height: 640px) and (orientation: landscape) {
+	#projects-container {
+		padding-top: 20px;
+	}
+}
+
+@media (max-width: 640px), 
+	   (max-width: 580px) and (orientation: landscape) {
 	#projects-container {
 		padding-top: 0px;
 	}
@@ -112,7 +154,7 @@ a:focus {
 	margin: 0;
 }
 
-@media(max-width: 400px) {
+@media (max-width: 400px) {
 	.projects-grid {
 		background-color: rgba(0, 0, 0, 0.6);
 	}
@@ -129,21 +171,21 @@ a:focus {
 	background-color: white;
 }
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
 	.project-container {
 		width: 33.33vw;
 		height: 22.66vw;
 	}
 }
 
-@media(max-width: 420px) {
+@media (max-width: 640px), (max-height: 640px) and (orientation: landscape) {
 	.project-container {
 		width: 50vw;
 		height: 34vw;
 	}
 }
 
-@media(max-width: 400px) {
+@media (max-width: 400px) {
 	.project-container {
 		margin-top: 15px;
 		width: 100vw;
@@ -180,7 +222,7 @@ a:focus {
 	bottom: 0;
 }
 
-@media(max-width: 420px) {
+@media (max-width: 640px), (max-height: 640px) and (orientation: landscape) {
 
 	.project-container .image-container {
 		top: -10%;
@@ -210,7 +252,7 @@ a:focus {
 	color: rgba(256, 256, 256, 0.8);
 }
 
-@media(max-width: 420px) {
+@media (max-width: 640px), (max-height: 640px) {
 
 	.description-container {
 		font-size: 2.5vw;
@@ -221,7 +263,7 @@ a:focus {
 	}
 }
 
-@media(max-width: 400px) {
+@media (max-width: 400px) {
 
 	.description-container {
 		font-size: 5vw;
