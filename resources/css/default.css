@@ -710,7 +710,8 @@ ul {
   } 
 }
 
-@media (max-width: 350px), (max-height: 350px) {
+@media (max-width: 570px) and (orientation: landscape), 
+       (max-height: 570px) and (orientation: portrait) {
   .below-masthead {
     margin-top: 10px;
   } 
