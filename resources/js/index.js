@@ -38,7 +38,7 @@ $(document).ready(function(){
   });
 
   function setupMasthead(){
-    if($(window).width() <= 640){
+    if($(window).width() <= 640 || $(window).height() <= 640){
       activateScrollMasthead();
     }
   }
@@ -73,7 +73,7 @@ $(document).ready(function(){
       //menu activated
       $(this).addClass('selected');
       $('#menu').addClass('activated');
-      if($(window).width() >= 640){
+      if($(window).width() > 640 && $(window).height() > 640){
         deactivateScrollMasthead();
       }
     }
@@ -84,8 +84,7 @@ $(document).ready(function(){
     
     $(window).scroll(function(){
 
-
-      if($(window).width() > 640){
+      if($(window).width() > 640 && $(window).height() > 640){
         // we round here to reduce a little workload
         var top = Math.round($(window).scrollTop());
         var offset = 20;
@@ -96,7 +95,8 @@ $(document).ready(function(){
         var textPosition = (Math.abs(top)/6).toFixed(0);
         //text.css('transform','translateY(' + textPosition + "px)");
         text.css({ 'transform': 'translate3d(' + 0 +'px, -' +  textPosition*2 + 'px, 0)'});
-        $('.carousel').css({ 'transform': 'translate3d(' + 0 +'px, -' +  textPosition + 'px, 0)'});
+        
+        $('.carousel').css({ 'transform': 'translate3d(' + 0 +'px, -' +  textPosition + 'px, 0)'});  
 
         var text = $('.item').find('.carousel-caption');
         text.css('opacity',opacity);

@@ -16,7 +16,14 @@
          url('fonts/opensans-regular-webfont.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
+}
 
+@font-face {
+    font-family: 'OpenSansBold';
+    src: url('fonts/opensans-bold-webfont.woff2') format('woff2'),
+         url('fonts/opensans-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
 }
 
 html,
@@ -188,6 +195,13 @@ ul {
   }
 }
 
+@media (max-height: 640px) and (orientation: landscape) {
+  .scroll-masthead {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+}
+
 .scroll-masthead  .masthead-brand {
   transition: 0.3s ease-out;
   color: rgba(32 ,32 ,32 ,1);
@@ -244,6 +258,13 @@ ul {
   padding-bottom: 15px;
 }
 
+@media (max-width: 640px) and (orientation: portrait) {
+  .masthead-default-size {
+    padding-top: 12px;
+    padding-bottom: 4px;
+  }
+}
+
 @media (max-height: 640px) and (orientation: landscape) {
   .masthead-default-size {
     padding-top: 0px;
@@ -282,10 +303,16 @@ ul {
   position: fixed;
 }
 
-@media(max-width: 640px) {
+@media (max-height: 640px) and (orientation: landscape) {
   .carousel {
     position: relative;
-    margin-top: -61px;
+  }
+}
+
+@media (max-width: 640px) {
+  .carousel {
+    position: relative;
+    margin-top: -55px;
   }
 }
 
@@ -308,7 +335,7 @@ ul {
   height: 100%;
 }
 
-@media(max-width: 640px) and (orientation: landscape) {
+@media (max-height: 640px) and (orientation: landscape) {
   .carousel-inner .item {
     background-position: center top 20px;
   }
@@ -540,6 +567,12 @@ ul {
   margin-top: 100vh;
 }
 
+@media (max-height: 640px) and (orientation: landscape) {
+  .standard-text {
+    margin-top: 0;
+  }
+}
+
 .standard-text a {
   color: black;
 }
@@ -662,7 +695,29 @@ ul {
 }
 
 .below-masthead {
-  padding-top: 100px;
+  margin-top: 100px;
+}
+
+@media (max-width: 640px) {
+  .below-masthead {
+    margin-top: 20px;
+  }
+}
+
+@media (max-height: 640px) {
+  .below-masthead {
+    margin-top: 75px;
+  } 
+}
+
+@media (max-width: 350px), (max-height: 350px) {
+  .below-masthead {
+    margin-top: 10px;
+  } 
+}
+
+.below-masthead .standard-text {
+  margin-top: 0;
 }
 
 .fixed {
@@ -678,6 +733,44 @@ ul {
   background-color: rgba(0,0,0,0);
   height: 100vh;
   pointer-events: visible;
+}
+
+.contact-social-media-link {
+  margin-top: 20px;
+  
+  max-width: 50%;
+}
+
+.contact-social-media-link img {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  float: left;
+  margin-right: 15px;
+}
+
+.contact-social-media-link h3 {
+  display: block;
+  font-weight: bold;
+  font-family: "Helvetica Neue";
+  font-size: 25px;
+  padding-top: 15px;
+  padding-right: 15px;
+  letter-spacing: -0.3px;
+}
+
+.contact-social-media-link#twitter-contact-link h3:before {
+
+  width: 50px;
+  height: 50px;
+  content: " ";
+  padding: 0px 20px;
+  font-size: 35px;
+  position: relative;
+  top: 5px;
+  right: 5px;
+  background-image: url("../images/twitter-icon-blue.svg");
+  background-repeat: no-repeat;
 }
 
 #test {
