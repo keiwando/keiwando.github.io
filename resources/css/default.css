@@ -736,9 +736,12 @@ ul {
   pointer-events: visible;
 }
 
+.contact-container h3 {
+  font-family: "Helvetica Neue Light", "OpenSans", Helvetica;
+}
+
 .contact-social-media-link {
   margin-top: 20px;
-  
   max-width: 50%;
 }
 
