@@ -1,0 +1,7 @@
+canvas {
+	width: 70vw;
+	height: 80vh;
+	max-width: 1280;
+	max-height: 768;
+	margin: 40px;
+}
