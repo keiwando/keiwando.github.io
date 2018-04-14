@@ -1,0 +1,44 @@
+---
+layout: empty
+title: WebGL Texture Distortion
+addedCSS: <link href="resources/css/brush-distort.css" rel="stylesheet">
+---
+
+<div id="distortion-container">
+	
+	<div id="distortion-control-container">
+		
+		<!-- Force -->
+		<h2>Force</h2>
+		<input type="range" name="pencil-force" min="0" max="1" step="0.01">
+
+		<!-- Altitude Angle -->
+		<div class="angle-input">
+			
+		</div>
+
+		<!-- Azimuth Angle -->
+
+		<!-- Movement Direction -->
+
+		<!-- Movement Speed -->
+		<h2>Speed</h2>
+		<input type="range" name="pencil-speed" min="0" max="1" step="0.01">
+
+		<!-- Bristle Stiffness -->
+		<h2>Bristle Stiffness</h2>
+		<input type="range" name="bristle-stiffness" min="0" max="1" step="0.01">
+
+		<!-- Bristle Length -->
+		<h2>Bristle Length</h2>
+		<input type="range" name="bristle-length" min="0" max="1" step="0.01">
+
+	</div>
+
+	<canvas id="glCanvas" width="1280" height="768"></canvas>	
+</div>
+
+
+
+<script src="resources/js/gl-matrix-min.js"></script>
+<script src="resources/js/webgl-distort.js"></script>

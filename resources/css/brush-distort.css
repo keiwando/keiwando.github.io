@@ -1,0 +1,65 @@
+canvas {
+	
+	width: 65%;
+	height: 100%;
+	float: right;
+}
+
+input[type=range] {
+
+    -webkit-appearance: none;
+  	margin: 9.1px 0;
+}
+
+input[type=range]:focus {
+  outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6.8px;
+  cursor: pointer;
+  box-shadow: none;
+  background: #4e6b6b;
+  border-radius: 10.9px;
+  border: 0px solid rgba(1, 1, 1, 0.92);
+}
+
+input[type=range]::-webkit-slider-thumb {
+  box-shadow: 0px 0px 1px #000000, 0px 0px 0px #0d0d0d;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  height: 25px;
+  width: 25px;
+  border-radius: 50px;
+  background: #feffff;
+  cursor: pointer;
+  -webkit-appearance: none;
+  margin-top: -9.1px;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #597a7a;
+}
+
+#distortion-container {
+	width: 70vw;
+	height: 80vh;
+	max-width: 1280;
+	max-height: 768;
+	margin: 40px auto;
+}
+
+#distortion-control-container {
+
+	background-color: rgba(255, 255, 255, 0.9);
+	height: 100%;
+	width: 35%;
+	float: left;
+
+	padding: 40px;
+}
+
+#distortion-control-container h2 {
+
+	color: rgb(50, 50, 50);
+}

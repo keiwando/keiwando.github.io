@@ -1,5 +1,65 @@
 main();
 
+function basicQuadVshSource() {
+	return `
+		attribute vec4 position;
+		attribute vec2 textureCoord;
+
+		uniform mat4 modelViewMat;
+		uniform mat4 projectionMat;
+
+		varying vec2 vTextureCoord;
+
+		void main() {
+			gl_Position = projectionMat * modelViewMat * position;
+
+			vTextureCoord = textureCoord;
+		}
+	`;
+}
+
+function basicQuadFshSource() {
+	return `
+		precision highp float;
+
+		uniform sampler2D texture;
+
+		varying vec2 vTextureCoord;
+
+		void main() {
+
+			highp vec4 texColor = texture2D(texture, vTextureCoord);
+
+			gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
+		}
+	`;
+}
+
+function distortionShapeVshSource() {
+	return `
+		precision highp float;
+
+		attribute vec4 position;
+		attribute vec2 textureCoord;
+
+		uniform mat4 modelViewMat;
+		uniform mat4 projectionMat;
+
+		varying vec2 vTextureCoord;
+
+		void main() {
+
+			float distortion = min(abs(position.x), abs(position.y)) * 5.5 + 1.0;// + abs(max(-position.x, 0.0)) * 20.5;
+
+			gl_Position = projectionMat * modelViewMat * distortion * position;
+
+			//gl_Position.a = 0.0;
+
+			vTextureCoord = textureCoord;
+		}
+	`;
+}
+
 function main() {
 
 	const canvas = document.querySelector('#glCanvas');
@@ -15,40 +75,12 @@ function main() {
 
 	// Vertex shader
 
-	const vshSource = `
-		attribute vec4 position;
-		attribute vec2 textureCoord;
-
-		uniform mat4 modelViewMat;
-		uniform mat4 projectionMat;
-
-		varying vec2 vTextureCoord;
-
-		void main() {
-			gl_Position = projectionMat * modelViewMat * position;
-
-			vTextureCoord = textureCoord;
-		}
-	`;
+	const vshSource = basicQuadVshSource();
+	//const vshSource = distortionShapeVshSource();
 
 	// Fragment shader
 
-	const fshSource = `
-		precision highp float;
-
-		uniform sampler2D texture;
-
-		varying vec2 vTextureCoord;
-
-		void main() {
-
-			highp vec4 texColor = texture2D(texture, vTextureCoord);
-
-			gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
-
-			//gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-		}
-	`;
+	const fshSource = basicQuadFshSource();
 
 	const program = createGLProgram(gl, vshSource, fshSource);
 
@@ -65,7 +97,8 @@ function main() {
 		}
 	};
 
-	const buffers = createBuffers(gl);
+	//const buffers = createBuffers(gl);
+	const buffers = createDistortionBuffers(gl);
 	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 
 	function render() {
@@ -143,8 +176,10 @@ function drawScene(gl, programInfo, buffers, texture) {
 
 	{
 		const offset = 0;
-		const vertexCount = 4;
-		gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount);
+		//const vertexCount = buffers.positions.length / 2;
+
+		//gl.drawArrays(gl.TRIANGLE_STRIP, offset, 4);
+		gl.drawArrays(gl.TRIANGLE_FAN, offset, 10);
 	}
 }
 
@@ -163,6 +198,7 @@ function loadTexture(gl, url) {
 
 		if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
 			gl.generateMipmap(gl.TEXTURE_2D);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 		} else {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -178,7 +214,41 @@ function isPowerOf2(value) {
 	return (value & (value - 1)) == 0;
 }
 
-function createBuffers(gl) {
+function createDistortionBuffers(gl) {
+
+	//  9/1	2 3
+	//	  8 0 4
+	//    7 6 5
+	const positions = [
+		 0.0,  0.0,
+		-1.0,  1.0,
+		 0.0,  1.0,
+		 1.0,  1.0,
+		 1.0,  0.0,
+		 1.0, -1.0,
+		 0.0, -1.0,
+		-1.0, -1.0,
+		-1.0,  0.0,
+		-1.0,  1.0
+	];
+
+	const textureCoords = [
+		0.5, 0.5,
+		0.0, 0.0,
+		0.5, 0.0,
+		1.0, 0.0,
+		1.0, 0.5,
+		1.0, 1.0,
+		0.5, 1.0,
+		0.0, 1.0,
+		0.0, 0.5, 
+		0.0, 0.0
+	];
+
+	return createBuffers(gl, positions, textureCoords);
+}
+
+function createQuadBuffers(gl) {
 
 	const positions = [
 		 1.0,  1.0,
@@ -193,6 +263,11 @@ function createBuffers(gl) {
 		1.0, 1.0,
 		0.0, 1.0
 	];
+
+	return createBuffers(gl, positions, textureCoords);
+}
+
+function createBuffers(gl, positions, textureCoords) {
 
 	const positionBuffer = gl.createBuffer();
 	gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
