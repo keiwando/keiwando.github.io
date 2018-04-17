@@ -9,39 +9,60 @@ addedCSS: <link href="resources/css/brush-distort.css" rel="stylesheet">
 	<div id="distortion-control-container">
 		
 		<!-- Force -->
-		<h2>Force</h2>
-		<input type="range" name="pencil-force" min="0" max="1" step="0.01">
+		<div class="control-item">
+			<h2>Force</h2>
+			<input id="force-input" type="range" name="pencil-force" min="0" max="1" step="0.01">	
+		</div>
 
 		<!-- Altitude Angle -->
-		<div class="angle-input angle-90">
+		<div id="altitude-input" class="control-item">
+			<h4>Altitude</h4>
+			<div class="angle-input angle-90">
+				<div class="thumb"></div>
+				<h2>360°</h2>
+			</div>	
 			
 		</div>
 
-		<!-- Azimuth Angle -->
-		<div class="angle-input left">
-			<div class="thumb"></div>
-			<h2>360°</h2>
-		</div>
+		<div class="horiz-flex shift-down">
+			<!-- Azimuth Angle -->
+			
+			<div id="azimuth-input" class="angle-input">
+				<h4>Azimuth</h4>
+				<div class="thumb"></div>
+				<h2>360°</h2>				
+			</div>	
 
-		<!-- Movement Direction -->
-		<div class="angle-input right">
-			<div class="thumb"></div>
-			<h2>0°</h2>
-		</div>
+			<!-- Movement Direction -->
+			
+			<div id="movement-direction-input" class="angle-input">
+				<h4>Movement</h4>
+				<div class="thumb"></div>
+				<h2>0°</h2>
+			</div>		
+			
+		</div> 
 
 		<span class="clear"></span>
 
 		<!-- Movement Speed -->
-		<h2>Speed</h2>
-		<input type="range" name="pencil-speed" min="0" max="1" step="0.01">
+		<div class="control-item">
+			<h2>Speed</h2>
+			<input id="speed-input" type="range" name="pencil-speed" min="0" max="1" step="0.01">	
+		</div>
+		
 
 		<!-- Bristle Stiffness -->
-		<h2>Bristle Stiffness</h2>
-		<input type="range" name="bristle-stiffness" min="0" max="1" step="0.01">
+		<div class="control-item">
+			<h2>Bristle Stiffness</h2>
+			<input id="stiffness-input" type="range" name="bristle-stiffness" min="0" max="1" step="0.01">	
+		</div>
 
 		<!-- Bristle Length -->
-		<h2>Bristle Length</h2>
-		<input type="range" name="bristle-length" min="0" max="1" step="0.01">
+		<div class="control-item">
+			<h2>Bristle Length</h2>
+			<input id="bristle-length-input" type="range" name="bristle-length" min="0" max="1" step="0.01">	
+		</div>
 
 	</div>
 

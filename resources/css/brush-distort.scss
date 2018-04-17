@@ -2,12 +2,29 @@
 ---
 
 $thumb-border-color: rgb(80, 80, 80);
+$angle-input-width: 14vh;
+$angle-input-thumb-width: 0.27 * $angle-input-width;
+$angle-input-font-size: 4vh;
 
 canvas {
 	
 	width: 65%;
 	height: 100%;
 	float: right;
+}
+
+h4 {
+	margin: 0px;
+	font-size: 1.3vw;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none;
 }
 
 input[type=range] {
@@ -34,7 +51,7 @@ input[type=range]::-webkit-slider-runnable-track {
 
 input[type=range]::-webkit-slider-thumb {
   box-shadow: 0px 0px 1px #000000, 0px 0px 0px #0d0d0d;
-  border: 1px solid $thumb-border-color;
+  border: 2px solid $thumb-border-color;
   height: 25px;
   width: 25px;
   border-radius: 50px;
@@ -54,6 +71,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	max-width: 1280;
 	max-height: 768;
 	margin: 40px auto;
+
 }
 
 #distortion-control-container {
@@ -64,20 +82,30 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	float: left;
 
 	padding: 30px;
-	padding-top: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
 }
 
-#distortion-control-container > h2 {
+#distortion-control-container .control-item > h2 {
 
-	font-size: 23px;
+	font-size: 1.5vw;
 	color: rgb(50, 50, 50);
 }
 
+#distortion-control-container .control-item > h4 {
+
+	color: rgb(50, 50, 50);
+	position: relative;
+	top: 0.2vw;
+}
+
 .angle-input {
-	width: 9vw;
-	height: 9vw;
-	max-width: 22vh;
-	max-height: 22vh; 
+	width: $angle-input-width;
+	height: $angle-input-width;
 	margin: 20px auto;
 
 	border: 0.8vw solid rgb(50, 50, 50);
@@ -85,34 +113,60 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	box-sizing: border-box;
 }
 
+.thumb:hover {
+	cursor: pointer;
+}
+
 .angle-input .thumb {
 
-	width: 2vw;
-	height: 2vw;
+	width: $angle-input-thumb-width;
+	height: $angle-input-thumb-width;
 
 	border: 3px solid $thumb-border-color;
 	border-radius: 50%;
 	background-color: white;
 
 	position: relative;
-	top: -1.4vw;
-	left: calc(50% - 1vw);
+	//top: -1.4vw;
+	//left: calc(50% - 1vw);
+	top: 0;
+	left: 0;
 }
 
 .angle-input > h2 {
 
-	font-size: 3vw;
+	font-size: $angle-input-font-size;
 	position: relative;
 	color: rgb(50, 50, 50);
-	top: -0.1vw; /*calc(30% - 1.7vw);*/
-	left: 0.4vw;
+	top: -0.8vh;
+	left: 0.7vh;
+}
+
+.angle-input > h4 {
+	position: absolute;
+
+	top: -2vh;
+	padding-left: 0vw;
+	color: rgb(50, 50, 50);
 }
 
 .angle-input.angle-90 {
 
-	width: 8vw;
-	height: 8vw;
+	width: $angle-input-width;
+	height: $angle-input-width;
 	border-radius: 0 100% 0 0;
+}
+
+.angle-input.angle-90 .thumb {
+
+	left: -1.4vw;
+}
+
+.angle-input.angle-90 > h2 {
+
+	font-size: 2.3vw;
+	top: 20%;
+	left: -0.2vw;
 }
 
 .left {
@@ -127,7 +181,16 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	clear: both;
 }
 
+.horiz-flex {
+	display: flex;
+	flex-direction: row;
+	position: relative;
+}
 
+.shift-down {
+	position: relative;
+	top: 2vh;
+}
 
 
 
