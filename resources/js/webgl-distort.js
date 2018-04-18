@@ -3,8 +3,8 @@ main();
 var pencilInputs = {
 	force: 0.5,
 	altitude: 90,
-	azimuth: 0,
-	movement: 70,
+	azimuth: 300,
+	movement: 45,
 	speed: 0.5,
 	bristleStiffness: 0.4,
 	bristleLength: 0.4
@@ -355,13 +355,30 @@ function create360AngleInput(elemId, valueName) {
 
 	var angleInput = document.querySelector(elemId);
 	var thumb = angleInput.getElementsByClassName("thumb")[0];
+	var angleLabel = angleInput.getElementsByTagName("h2")[0];
 	var boundingRect = angleInput.getBoundingClientRect();
 	var inputStyles = getComputedStyle(angleInput);
 	var inputWidth = boundingRect.width;
 	var inputBorderWidth = parseInt(inputStyles.getPropertyValue("border-left-width"), 10);
 	var thumbWidth = thumb.getBoundingClientRect().width;
+	var thumbHeight = thumb.getBoundingClientRect().height;
 	var centerX = boundingRect.left + boundingRect.width / 2;
 	var centerY = boundingRect.top + boundingRect.height / 2;
+
+	/*var center = document.createElement("div");
+
+	center.style.width = "10px";
+	center.style.height = "10px";
+	center.style["border-radius"] = "50%"; 
+	center.style["background-color"] = "red";
+	center.style.position = "absolute";
+	center.style.top = 0.5 * (boundingRect.height - 2 * inputBorderWidth) - 5 + "px";
+	center.style.left = 0.5 * (boundingRect.width - 2 * inputBorderWidth) - 5 + "px";
+	//center.style.top = -5 + "px";
+	//center.style.left = -5 + "px";
+	angleInput.appendChild(center);
+	//document.insertBefore(center, angleInput);*/
+
 
 	var isDragging = false;	
 
@@ -378,24 +395,30 @@ function create360AngleInput(elemId, valueName) {
 		if (isDragging) {
 
 			var angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
-			SetThumbPosition(angle);
+			setThumbPosition(angle);
+			pencilInputs[valueName] = -angle * 180 / Math.PI;
+			updateLabel(angleLabel, pencilInputs[valueName]);
 		}
 	});
 
-	SetThumbPosition(pencilInputs[valueName] * Math.PI / 180);
+	setThumbPosition(-pencilInputs[valueName] * Math.PI / 180);
+	updateLabel(angleLabel, pencilInputs[valueName]);
 
-	function SetThumbPosition(angle) {
+	function setThumbPosition(angle) {
 
-		var cX = 0.5 * (Math.cos(angle) * inputWidth + boundingRect.width);
-			var cY = 0.5 * (Math.sin(angle) * inputWidth  + boundingRect.width);
-			console.log("angle: " + angle);
+			var cX = 0.5 * (Math.cos(-angle) * (inputWidth - 1 * inputBorderWidth) + inputWidth - 2 * inputBorderWidth);
+			var cY = 0.5 * (Math.sin(angle) * (inputWidth - 1 * inputBorderWidth) + inputWidth - 2 * inputBorderWidth);
+			//console.log("angle: " + angle);
 
-			var newLeft = (cX - inputBorderWidth / 2 - thumbWidth / 2);
-			var newTop = (cY - inputBorderWidth / 2 - thumbWidth / 2);
-			//var newLeft = (cX - thumbWidth / 2);
-			//var newTop = (cY - thumbWidth / 2);
+			var newLeft = (cX - thumbWidth / 2);
+			var newTop = (cY - thumbHeight / 2);
+
 			thumb.style.left = newLeft + "px";
 			thumb.style.top = newTop + "px";
+	}
+
+	function updateLabel(label, degrees) {
+		label.innerHTML = parseInt(pencilInputs[valueName] + (degrees < 0 ? 360 : 0)) + "°";	
 	}
 }
 

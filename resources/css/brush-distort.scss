@@ -18,13 +18,17 @@ h4 {
 	font-size: 1.3vw;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+*, h1, h2, h3, h4, h5, h6, p {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
        -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none;
+}
+
+h2, h4 {
+	margin: 0px;
 }
 
 input[type=range] {
@@ -107,10 +111,17 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	width: $angle-input-width;
 	height: $angle-input-width;
 	margin: 20px auto;
+	position: relative;
 
 	border: 0.8vw solid rgb(50, 50, 50);
 	border-radius: 50%;
 	box-sizing: border-box;
+
+	transform: translateZ(0);
+	-webkit-transform: translateZ(0);
+
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden; 
 }
 
 .thumb:hover {
@@ -126,11 +137,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	border-radius: 50%;
 	background-color: white;
 
-	position: relative;
-	//top: -1.4vw;
-	//left: calc(50% - 1vw);
-	top: 0;
-	left: 0;
+	position: absolute;
 }
 
 .angle-input > h2 {
@@ -138,14 +145,20 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	font-size: $angle-input-font-size;
 	position: relative;
 	color: rgb(50, 50, 50);
-	top: -0.8vh;
+	top: 0.5 * ($angle-input-width) - $angle-input-font-size * 0.8;
 	left: 0.7vh;
+
+	transform: translateZ(0);
+	-webkit-transform: translateZ(0);
+
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden; 
 }
 
 .angle-input > h4 {
 	position: absolute;
 
-	top: -2vh;
+	top: -5vh;
 	padding-left: 0vw;
 	color: rgb(50, 50, 50);
 }
