@@ -25,6 +25,12 @@ h4 {
        -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none;
+
+           	transform: translateZ(0);
+	-webkit-transform: translateZ(0);
+
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden; 
 }
 
 h2, h4 {
@@ -159,7 +165,11 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	position: absolute;
 
 	top: -5vh;
-	padding-left: 0vw;
+	width: 100%;
+	text-align: center;
+	overflow: none;
+	margin-left: 0;
+	margin-right: 0;
 	color: rgb(50, 50, 50);
 }
 
@@ -168,18 +178,21 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	width: $angle-input-width;
 	height: $angle-input-width;
 	border-radius: 0 100% 0 0;
+	border-left: 0px;
+	border-bottom: 0px;
 }
 
 .angle-input.angle-90 .thumb {
 
-	left: -1.4vw;
+	//left: -1.4vw;
+	position: absolute;
 }
 
 .angle-input.angle-90 > h2 {
 
 	font-size: 2.3vw;
-	top: 20%;
-	left: -0.2vw;
+	top: 50%;
+	left: -0.5vw;
 }
 
 .left {
@@ -205,6 +218,10 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	top: 2vh;
 }
 
+.shift-left-text {
+	position: relative;
+	left: -0.3vw;
+}
 
 
 

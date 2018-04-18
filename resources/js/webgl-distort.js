@@ -340,13 +340,14 @@ function connectInputs() {
 
 	create360AngleInput("#azimuth-input", "azimuth");
 	create360AngleInput("#movement-direction-input", "movement");
+	create90AngleInput("#altitude-input", "altitude");
 }
 
 function connectSlider(elemId, valueName) {
 
 	var inputElem = document.querySelector(elemId);
 	inputElem.onchange = function(event) {
-		pencilInputs[valueName] = inputElem.value;
+		pencilInputs[valueName] = parseInt(inputElem.value);
 	}
 	inputElem.value = pencilInputs[valueName];
 }
@@ -365,21 +366,6 @@ function create360AngleInput(elemId, valueName) {
 	var centerX = boundingRect.left + boundingRect.width / 2;
 	var centerY = boundingRect.top + boundingRect.height / 2;
 
-	/*var center = document.createElement("div");
-
-	center.style.width = "10px";
-	center.style.height = "10px";
-	center.style["border-radius"] = "50%"; 
-	center.style["background-color"] = "red";
-	center.style.position = "absolute";
-	center.style.top = 0.5 * (boundingRect.height - 2 * inputBorderWidth) - 5 + "px";
-	center.style.left = 0.5 * (boundingRect.width - 2 * inputBorderWidth) - 5 + "px";
-	//center.style.top = -5 + "px";
-	//center.style.left = -5 + "px";
-	angleInput.appendChild(center);
-	//document.insertBefore(center, angleInput);*/
-
-
 	var isDragging = false;	
 
 	thumb.addEventListener("mousedown", function(event) {
@@ -396,7 +382,7 @@ function create360AngleInput(elemId, valueName) {
 
 			var angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
 			setThumbPosition(angle);
-			pencilInputs[valueName] = -angle * 180 / Math.PI;
+			pencilInputs[valueName] = -angle * 180 / Math.PI  + (angle > 0 ? 360 : 0);
 			updateLabel(angleLabel, pencilInputs[valueName]);
 		}
 	});
@@ -408,7 +394,6 @@ function create360AngleInput(elemId, valueName) {
 
 			var cX = 0.5 * (Math.cos(-angle) * (inputWidth - 1 * inputBorderWidth) + inputWidth - 2 * inputBorderWidth);
 			var cY = 0.5 * (Math.sin(angle) * (inputWidth - 1 * inputBorderWidth) + inputWidth - 2 * inputBorderWidth);
-			//console.log("angle: " + angle);
 
 			var newLeft = (cX - thumbWidth / 2);
 			var newTop = (cY - thumbHeight / 2);
@@ -422,15 +407,62 @@ function create360AngleInput(elemId, valueName) {
 	}
 }
 
-function create90AngleInput() {
+function create90AngleInput(elemId, valueName) {
 
-}
+	var angleInput = document.querySelector(elemId);
+	var thumb = angleInput.getElementsByClassName("thumb")[0];
+	var angleLabel = angleInput.getElementsByTagName("h2")[0];
+	var boundingRect = angleInput.getBoundingClientRect();
+	var inputStyles = getComputedStyle(angleInput);
+	var inputWidth = boundingRect.width;
+	var inputBorderWidth = parseInt(inputStyles.getPropertyValue("border-right-width"), 10);
+	var thumbWidth = thumb.getBoundingClientRect().width;
+	var thumbHeight = thumb.getBoundingClientRect().height;
+	var pivotX = boundingRect.left + inputBorderWidth / 2;
+	var pivotY = boundingRect.top + inputWidth - inputBorderWidth / 2;
 
-function relativeCoords(event) {
-  var bounds = event.target.getBoundingClientRect();
-  var x = event.clientX - bounds.left;
-  var y = event.clientY - bounds.top;
-  return {x: x, y: y};
+	var isDragging = false;	
+
+	thumb.addEventListener("mousedown", function(event) {
+		isDragging = true;
+	});
+
+	document.addEventListener("mouseup", function(event) {
+		isDragging = false;
+	});
+
+	document.addEventListener("mousemove", function(event) {
+
+		if (isDragging) {
+
+			var angle = Math.max(-Math.PI/2, Math.min(0, Math.atan2(event.clientY - pivotY, event.clientX - pivotX)));
+			setThumbPosition(angle);
+			pencilInputs[valueName] = -angle * 180 / Math.PI;
+			updateLabel(angleLabel, pencilInputs[valueName]);
+		}
+	});
+
+	setThumbPosition(-pencilInputs[valueName] * Math.PI / 180);
+	updateLabel(angleLabel, pencilInputs[valueName]);
+
+	function setThumbPosition(angle) {
+
+			var cX = (Math.cos(-angle) * (inputWidth - 0.5 * inputBorderWidth));
+			var cY = (Math.sin(angle)  * (inputWidth - 0.5 * inputBorderWidth));
+
+			var newLeft = cX - inputBorderWidth / 2;
+			var newTop = cY + inputWidth - inputBorderWidth / 2;
+
+			newLeft = cX - 0.5 * thumbWidth;
+			newTop = cY + inputWidth - 1 * inputBorderWidth - 0.5 * thumbWidth;
+
+			thumb.style.left = newLeft + "px";
+			thumb.style.top = newTop + "px";
+	}
+
+	function updateLabel(label, degrees) {
+		label.innerHTML = parseInt(pencilInputs[valueName] + (degrees < 0 ? 360 : 0)) + "°";	
+	}
 }
 
 
