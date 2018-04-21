@@ -52,6 +52,15 @@ function distortionShapeVshSource() {
 		attribute vec4 position;
 		attribute vec2 textureCoord;
 
+		// Advanced Pencil inputs
+		uniform float force;
+		uniform float altitude;
+		uniform float azimuth;
+		uniform float movementDirection;
+		uniform float speed;
+		uniform float stiffness;
+		uniform float bristleLength; 
+
 		uniform mat4 modelViewMat;
 		uniform mat4 projectionMat;
 
@@ -59,7 +68,7 @@ function distortionShapeVshSource() {
 
 		void main() {
 
-			float distortion = min(abs(position.x), abs(position.y)) * 5.5 + 1.0;// + abs(max(-position.x, 0.0)) * 20.5;
+			float distortion = min(abs(position.x), abs(position.y)) * 5.5 * speed + 1.0 + abs(max(-position.x, 0.0)) * 20.5 * force;
 
 			gl_Position = projectionMat * modelViewMat * distortion * position;
 
@@ -85,8 +94,8 @@ function main() {
 
 	// Vertex shader
 
-	const vshSource = basicQuadVshSource();
-	//const vshSource = distortionShapeVshSource();
+	//const vshSource = basicQuadVshSource();
+	const vshSource = distortionShapeVshSource();
 
 	// Fragment shader
 
@@ -101,6 +110,13 @@ function main() {
 			textureCoord: gl.getAttribLocation(program, "textureCoord")
 		},
 		uniformLocations: {
+			force: gl.getUniformLocation(program, "force"),
+			altitude: gl.getUniformLocation(program, "altitude"),
+			azimuth: gl.getUniformLocation(program, "azimuth"),
+			movementDirection: gl.getUniformLocation(program, "movementDirection"),
+			speed: gl.getUniformLocation(program, "speed"),
+			stiffness: gl.getUniformLocation(program, "stiffness"),
+			bristleLength: gl.getUniformLocation(program, "bristleLength"),
 			modelViewMat: gl.getUniformLocation(program, "modelViewMat"),
 			projectionMat: gl.getUniformLocation(program, "projectionMat"),
 			texture: gl.getUniformLocation(program, "texture")
@@ -180,6 +196,8 @@ function drawScene(gl, programInfo, buffers, texture) {
 		modelViewMatrix
 	);
 
+	bindPencilInputs(gl, programInfo);
+
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
 	gl.uniform1i(programInfo.uniformLocations.texture, 0);
@@ -222,6 +240,18 @@ function loadTexture(gl, url) {
 
 function isPowerOf2(value) {
 	return (value & (value - 1)) == 0;
+}
+
+function bindPencilInputs(gl, program) {
+
+	gl.uniform1f(program.uniformLocations.force, pencilInputs.force);
+	//console.log("force: " + pencilInputs.force);
+	gl.uniform1f(program.uniformLocations.altitude, pencilInputs.altitude);
+	gl.uniform1f(program.uniformLocations.azimuth, pencilInputs.azimuth);
+	gl.uniform1f(program.uniformLocations.movement, pencilInputs.movement);
+	gl.uniform1f(program.uniformLocations.speed, pencilInputs.speed);
+	gl.uniform1f(program.uniformLocations.stiffness, pencilInputs.bristleStiffness);
+	gl.uniform1f(program.uniformLocations.bristleLength, pencilInputs.bristleLength);
 }
 
 function createDistortionBuffers(gl) {
@@ -346,8 +376,8 @@ function connectInputs() {
 function connectSlider(elemId, valueName) {
 
 	var inputElem = document.querySelector(elemId);
-	inputElem.onchange = function(event) {
-		pencilInputs[valueName] = parseInt(inputElem.value);
+	inputElem.oninput = function(event) {
+		pencilInputs[valueName] = parseFloat(inputElem.value);
 	}
 	inputElem.value = pencilInputs[valueName];
 }
