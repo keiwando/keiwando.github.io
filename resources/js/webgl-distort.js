@@ -68,7 +68,7 @@ function distortionShapeVshSource() {
 
 		void main() {
 
-			float distortion = min(abs(position.x), abs(position.y)) * 5.5 * speed + 1.0 + abs(max(-position.x, 0.0)) * 20.5 * force;
+			float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0 + abs(max(-position.x, 0.0)) * 20.5;// * sin(movementDirection * 3.14159 / 180.0);
 
 			gl_Position = projectionMat * modelViewMat * distortion * position;
 
@@ -125,7 +125,9 @@ function main() {
 
 	//const buffers = createBuffers(gl);
 	const buffers = createDistortionBuffers(gl);
-	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);
@@ -255,6 +257,40 @@ function bindPencilInputs(gl, program) {
 }
 
 function createDistortionBuffers(gl) {
+
+	//  9/1	2 3
+	//	  8 0 4
+	//    7 6 5
+	const positions = [
+		 0.0,  0.0,
+		-1.0,  1.0,
+		 0.0,  1.0,
+		 1.0,  1.0,
+		 1.0,  0.0,
+		 1.0, -1.0,
+		 0.0, -1.0,
+		-1.0, -1.0,
+		-1.0,  0.0,
+		-1.0,  1.0
+	];
+
+	const textureCoords = [
+		0.5, 0.5,
+		0.0, 0.0,
+		0.5, 0.0,
+		1.0, 0.0,
+		1.0, 0.5,
+		1.0, 1.0,
+		0.5, 1.0,
+		0.0, 1.0,
+		0.0, 0.5, 
+		0.0, 0.0
+	];
+
+	return createBuffers(gl, positions, textureCoords);
+}
+
+function createDistortionBuffersV2(gl) {
 
 	//  9/1	2 3
 	//	  8 0 4
