@@ -1,7 +1,7 @@
 main();
 
 var pencilInputs = {
-	force: 0.5,
+	force: 0,
 	altitude: 90,
 	azimuth: 300,
 	movement: 45,
@@ -49,6 +49,8 @@ function distortionShapeVshSource() {
 	return `
 		precision highp float;
 
+		const float PI = 3.1415926;
+
 		attribute vec4 position;
 		attribute vec2 textureCoord;
 
@@ -68,13 +70,55 @@ function distortionShapeVshSource() {
 
 		void main() {
 
-			float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0 + abs(max(-position.x, 0.0)) * 20.5;// * sin(movementDirection * 3.14159 / 180.0);
+			float directionRad = movementDirection * PI / 180.0;
+			float altitudeRad = altitude * PI / 180.0;
+			float azimuthRad = azimuth * PI / 180.0;
 
-			gl_Position = projectionMat * modelViewMat * distortion * position;
+			float offsetX = -cos(directionRad) * cos(altitudeRad) * bristleLength;
+			float offsetY = -sin(directionRad) * cos(altitudeRad) * bristleLength;
+			highp vec4 offset = vec4(offsetX, offsetY, 0.0, 0.0);
 
-			//gl_Position.a = 0.0;
+			float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0;// + abs(max(-position.x, 0.0)) * 20.5 * sin(force);
+
+			gl_Position = projectionMat * modelViewMat * distortion * (position + offset);
 
 			vTextureCoord = textureCoord;
+		}
+	`;
+}
+
+function distortionShapeFshSource() {
+	return `
+		precision highp float;
+
+		const float PI = 3.1415926;
+
+		uniform float force;
+		uniform float altitude;
+		uniform float azimuth;
+		uniform float movementDirection;
+		uniform float speed;
+		uniform float stiffness;
+		uniform float bristleLength; 
+
+		uniform sampler2D texture;
+
+		varying vec2 vTextureCoord;
+
+		void main() {
+
+			float coeffX = 10.0;
+			float coeffY = 10.0;
+			
+			float dX = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
+			//float dY = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
+			float dY = 0.0;
+
+			highp vec2 textureCoord = vec2(vTextureCoord.x + dX, vTextureCoord.y + dY);
+
+			highp vec4 texColor = texture2D(texture, textureCoord);
+
+			gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
 		}
 	`;
 }
@@ -99,7 +143,8 @@ function main() {
 
 	// Fragment shader
 
-	const fshSource = basicQuadFshSource();
+	//const fshSource = basicQuadFshSource();
+	const fshSource = distortionShapeFshSource();
 
 	const program = createGLProgram(gl, vshSource, fshSource);
 
@@ -123,10 +168,10 @@ function main() {
 		}
 	};
 
-	//const buffers = createBuffers(gl);
-	const buffers = createDistortionBuffers(gl);
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
-	const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
+	const buffers = createQuadBuffers(gl);
+	//const buffers = createDistortionBuffers(gl);
+	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 
 	function render() {
@@ -208,8 +253,8 @@ function drawScene(gl, programInfo, buffers, texture) {
 		const offset = 0;
 		//const vertexCount = buffers.positions.length / 2;
 
-		//gl.drawArrays(gl.TRIANGLE_STRIP, offset, 4);
-		gl.drawArrays(gl.TRIANGLE_FAN, offset, 10);
+		gl.drawArrays(gl.TRIANGLE_STRIP, offset, 4);
+		//gl.drawArrays(gl.TRIANGLE_FAN, offset, 10);
 	}
 }
 
@@ -229,10 +274,12 @@ function loadTexture(gl, url) {
 		if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
 			gl.generateMipmap(gl.TEXTURE_2D);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-		} else {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		} else {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 		}
 	};
 	image.src = url;
@@ -247,50 +294,16 @@ function isPowerOf2(value) {
 function bindPencilInputs(gl, program) {
 
 	gl.uniform1f(program.uniformLocations.force, pencilInputs.force);
-	//console.log("force: " + pencilInputs.force);
 	gl.uniform1f(program.uniformLocations.altitude, pencilInputs.altitude);
 	gl.uniform1f(program.uniformLocations.azimuth, pencilInputs.azimuth);
-	gl.uniform1f(program.uniformLocations.movement, pencilInputs.movement);
+	gl.uniform1f(program.uniformLocations.movementDirection, pencilInputs.movement);
+	//console.log("movement: " + pencilInputs.movement);
 	gl.uniform1f(program.uniformLocations.speed, pencilInputs.speed);
 	gl.uniform1f(program.uniformLocations.stiffness, pencilInputs.bristleStiffness);
 	gl.uniform1f(program.uniformLocations.bristleLength, pencilInputs.bristleLength);
 }
 
 function createDistortionBuffers(gl) {
-
-	//  9/1	2 3
-	//	  8 0 4
-	//    7 6 5
-	const positions = [
-		 0.0,  0.0,
-		-1.0,  1.0,
-		 0.0,  1.0,
-		 1.0,  1.0,
-		 1.0,  0.0,
-		 1.0, -1.0,
-		 0.0, -1.0,
-		-1.0, -1.0,
-		-1.0,  0.0,
-		-1.0,  1.0
-	];
-
-	const textureCoords = [
-		0.5, 0.5,
-		0.0, 0.0,
-		0.5, 0.0,
-		1.0, 0.0,
-		1.0, 0.5,
-		1.0, 1.0,
-		0.5, 1.0,
-		0.0, 1.0,
-		0.0, 0.5, 
-		0.0, 0.0
-	];
-
-	return createBuffers(gl, positions, textureCoords);
-}
-
-function createDistortionBuffersV2(gl) {
 
 	//  9/1	2 3
 	//	  8 0 4
