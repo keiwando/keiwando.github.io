@@ -2,14 +2,27 @@
 layout: empty
 title: Scheduler
 addedCSS: <link href="resources/css/scheduler.css" rel="stylesheet">
+
+days:
+- Monday
+- Tuesday
+- Wednesday
+- Thursday
+- Friday
+- Saturday
+- Sunday
 ---
 
 <div id="main-container">
 
 	<div id="schedule-container">
-		
+		{% include scheduler-time-container.html %}
+		{% for day in page.days %}
+			{% include scheduler-day-container.html title=day %}
+		{% endfor %}
 	</div>
 	<div id="input-container">
+		<span class="syntax-error-display"></span>
 		<input type="text" name="dsl-cmd-input" autocomplete="off" autofocus>
 	</div>
 	
