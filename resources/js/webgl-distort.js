@@ -111,8 +111,7 @@ function distortionShapeFshSource() {
 			float coeffY = 10.0;
 			
 			float dX = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
-			//float dY = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
-			float dY = 0.0;
+			float dY = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
 
 			highp vec2 textureCoord = vec2(vTextureCoord.x + dX, vTextureCoord.y + dY);
 
@@ -173,6 +172,7 @@ function main() {
 	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
 
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);
@@ -276,6 +276,8 @@ function loadTexture(gl, url) {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+			//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+			//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 		} else {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);

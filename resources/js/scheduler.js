@@ -49,7 +49,7 @@ var Scheduler = (function(){
 		  = "!!"
 
 		Title
-		  = ([A-Za-z0-9 ]+) { return text(); }
+		  = ([A-Za-zÄÖÜäöüß0-9 ]+) { return text(); }
 
 		Time 
 		  = hour:Hour [,.:]? minute:Minute? {
@@ -102,6 +102,10 @@ var Scheduler = (function(){
 	`;
 
 	var parser = peg.generate(grammar);
+
+	console.log(document.cookie);
+	document.cookie = "TUE 10-12 Test !!";
+	let storage = window.localStorage;
 
 	var elem;
 	var schedule;
@@ -328,8 +332,6 @@ var Scheduler = (function(){
 						if (parsed.startTime.hour < settings.startHour || parsed.endTime.hour > settings.endHour) {
 							settings.startHour = Math.min(settings.startHour, parsed.startTime.hour);
 							settings.endHour = Math.max(settings.endHour, parsed.endTime.hour);
-							console.log(settings.startHour);
-							console.log(settings.endHour);
 							refreshContainerSizes();
 						}
 
