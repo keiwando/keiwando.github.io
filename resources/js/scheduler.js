@@ -61,7 +61,7 @@ var Scheduler = (function(){
 		  }
 
 		Hour 
-		  = ([2][0-3] / [1][0-9] / [0]?[0-9] / [0-9]) { 
+		  = ([2][0-4] / [1][0-9] / [0]?[0-9] / [0-9]) { 
 		  	return parseInt(text(), 10);
 		  }
 
@@ -104,6 +104,7 @@ var Scheduler = (function(){
 	var parser = peg.generate(grammar);
 
 	var elem;
+	var schedule;
 
 	var days = {
 		1 : "Monday",
@@ -123,8 +124,9 @@ var Scheduler = (function(){
 	var settings = {
 		timeCellHeight: 40,
 		dTime: 30,
-		startHour: 7,
-		endHour: 20
+		startHour: 8,
+		endHour: 18,
+		minEventDuration: 30
 	}
 
 	var events = [];
@@ -145,7 +147,44 @@ var Scheduler = (function(){
 		}
 	}
 
-	return {
+	function placeEvent(eventInfo) {
+
+		var titleHeight = elem.timeContainer.querySelector("h3").getBoundingClientRect().height;
+
+		var height = (eventInfo.endTime.minute + eventInfo.endTime.hour * 60 - eventInfo.startTime.minute - eventInfo.startTime.hour * 60) / settings.dTime * settings.timeCellHeight + 2;
+		var top = (eventInfo.startTime.minute + (eventInfo.startTime.hour - settings.startHour) * 60) / settings.dTime * settings.timeCellHeight + titleHeight + 8;
+
+		eventInfo.cell.style.top = `${top}px`;
+		eventInfo.cell.style.height = `${height}px`;
+
+		if (eventInfo.important) {
+			eventInfo.cell.classList.add("important");
+		}
+	}
+
+	function clampInputTimes(parsed) {
+
+		if (!("startTime" in parsed)) {
+			return parsed;
+		}
+
+		let startInMins = parsed.startTime.hour * 60 + parsed.startTime.minute;
+		startInMins = Math.max(0, startInMins);
+
+		parsed.startTime.hour = Math.floor(startInMins / 60);
+		parsed.startTime.minute = startInMins % 60;
+
+		if ("endTime" in parsed) {
+			let endInMins = Math.min(60 * 24, Math.max(startInMins + settings.minEventDuration, parsed.endTime.hour * 60 + parsed.endTime.minute)); 
+
+			parsed.endTime.hour = Math.floor(endInMins / 60);
+			parsed.endTime.minute = endInMins % 60;	
+		}
+
+		return parsed;
+	}
+
+	schedule = {
 
 		elements: {
 			dslInput: document.querySelector("input[name=dsl-cmd-input]"),
@@ -160,8 +199,9 @@ var Scheduler = (function(){
 			elem = this.elements;
 			this.bindUIActions();
 			this.setupTimeContainer();
-			refreshContainerSizes = this.setupTimeContainer;
-			refreshCurrentDay(1);
+			refreshContainerSizes = this.refreshContainers;
+			let currentDay = new Date().getDay();
+			refreshCurrentDay(currentDay == 0 ? 7 : currentDay);
 			this.runTestCommands();
 			return this;
 		},
@@ -212,7 +252,7 @@ var Scheduler = (function(){
 			}
 
 			var titleHeight = elem.timeContainer.querySelector("h3").getBoundingClientRect().height;
-			var containerHeight = titleHeight + numOfCells * (cellHeight + 0.3);
+			var containerHeight = titleHeight + numOfCells * (cellHeight + 0.2);
 
 			for (var container of elem.dayContainers) {
 				container.style.height = `${containerHeight}px`;
@@ -220,7 +260,18 @@ var Scheduler = (function(){
 		},
 
 		refreshContainers: function() {
-			// TODO:
+			
+			var labels = [].slice.call(elem.timeContainer.getElementsByTagName("h5"));
+		
+			for (var label of labels) {
+				elem.timeContainer.removeChild(label);
+			}
+
+			schedule.setupTimeContainer();
+
+			for (eventInfo of events) {
+				placeEvent(eventInfo);
+			}
 		},
 
 		handleInputChange: function(input) {
@@ -242,7 +293,7 @@ var Scheduler = (function(){
 
 		handleInputSubmit: function(input) {
 
-			function createEvent(container, title, day, start, end) {
+			function createEvent(container, title, day, start, end, important) {
 
 				var eventCell = document.createElement("div");
 				container.appendChild(eventCell);
@@ -256,23 +307,9 @@ var Scheduler = (function(){
 					title: title,
 					day: day,
 					startTime: start,
-					endTime: end
+					endTime: end,
+					important: important
 				};
-			}
-
-			function placeEvent(cell, startTime, endTime, important) {
-
-				var titleHeight = elem.timeContainer.querySelector("h3").getBoundingClientRect().height;
-
-				var height = (endTime.minute + endTime.hour * 60 - startTime.minute - startTime.hour * 60) / settings.dTime * settings.timeCellHeight + 2;
-				var top = (startTime.minute + (startTime.hour - settings.startHour) * 60) / settings.dTime * settings.timeCellHeight + titleHeight + 8;
-
-				cell.style.top = `${top}px`;
-				cell.style.height = `${height}px`;
-
-				if (important) {
-					cell.classList.add("important");
-				}
 			}
 
 			try {
@@ -280,6 +317,7 @@ var Scheduler = (function(){
 				if (input != "") {
 
 					var parsed = parser.parse(input);
+					parsed = clampInputTimes(parsed);
 
 					if ("day" in parsed && parsed["day"] != -1 && parsed["day"] != null) {
 						refreshCurrentDay(parsed.day);
@@ -287,13 +325,16 @@ var Scheduler = (function(){
 
 					if ("title" in parsed) {
 
-						if (parsed.startTime.hour < settings.startHour) {
-							settings.startHour = parsed.startTime.hour;
+						if (parsed.startTime.hour < settings.startHour || parsed.endTime.hour > settings.endHour) {
+							settings.startHour = Math.min(settings.startHour, parsed.startTime.hour);
+							settings.endHour = Math.max(settings.endHour, parsed.endTime.hour);
+							console.log(settings.startHour);
+							console.log(settings.endHour);
 							refreshContainerSizes();
 						}
 
-						var eventInfo = createEvent(context.selectedDayContainer, parsed.title, context.selectedDay, parsed.startTime, parsed.endTime);
-						placeEvent(eventInfo.cell, parsed.startTime, parsed.endTime, parsed.important);
+						var eventInfo = createEvent(context.selectedDayContainer, parsed.title, context.selectedDay, parsed.startTime, parsed.endTime, parsed.important);
+						placeEvent(eventInfo);
 						events.push(eventInfo);
 					}
 
@@ -340,7 +381,7 @@ var Scheduler = (function(){
 			var input = elem.dslInput;
 
 			for (var cmd of commands) {
-				console.log(cmd);
+				//console.log(cmd);
 				input.value = cmd;
 				this.handleInputSubmit(input.value);
 				input.value = "";
@@ -348,5 +389,7 @@ var Scheduler = (function(){
 		}
 
 	}.init();
+
+	return schedule;
 
 })();
