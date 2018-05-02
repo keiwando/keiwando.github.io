@@ -105,15 +105,61 @@ function distortionShapeFshSource() {
 
 		varying vec2 vTextureCoord;
 
+		highp vec2 vectorField(highp vec2 x) {
+
+			highp vec2 x1 = vec2(0.5, 0.5);
+			highp vec2 x2 = vec2(0.5, 1.4);
+
+			float q1 =  0.2;
+			float q2 = -0.2;
+
+			highp float d1 = length(x1 - x);
+			highp float d2 = length(x2 - x);
+
+			return (1.0 / (4.0 * PI)) * (q1 * normalize(x1 - x)/(d1 * d1) + q2 * normalize(x2 - x)/(d2 * d2));
+		}
+
+		highp float invertedGaussian(highp vec2 x, highp vec2 center, float multiply) {
+
+			float epsilon = 1.0 * multiply;
+
+			return 1.0 - exp(-pow(epsilon * length(x - center), 2.0));
+		}
+
+		highp float parabola(highp vec2 x, highp vec2 center, float multiply) {
+
+			return pow(length(x - center), 2.0) * multiply;
+		}
+
 		void main() {
 
-			float coeffX = 10.0;
-			float coeffY = 10.0;
+			//float coeffX = 10.0;
+			//float coeffY = 10.0;
 			
-			float dX = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
-			float dY = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
+			//float dX = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
+			//float dY = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
+
+			float offsetWeight = 1.0;
+			//highp vec2 offset = normalize(vectorField(vTextureCoord)) * offsetWeight;
+			//float dX = sign(offset.x) * min(0.05, abs(offset.x));
+			//float dY = sign(offset.y) * min(0.05, abs(offset.y));
+			
+			highp vec2 center = vec2(0.5, 0.5);
+			//highp vec2 offset = offsetWeight * invertedGaussian(vTextureCoord, center, force) * normalize(vTextureCoord - center);
+			highp vec2 offset = offsetWeight * parabola(vTextureCoord, center, force) * normalize(center - vTextureCoord);
+
+			float dX = offset.x;
+			float dY = offset.y;
+
+			//dX = 0.0;
+			//dY = 0.0;
 
 			highp vec2 textureCoord = vec2(vTextureCoord.x + dX, vTextureCoord.y + dY);
+
+			//textureCoord = (textureCoord - vec2(0.5, 0.5)) * (1.0 + 3.0 * force) + vec2(0.5, 0.5);
+			//textureCoord = (textureCoord - vec2(0.5, 0.5)) * 5.0 + vec2(0.5, 0.5);
+			textureCoord.x = max(0.0, min(1.0, textureCoord.x));
+			textureCoord.y = max(0.0, min(1.0, textureCoord.y));
 
 			highp vec4 texColor = texture2D(texture, textureCoord);
 
