@@ -1,7 +1,7 @@
 main();
 
 var pencilInputs = {
-	force: 0,
+	force: 0.0,
 	altitude: 90,
 	azimuth: 300,
 	movement: 45,
@@ -67,6 +67,7 @@ function distortionShapeVshSource() {
 		uniform mat4 projectionMat;
 
 		varying vec2 vTextureCoord;
+		varying float vScaleFactor;
 
 		void main() {
 
@@ -78,11 +79,14 @@ function distortionShapeVshSource() {
 			float offsetY = -sin(directionRad) * cos(altitudeRad) * bristleLength;
 			highp vec4 offset = vec4(offsetX, offsetY, 0.0, 0.0);
 
-			float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0;// + abs(max(-position.x, 0.0)) * 20.5 * sin(force);
-
-			gl_Position = projectionMat * modelViewMat * distortion * (position + offset);
+			float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0 + abs(max(-position.x, 0.0)) * 20.5 * sin(force);
 
 			vTextureCoord = textureCoord;
+			vScaleFactor = (1.0 + 0.8 * force);
+
+			//gl_Position = projectionMat * modelViewMat * distortion * (position + offset);
+			gl_Position = projectionMat * modelViewMat * (vec4(position.xy * vScaleFactor, 0.0, 1.0) + offset);
+			//gl_Position = vec4(position.xy * 0.5, 0.0, 1.0);
 		}
 	`;
 }
@@ -104,6 +108,7 @@ function distortionShapeFshSource() {
 		uniform sampler2D texture;
 
 		varying vec2 vTextureCoord;
+		varying float vScaleFactor;
 
 		highp vec2 vectorField(highp vec2 x) {
 
@@ -133,23 +138,24 @@ function distortionShapeFshSource() {
 
 		void main() {
 
-			//float coeffX = 10.0;
-			//float coeffY = 10.0;
-			
-			//float dX = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
-			//float dY = sin(coeffX * vTextureCoord.x + coeffY * vTextureCoord.y) * 0.1 * force;
+			float offsetWeight = 0.08;
 
-			float offsetWeight = 1.0;
-			//highp vec2 offset = normalize(vectorField(vTextureCoord)) * offsetWeight;
-			//float dX = sign(offset.x) * min(0.05, abs(offset.x));
-			//float dY = sign(offset.y) * min(0.05, abs(offset.y));
+			// vec3(centerX, centerY, centerWeight)
+			highp vec3 center1 = vec3(0.5, -0.04, 10.0);
+			highp vec3 center2 = vec3(0.5, 0.2, -10.0);
 			
-			highp vec2 center = vec2(0.5, 0.5);
-			//highp vec2 offset = offsetWeight * invertedGaussian(vTextureCoord, center, force) * normalize(vTextureCoord - center);
-			highp vec2 offset = offsetWeight * parabola(vTextureCoord, center, force) * normalize(center - vTextureCoord);
+			float val1 = parabola(vTextureCoord, center1.xy, force);
+			//float val2 = parabola(vTextureCoord, center2.xy, force);
+			float val2 = invertedGaussian(vTextureCoord, center2.xy, force);
+
+			highp vec2 d1 = normalize(center1.xy - vTextureCoord);
+			highp vec2 d2 = normalize(center2.xy - vTextureCoord);
+
+			//highp vec2 offset = offsetWeight * (center1.z * d1 * val1 + center2.z * d2 * val2);
+			highp vec2 offset = offsetWeight * (center1.z * d1 * val1 + center2.z * d2 * val2) * 2.0 * abs(center1.x - vTextureCoord.x);
 
 			float dX = offset.x;
-			float dY = offset.y;
+			float dY = offset.y + 0.12 * force * force;
 
 			//dX = 0.0;
 			//dY = 0.0;
@@ -157,13 +163,20 @@ function distortionShapeFshSource() {
 			highp vec2 textureCoord = vec2(vTextureCoord.x + dX, vTextureCoord.y + dY);
 
 			//textureCoord = (textureCoord - vec2(0.5, 0.5)) * (1.0 + 3.0 * force) + vec2(0.5, 0.5);
-			//textureCoord = (textureCoord - vec2(0.5, 0.5)) * 5.0 + vec2(0.5, 0.5);
-			textureCoord.x = max(0.0, min(1.0, textureCoord.x));
-			textureCoord.y = max(0.0, min(1.0, textureCoord.y));
+			textureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+			//textureCoord.x = max(0.0, min(1.0, textureCoord.x));
+			//textureCoord.y = max(0.0, min(1.0, textureCoord.y));
 
 			highp vec4 texColor = texture2D(texture, textureCoord);
 
 			gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
+
+			float indLimit = 0.01; 
+			if (length(vTextureCoord - center1.xy) < indLimit) {
+				gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+			} else if (length(vTextureCoord - center2.xy) < indLimit) {
+				gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+			}
 		}
 	`;
 }
@@ -215,10 +228,11 @@ function main() {
 
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
-	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
 
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);
@@ -246,12 +260,13 @@ function drawScene(gl, programInfo, buffers, texture) {
 	const projectionMatrix = mat4.create();
 
 	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+	//mat4.ortho(projectionMatrix, 0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, zNear, zFar);
+	mat4.ortho(projectionMatrix, 0, 5, 0, 5, zNear, zFar);
 
 	const modelViewMatrix = mat4.create();
 
-	mat4.translate(modelViewMatrix, 
-				   modelViewMatrix, 
-				   [-0.0, 0.0, -6.0]);
+	//mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
+	mat4.translate(modelViewMatrix, modelViewMatrix, [2.5, 2.5, -6.0]);
 
 	{
 		const numComponents = 2;
@@ -322,8 +337,8 @@ function loadTexture(gl, url) {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-			//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-			//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 		} else {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -386,6 +401,13 @@ function createDistortionBuffers(gl) {
 }
 
 function createQuadBuffers(gl) {
+
+	/*const positions = [
+		 1.0,  1.0,
+		-1.0,  1.0,
+		 1.0, -1.0,
+		-1.0, -1.0
+	];*/
 
 	const positions = [
 		 1.0,  1.0,
