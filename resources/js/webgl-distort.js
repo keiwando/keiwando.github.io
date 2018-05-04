@@ -1,12 +1,12 @@
 main();
 
 var pencilInputs = {
-	force: 0.0,
+	force: 1.0,
 	altitude: 90,
 	azimuth: 300,
-	movement: 45,
-	speed: 0.5,
-	bristleStiffness: 0.4,
+	movement: 0,
+	speed: 1.0,
+	bristleStiffness: 0.0,
 	bristleLength: 0.4
 };
 
@@ -84,6 +84,8 @@ function distortionShapeVshSource() {
 			vTextureCoord = textureCoord;
 			vScaleFactor = (1.0 + 0.8 * force);
 
+			//vScaleFactor = 1.0;
+
 			//gl_Position = projectionMat * modelViewMat * distortion * (position + offset);
 			gl_Position = projectionMat * modelViewMat * (vec4(position.xy * vScaleFactor, 0.0, 1.0) + offset);
 			//gl_Position = vec4(position.xy * 0.5, 0.0, 1.0);
@@ -110,6 +112,7 @@ function distortionShapeFshSource() {
 		varying vec2 vTextureCoord;
 		varying float vScaleFactor;
 
+
 		highp vec2 vectorField(highp vec2 x) {
 
 			highp vec2 x1 = vec2(0.5, 0.5);
@@ -124,59 +127,115 @@ function distortionShapeFshSource() {
 			return (1.0 / (4.0 * PI)) * (q1 * normalize(x1 - x)/(d1 * d1) + q2 * normalize(x2 - x)/(d2 * d2));
 		}
 
+		highp float gaussian(highp vec2 x, highp vec2 center, float multiply) {
+
+			float epsilon = 1.0 / multiply;
+
+			return exp(-pow(epsilon * length(x - center), 2.0));
+		}
+
 		highp float invertedGaussian(highp vec2 x, highp vec2 center, float multiply) {
 
-			float epsilon = 1.0 * multiply;
-
-			return 1.0 - exp(-pow(epsilon * length(x - center), 2.0));
+			return 1.0 - gaussian(x, center, multiply);
 		}
 
 		highp float parabola(highp vec2 x, highp vec2 center, float multiply) {
 
-			return pow(length(x - center), 2.0) * multiply;
+			return pow(length(center - x), 2.0) * multiply;
+		}
+
+		highp float clampedParabola(highp vec2 x, highp vec2 center, float multiply) {
+			
+			//float v = pow(length(x - center), 2.0 + 1.4 * multiply);
+			float v = pow(length(x - center), 1.5) * multiply;
+			//return min(0.2, parabola(x, center, multiply));
+			return min(0.2, v);
+			//return v;
+		}
+
+		highp float smoothIncrease(highp vec2 x, highp vec2 center, float multiply) {
+
+			float minDistance = 0.1;
+			float maxDistance = 2.0;
+
+			//float t = multiply * min(1.0, max(1.0, (length(x - center), 0, maxDistance))) / maxDistance;
+			float t = (length(x - center), 0, maxDistance) / maxDistance;
+			return smoothstep(0.0, 0.0001, t) * multiply * 0.1;
+		}
+
+		float linearFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirection, float multiply) {
+
+			float dist = length(dot(center - x, relativeDirection) / length(relativeDirection));
+			return pow(dist, 2.0) * multiply;
+		}
+
+		float compressionFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirection, float multiply) {
+
+			highp vec2 dX = center - x;
+
+			float dist = length(dot(dX, relativeDirection) / length(relativeDirection));
+
+			float angle = asin(abs(dot(dX, relativeDirection)) / (length(dX) * length(relativeDirection)));
+
+			if (abs(angle) > PI) {
+				//return pow(abs(x.y - center.y), 1.0) * multiply * 10.0;
+				return pow(dist, 1.0) * multiply * 10.0;
+			}
+			return pow(dist, 1.0) * multiply;
+			//return pow(abs(x.y - center.y), 1.0) * multiply;
+		}
+
+		void markCenter(highp vec2 texturePos, highp vec3 center, highp vec3 color) {
+
+			if (center.z == 0.0) return;
+
+			if (length(texturePos - center.xy) < 0.01) {
+				gl_FragColor = vec4(color, 1.0);
+			}
 		}
 
 		void main() {
 
-			float offsetWeight = 0.08;
+			float forceDistWeight = 0.6;
+			float linearFlowWeight = 1.0;
+			float compressionFlowWeight = 0.04;
 
-			// vec3(centerX, centerY, centerWeight)
-			highp vec3 center1 = vec3(0.5, -0.04, 10.0);
-			highp vec3 center2 = vec3(0.5, 0.2, -10.0);
-			
-			float val1 = parabola(vTextureCoord, center1.xy, force);
-			//float val2 = parabola(vTextureCoord, center2.xy, force);
-			float val2 = invertedGaussian(vTextureCoord, center2.xy, force);
+			float upAngle = (movementDirection + 180.0) * PI / 180.0;
+			float rightAngle = upAngle + PI / 2.0;
+			float downAngle = rightAngle + PI / 2.0;
 
-			highp vec2 d1 = normalize(center1.xy - vTextureCoord);
-			highp vec2 d2 = normalize(center2.xy - vTextureCoord);
+			highp vec2 center = vec2(0.5, 0.5);
 
-			//highp vec2 offset = offsetWeight * (center1.z * d1 * val1 + center2.z * d2 * val2);
-			highp vec2 offset = offsetWeight * (center1.z * d1 * val1 + center2.z * d2 * val2) * 2.0 * abs(center1.x - vTextureCoord.x);
+			//highp vec2 right = vec2(1.0, 0.0);
+			highp vec2 right = vec2(cos(-rightAngle), sin(-rightAngle));
+			//highp vec2 down = vec2(0.0, -1.0);
+			highp vec2 down = vec2(cos(-downAngle), sin(-downAngle)); 
+
+			highp vec2 forceDistortion = normalize(center.xy - vTextureCoord) * parabola(vTextureCoord, center, force) * forceDistWeight;
+			highp vec2 linearDistortion = linearFlow(vTextureCoord, center, right, max(0.0, speed - stiffness)) * linearFlowWeight * down;
+			highp vec2 compressDistortion = compressionFlow(vTextureCoord, center, down, max(0.0, speed - stiffness)) * compressionFlowWeight * down;
+
+			highp vec2 offset = forceDistortion + linearDistortion + compressDistortion;
+
+			//offset += vec2(0.0, valueForCenter(vTextureCoord, 1, max(0.0, speed - stiffness))) * centers(1).z;
+			//offset += vec2(0.0, valueForCenter(vTextureCoord, 2, max(0.0, speed - stiffness))) * centers(2).z;
 
 			float dX = offset.x;
-			float dY = offset.y + 0.12 * force * force;
-
-			//dX = 0.0;
-			//dY = 0.0;
+			float dY = offset.y;
 
 			highp vec2 textureCoord = vec2(vTextureCoord.x + dX, vTextureCoord.y + dY);
 
-			//textureCoord = (textureCoord - vec2(0.5, 0.5)) * (1.0 + 3.0 * force) + vec2(0.5, 0.5);
 			textureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
-			//textureCoord.x = max(0.0, min(1.0, textureCoord.x));
-			//textureCoord.y = max(0.0, min(1.0, textureCoord.y));
 
 			highp vec4 texColor = texture2D(texture, textureCoord);
 
 			gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
 
-			float indLimit = 0.01; 
-			if (length(vTextureCoord - center1.xy) < indLimit) {
-				gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-			} else if (length(vTextureCoord - center2.xy) < indLimit) {
-				gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
-			}
+			highp vec2 vTextureCoordSc = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+
+			//markCenter(vTextureCoordSc, centers(0), vec3(1.0, 0.0, 0.0));
+			//markCenter(vTextureCoordSc, centers(1), vec3(0.0, 0.0, 1.0));
+			//markCenter(vTextureCoordSc, centers(2), vec3(0.8, 0.8, 0.0));
 		}
 	`;
 }
@@ -228,11 +287,13 @@ function main() {
 
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	
+	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
-	const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
 
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);
@@ -337,8 +398,8 @@ function loadTexture(gl, url) {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+			//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+			//gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
 		} else {
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
 			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
