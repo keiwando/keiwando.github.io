@@ -7,6 +7,9 @@ $timeUnitHeight: 40px;
 $titleHeight: 20px;
 $border-alpha: 0.5;
 
+$mainWidth: 70vw;
+$mainHeight: 50vw;
+
 
 // Colors
 $inputColor: rgba(50, 50, 50, 1);
@@ -24,12 +27,12 @@ html, body {
 	width: 100%;
 	height: 100%;
 	max-height: 100%;
-	overflow: hidden;
+	overflow-y: auto;
 }
 
 #main-container {
-	width: 70vw;
-	height: 50vw;
+	width: $mainWidth;
+	height: $mainHeight;
 	max-height: 90vh;
 	margin: 20px auto;
 
@@ -121,6 +124,8 @@ html, body {
 
 #input-container {
 
+	font-family: Monospace;
+
 	position: relative;
 
 	width: 100%;
@@ -183,6 +188,67 @@ html, body {
 	height: $syntax-error-display-height;
 	transition: 0.2s;
 }
+
+#documentation-container {
+
+	//font-family: OpenSans;
+
+	margin-top: 100px;
+	padding-bottom: 200px;
+	width: $mainWidth;
+
+	font-family: OpenSans;
+	text-align: left;
+
+	color: rgb(225, 225, 225);
+
+	h2 {
+		font-family: Lovelo;
+		text-align: center;
+	}
+
+	h3 {
+		//font-size: 1.9em;
+		font-family: Lovelo;
+	}
+
+	p {
+		font-size: 1.3em;
+		padding-left: 40px;
+		padding-right: 40px;
+	}
+
+	span {
+		font-family: Monospace;
+		font-size: 1.0em;
+		padding-left: 5px;
+		padding-right: 5px;
+		color: $blueDesat;
+	}
+
+	span.red {
+		color: $redDesat;
+		font-family: OpenSans;
+		font-size: 1em;
+		padding: 0;
+	}
+
+	.sep-line {
+
+		margin: 0 auto;
+		margin-top: 35px;
+		margin-bottom: 35px;
+		display: block;
+		height: 2px;
+		width: 80%;
+		background-color: rgba(100, 100, 100, 0.8);
+	}
+}
+
+
+
+
+
 
 
 

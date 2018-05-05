@@ -112,55 +112,9 @@ function distortionShapeFshSource() {
 		varying vec2 vTextureCoord;
 		varying float vScaleFactor;
 
-
-		highp vec2 vectorField(highp vec2 x) {
-
-			highp vec2 x1 = vec2(0.5, 0.5);
-			highp vec2 x2 = vec2(0.5, 1.4);
-
-			float q1 =  0.2;
-			float q2 = -0.2;
-
-			highp float d1 = length(x1 - x);
-			highp float d2 = length(x2 - x);
-
-			return (1.0 / (4.0 * PI)) * (q1 * normalize(x1 - x)/(d1 * d1) + q2 * normalize(x2 - x)/(d2 * d2));
-		}
-
-		highp float gaussian(highp vec2 x, highp vec2 center, float multiply) {
-
-			float epsilon = 1.0 / multiply;
-
-			return exp(-pow(epsilon * length(x - center), 2.0));
-		}
-
-		highp float invertedGaussian(highp vec2 x, highp vec2 center, float multiply) {
-
-			return 1.0 - gaussian(x, center, multiply);
-		}
-
 		highp float parabola(highp vec2 x, highp vec2 center, float multiply) {
 
 			return pow(length(center - x), 2.0) * multiply;
-		}
-
-		highp float clampedParabola(highp vec2 x, highp vec2 center, float multiply) {
-			
-			//float v = pow(length(x - center), 2.0 + 1.4 * multiply);
-			float v = pow(length(x - center), 1.5) * multiply;
-			//return min(0.2, parabola(x, center, multiply));
-			return min(0.2, v);
-			//return v;
-		}
-
-		highp float smoothIncrease(highp vec2 x, highp vec2 center, float multiply) {
-
-			float minDistance = 0.1;
-			float maxDistance = 2.0;
-
-			//float t = multiply * min(1.0, max(1.0, (length(x - center), 0, maxDistance))) / maxDistance;
-			float t = (length(x - center), 0, maxDistance) / maxDistance;
-			return smoothstep(0.0, 0.0001, t) * multiply * 0.1;
 		}
 
 		float linearFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirection, float multiply) {
@@ -178,11 +132,9 @@ function distortionShapeFshSource() {
 			float angle = asin(abs(dot(dX, relativeDirection)) / (length(dX) * length(relativeDirection)));
 
 			if (abs(angle) > PI) {
-				//return pow(abs(x.y - center.y), 1.0) * multiply * 10.0;
 				return pow(dist, 1.0) * multiply * 10.0;
 			}
 			return pow(dist, 1.0) * multiply;
-			//return pow(abs(x.y - center.y), 1.0) * multiply;
 		}
 
 		void markCenter(highp vec2 texturePos, highp vec3 center, highp vec3 color) {
@@ -206,9 +158,7 @@ function distortionShapeFshSource() {
 
 			highp vec2 center = vec2(0.5, 0.5);
 
-			//highp vec2 right = vec2(1.0, 0.0);
 			highp vec2 right = vec2(cos(-rightAngle), sin(-rightAngle));
-			//highp vec2 down = vec2(0.0, -1.0);
 			highp vec2 down = vec2(cos(-downAngle), sin(-downAngle)); 
 
 			highp vec2 forceDistortion = normalize(center.xy - vTextureCoord) * parabola(vTextureCoord, center, force) * forceDistWeight;
@@ -216,9 +166,6 @@ function distortionShapeFshSource() {
 			highp vec2 compressDistortion = compressionFlow(vTextureCoord, center, down, max(0.0, speed - stiffness)) * compressionFlowWeight * down;
 
 			highp vec2 offset = forceDistortion + linearDistortion + compressDistortion;
-
-			//offset += vec2(0.0, valueForCenter(vTextureCoord, 1, max(0.0, speed - stiffness))) * centers(1).z;
-			//offset += vec2(0.0, valueForCenter(vTextureCoord, 2, max(0.0, speed - stiffness))) * centers(2).z;
 
 			float dX = offset.x;
 			float dY = offset.y;
@@ -288,12 +235,12 @@ function main() {
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
 	
-	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
 
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);

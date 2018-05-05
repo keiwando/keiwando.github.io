@@ -25,6 +25,31 @@ days:
 		<span class="syntax-error-display"></span>
 		<input type="text" name="dsl-cmd-input" autocomplete="off" autofocus>
 	</div>
+
+	<div id="documentation-container">
+		
+		<h2>Commands</h2>
+
+		<span class="sep-line"></span>
+		
+		<h3>Select a Day</h3>
+		<p>Type <span>Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday</span> or <span>Today</span> to select a day</p>
+		<p>The currently selected day is always <span class="red">highlighted</span>.</p>
+		<!--<p>Alternatively, type <span>Today</span> to select whatever day it is right now.</p>-->
+		<p>You can also abbreviate all day names down to a minimum of 2 characters, so for example
+		<span>Mo, Mon, Mond, Monda, Monday</span>
+		are all valid ways to reference <span>Monday</span>.</p>
+
+		<span class="sep-line"></span>
+
+		<h3>Add an Event</h3>
+		<p>Specify the event in the form</p>
+		<p><span>Day startTime - endTime Title</span></p>
+		<p>Add <span>!!</span> to the end of the command to indicate an important event. For example</p>
+		<p><span>Wed 10:30 - 12 Meeting !!</span></p>
+		<p>adds an important event called "Meeting" on Wednesday between 10:30 and 12:00 to your schedule.</p>
+
+	</div>
 	
 </div>
 

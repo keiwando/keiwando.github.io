@@ -4,9 +4,37 @@ var Scheduler = (function(){
 	var grammar = `
 
 		FullInput
+		  = 
+		    CreateEventCommand
+		  / ResetCommand
+		  / SelectDayCommand
+		  / DeleteEventCommand
+		  / ClearAllDayEventsCommand
+		  / ClearAllCommand
+		  / " "*
+
+		SelectDayCommand
+		  = day:Day { 
+
+		  	return {
+		  		commandID: 0, 
+		  		day: day
+		  	};
+		  }
+
+		ResetCommand
+		  = "Reset"i {
+
+		  	return {
+		  		commandID: 1
+		  	}
+		  }
+
+		CreateEventCommand
 		  = day:Day _ start:Time _? "-" _? end:Time _ title:Title important:Important? {
 
 		  	  return {
+		  	  	commandID: 2,
 			  	day: day,
 			  	startTime: start,
 			  	endTime: end,
@@ -15,16 +43,10 @@ var Scheduler = (function(){
 			  };
 		  }
 
-		  / day:Day { 
-
-		  	return {
-		  		day: day
-		  	};
-		  }
-
 		  / start:Time _? "-" _? end:Time _ title:Title important:Important? {
 
 		  	  return {
+		  	  	commandID: 2,
 			  	day: -1,
 			  	startTime: start,
 			  	endTime: end,
@@ -33,15 +55,30 @@ var Scheduler = (function(){
 			  };
 		  }
 
-		  / DeleteCommand
 
-		DeleteCommand
-		  = ("Clear"i / "Del"i"ete"i?) _ day:(Day _)? startTime:Time {
+		DeleteEventCommand
+		  = ("Clear"i / "Delete"i?) _ day:(Day _)? startTime:Time {
 
 		  	return {
-		  		delete: true,
+		  		commandID: 3,
 		  		day: day == null ? -1 : day[0],
 		  		startTime: startTime
+		  	};
+		  }
+
+		ClearAllDayEventsCommand
+		  = ("Clear"i / "Delete"i?) _ day:Day {
+
+		  	return {
+		  		commandID: 4,
+		  		day: day
+		  	};
+		  }
+
+		ClearAllCommand
+		  = ("Clear"i / "Delete"i?) " All"i {
+		  	return {
+		  		commandID: 5
 		  	}
 		  }
 
@@ -56,7 +93,7 @@ var Scheduler = (function(){
 
 		  	return {
 		  		hour: hour,
-		  		minute: minute | 0
+		  		minute: minute || 0
 		  	}
 		  }
 
@@ -71,28 +108,34 @@ var Scheduler = (function(){
 		  }
 
 		Day
-		  = Monday / Tuesday / Wednesday / Thursday / Friday / Saturday / Sunday
+		  = Monday / Tuesday / Wednesday / Thursday / Friday / Saturday / Sunday / Today
 
 		Monday
-		  = "Mon"i"day"i? { return 1; }
-
+		  = ("Monday"i / "Monda"i / "Mond"i / "Mon"i / "Mo"i) { return 1; }
+ 		  
 		Tuesday
-		  = "Tue"i"sday"i? { return 2; }
+		  = ("Tuesday"i / "Tuesda"i / "Tuesd"i / "Tues"i / "Tue"i / "Tu"i) { return 2; }
 
 		Wednesday
-		  = "Wed"i"nesday"i? { return 3; }
+		  = ("Wednesday"i / "Wednesda"i / "Wednesd"i / "Wednes"i / "Wedne"i / "Wedn"i / "Wed"i / "We"i) { return 3; }
 
 		Thursday
-		  = "Thu"i"rsday"i? { return 4; }
+		  = ("Thursday"i / "Thursda"i / "Thursd"i / "Thurs"i / "Thur"i / "Thu"i / "Th"i) { return 4; }
 
 		Friday
-		  = "Fri"i"day"i? { return 5; }
+		  = ("Friday"i / "Frida"i / "Frid"i / "Fri"i / "Fr"i) { return 5; }
 
 		Saturday
-		  = "Sat"i"urday"i? { return 6; }
+		  = ("Saturday"i / "Saturda"i / "Saturd"i / "Satur"i / "Satu"i / "Sat"i / "Sa"i) { return 6; }
 
 		Sunday
-		  = "Sun"i"day"i? { return 7; }
+		  = ("Sunday"i / "Sunda"i / "Sund"i / "Sun"i / "Su"i) { return 7; }
+
+		Today
+		  = "Today"i { 
+		  	let currentDay = new Date().getDay();
+			return currentDay == 0 ? 7 : currentDay;
+		  }
 
 		Integer "integer"
 		  = _ [0-9]+ { return parseInt(text(), 10); }
@@ -103,9 +146,10 @@ var Scheduler = (function(){
 
 	var parser = peg.generate(grammar);
 
-	console.log(document.cookie);
-	document.cookie = "TUE 10-12 Test !!";
+	//console.log(document.cookie);
+	//document.cookie = "TUE 10-12 Test !!";
 	let storage = window.localStorage;
+	let COMMAND_STORAGE_KEY = "Scheduler_Commands";
 
 	var elem;
 	var schedule;
@@ -122,7 +166,9 @@ var Scheduler = (function(){
 
 	var context = {
 		selectedDay: 1,
-		selectedDayContainer: undefined
+		selectedDayContainer: undefined,
+		previousCommands: [],
+		redoCommands: []
 	}
 
 	var settings = {
@@ -139,7 +185,7 @@ var Scheduler = (function(){
 
 	var refreshCurrentDay = function(day) {
 
-		context.selectedDay = day;
+		context.selectedDay = parseInt(day);
 
 		for (dayContainer of elem.dayContainers) {
 			if (dayContainer.id == days[context.selectedDay] + "-container") {
@@ -149,6 +195,25 @@ var Scheduler = (function(){
 				dayContainer.classList.remove("current");
 			}
 		}
+	}
+
+	function createEvent(container, title, day, start, end, important) {
+
+		var eventCell = document.createElement("div");
+		container.appendChild(eventCell);
+		eventCell.classList.add("event");
+		var label = document.createElement("h5");
+		eventCell.appendChild(label);
+		label.innerHTML = title;
+
+		return {
+			cell: eventCell,
+			title: title,
+			day: day,
+			startTime: start,
+			endTime: end,
+			important: important
+		};
 	}
 
 	function placeEvent(eventInfo) {
@@ -188,6 +253,147 @@ var Scheduler = (function(){
 		return parsed;
 	}
 
+	function selectDayCmd(parsed) {
+		refreshCurrentDay(parsed.day);
+	}
+
+	function createEventCmd(parsed) {
+
+		if ("day" in parsed && parsed["day"] != -1 && parsed["day"] != null) {
+			refreshCurrentDay(parsed.day);
+		}
+
+		if (parsed.startTime.hour < settings.startHour || parsed.endTime.hour > settings.endHour) {
+			settings.startHour = Math.min(settings.startHour, parsed.startTime.hour);
+			settings.endHour = Math.max(settings.endHour, parsed.endTime.hour);
+			refreshContainerSizes();
+		}
+
+		var eventInfo = createEvent(context.selectedDayContainer, parsed.title, context.selectedDay, parsed.startTime, parsed.endTime, parsed.important);
+		placeEvent(eventInfo);
+		events.push(eventInfo);		
+	}
+
+	function deleteEventCmd(parsed) {
+
+		if ("day" in parsed && parsed["day"] != -1 && parsed["day"] != null) {
+			refreshCurrentDay(parsed.day);
+		}
+
+		let index = events.findIndex(function(e){
+			
+			return e.day == context.selectedDay && e.startTime.hour == parsed.startTime.hour && e.startTime.minute == parsed.startTime.minute;
+		});
+
+		if (index == -1) {
+			throw "Event to be deleted unknown"
+		}
+
+		var eventInfo = events[index];
+		eventInfo.cell.parentElement.removeChild(eventInfo.cell);
+		events.splice(index, 1);
+
+		refreshDayStartAndEndTimes();
+		refreshContainerSizes();
+	}
+
+	function clearAllDayEventsCmd(parsed) {
+
+		let eventsToDelete = events.filter(function(ev){
+			return ev.day == parsed.day
+		});
+
+		console.log(eventsToDelete);
+
+		for (var ev of eventsToDelete) {
+			ev.cell.parentElement.removeChild(ev.cell);
+		}
+
+		events = events.filter(function(ev){
+			return ev.day != parsed.day
+		});
+		console.log(events);
+		refreshDayStartAndEndTimes();
+		refreshContainerSizes();
+	}
+
+	function clearAllEventsCmd() {
+
+		for (var ev of events) {
+			ev.cell.parentElement.removeChild(ev.cell);
+		}
+		events.length = 0;
+
+		settings.startHour = 8;
+		settings.endHour = 18;
+
+		refreshContainerSizes();
+	}
+
+	function refreshDayStartAndEndTimes() {
+
+		settings.startHour = Math.min(8, Math.min(...events.map(ev => ev.startTime.hour)));
+		settings.endHour = Math.max(18, Math.min(24, Math.max(...events.map(ev => ev.endTime.hour + (ev.endTime.minute > 0 ? 1 : 0)))));
+	}
+
+	function reset() {
+
+		clearAllEventsCmd();
+		events.length = 0;
+		localStorage.removeItem(COMMAND_STORAGE_KEY);
+
+		context = {
+			selectedDay: 1,
+			selectedDayContainer: undefined,
+			previousCommands: [],
+			redoCommands: []
+		}
+
+		settings = {
+			timeCellHeight: 40,
+			dTime: 30,
+			startHour: 8,
+			endHour: 18,
+			minEventDuration: 30
+		}
+	}
+
+	function undo() {
+
+		if (context.previousCommands.length > 0) {
+			let undoCommand = context.previousCommands.pop();
+			context.redoCommands.unshift(undoCommand);
+			let commands = context.previousCommands.slice(0);
+			context.previousCommands.length = 0;
+			clearAllEventsCmd();
+			schedule.runCommands(commands);
+		}
+	}
+
+	function redo() {
+
+		if (context.redoCommands.length > 0) {
+			var redoCommand = context.redoCommands.shift();
+			schedule.runCommands([redoCommand]);
+		}
+	}
+
+	(function registerKeyboardInputHandler(){
+
+		function onKeyDown(e) {
+
+			var evtobj = window.event? event : e
+      		if (evtobj.keyCode == 90 && evtobj.ctrlKey) {
+      			undo();
+      		} else if (evtobj.keyCode == 89 && evtobj.ctrlKey) {
+      			redo();
+      		} 
+		}
+
+		document.onkeydown = onKeyDown;
+
+	})();
+
 	schedule = {
 
 		elements: {
@@ -206,7 +412,7 @@ var Scheduler = (function(){
 			refreshContainerSizes = this.refreshContainers;
 			let currentDay = new Date().getDay();
 			refreshCurrentDay(currentDay == 0 ? 7 : currentDay);
-			this.runTestCommands();
+			//this.runTestCommands();
 			return this;
 		},
 
@@ -224,7 +430,7 @@ var Scheduler = (function(){
 			inp.onchange = function() {
 				if (submitHandler(inp.value)) {
 					inp.value = "";
-					// TODO: Save input for undo
+					context.redoCommands.length = 0;
 				}
 			}
 		},
@@ -282,7 +488,7 @@ var Scheduler = (function(){
 
 			try {
 
-				if (input != "") {
+				if (input.replace(" ", "") != "") {
 					parser.parse(input);
 				}
 				
@@ -297,63 +503,31 @@ var Scheduler = (function(){
 
 		handleInputSubmit: function(input) {
 
-			function createEvent(container, title, day, start, end, important) {
-
-				var eventCell = document.createElement("div");
-				container.appendChild(eventCell);
-				eventCell.classList.add("event");
-				var label = document.createElement("h5");
-				eventCell.appendChild(label);
-				label.innerHTML = title;
-
-				return {
-					cell: eventCell,
-					title: title,
-					day: day,
-					startTime: start,
-					endTime: end,
-					important: important
-				};
+			function chooseCommand(parsed) {
+				//console.log(JSON.stringify(parsed));
+				switch (parsed.commandID) {
+					case 0: selectDayCmd(parsed); break;
+					case 1: reset(); break;
+					case 2: createEventCmd(parsed); break;
+					case 3: deleteEventCmd(parsed); break;
+					case 4: clearAllDayEventsCmd(parsed); break;
+					case 5: clearAllEventsCmd(); break;
+				}
 			}
 
 			try {
 
-				if (input != "") {
+				if (input.replace(" ", "") != "") {
 
 					var parsed = parser.parse(input);
 					parsed = clampInputTimes(parsed);
 
-					if ("day" in parsed && parsed["day"] != -1 && parsed["day"] != null) {
-						refreshCurrentDay(parsed.day);
-					}
+					chooseCommand(parsed);
 
-					if ("title" in parsed) {
-
-						if (parsed.startTime.hour < settings.startHour || parsed.endTime.hour > settings.endHour) {
-							settings.startHour = Math.min(settings.startHour, parsed.startTime.hour);
-							settings.endHour = Math.max(settings.endHour, parsed.endTime.hour);
-							refreshContainerSizes();
-						}
-
-						var eventInfo = createEvent(context.selectedDayContainer, parsed.title, context.selectedDay, parsed.startTime, parsed.endTime, parsed.important);
-						placeEvent(eventInfo);
-						events.push(eventInfo);
-					}
-
-					if ("delete" in parsed) {
-
-						let index = events.findIndex(function(e){
-							
-							return e.day == context.selectedDay && e.startTime.hour == parsed.startTime.hour && e.startTime.minute == parsed.startTime.minute;
-						});
-
-						if (index == -1) {
-							throw "Event to be deleted unknown"
-						}
-
-						var eventInfo = events[index];
-						eventInfo.cell.parentElement.removeChild(eventInfo.cell);
-						events.splice(index, 1);
+					context.previousCommands.push(input);
+					
+					if (parsed.commandID != 1) {
+						localStorage.setItem(COMMAND_STORAGE_KEY, context.previousCommands.join("\n"));	
 					}
 				}
 
@@ -377,8 +551,15 @@ var Scheduler = (function(){
 				"Mon 10-11 Meeting !!",
 				"11-12 Break",
 				"12-14 Lunch",
-				"Del Wed 8"
+				"Del Wed 8",
+				"Wed 8-10 Test",
+				"Fri 10-11 Test"
 			];
+
+			this.runCommands(commands);
+		},
+
+		runCommands: function(commands) {
 
 			var input = elem.dslInput;
 
@@ -391,6 +572,12 @@ var Scheduler = (function(){
 		}
 
 	}.init();
+
+	let previousCommands = storage.getItem(COMMAND_STORAGE_KEY);
+	if (previousCommands != null) {
+		console.log("Previous commands: " + previousCommands);
+		schedule.runCommands(previousCommands.split("\n"));
+	}
 
 	return schedule;
 
