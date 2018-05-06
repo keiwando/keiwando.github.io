@@ -4,10 +4,10 @@ var pencilInputs = {
 	force: 1.0,
 	altitude: 90,
 	azimuth: 300,
-	movement: 0,
+	movement: 90,
 	speed: 1.0,
 	bristleStiffness: 0.0,
-	bristleLength: 0.4
+	bristleLength: 0.0
 };
 
 function basicQuadVshSource() {
@@ -112,6 +112,17 @@ function distortionShapeFshSource() {
 		varying vec2 vTextureCoord;
 		varying float vScaleFactor;
 
+		highp float fD(highp vec2 pos, highp vec2 center, float dryness) {
+
+			float x = (pos.x - center.x) * 15.0;// * dryness;
+			float y = (pos.y - center.y) * 15.0;// * dryness;
+
+			float val = pow(0.5 * (cos(x * sqrt(x * x + y * y)) * cos(y * sqrt(x * x + y * y)) + 1.0), 7.0 * dryness);
+
+			//return val * 2.0 - 1.0;
+			return val;
+		}
+
 		highp float parabola(highp vec2 x, highp vec2 center, float multiply) {
 
 			return pow(length(center - x), 2.0) * multiply;
@@ -123,18 +134,20 @@ function distortionShapeFshSource() {
 			return pow(dist, 2.0) * multiply;
 		}
 
-		float compressionFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirection, float multiply) {
+		float compressionFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirection, highp vec2 rel2, float multiply) {
 
 			highp vec2 dX = center - x;
 
 			float dist = length(dot(dX, relativeDirection) / length(relativeDirection));
 
-			float angle = asin(abs(dot(dX, relativeDirection)) / (length(dX) * length(relativeDirection)));
+			float dist2 = length(dot(dX, rel2) / length(rel2)) * 10.0 + 0.4;
 
-			if (abs(angle) > PI) {
-				return pow(dist, 1.0) * multiply * 10.0;
+			float angle = asin(dot(dX, relativeDirection)) / (length(dX) * length(relativeDirection));
+
+			if (angle < 0.0) {
+				return pow(dist, 1.0) * multiply * 5.0;
 			}
-			return pow(dist, 1.0) * multiply;
+			return pow(dist, 1.0) * multiply * 2.0;
 		}
 
 		void markCenter(highp vec2 texturePos, highp vec3 center, highp vec3 color) {
@@ -163,9 +176,10 @@ function distortionShapeFshSource() {
 
 			highp vec2 forceDistortion = normalize(center.xy - vTextureCoord) * parabola(vTextureCoord, center, force) * forceDistWeight;
 			highp vec2 linearDistortion = linearFlow(vTextureCoord, center, right, max(0.0, speed - stiffness)) * linearFlowWeight * down;
-			highp vec2 compressDistortion = compressionFlow(vTextureCoord, center, down, max(0.0, speed - stiffness)) * compressionFlowWeight * down;
+			highp vec2 compressDistortion = compressionFlow(vTextureCoord, center, down, right, max(0.0, speed - stiffness)) * compressionFlowWeight * down;
 
 			highp vec2 offset = forceDistortion + linearDistortion + compressDistortion;
+			//highp vec2 offset = forceDistortion + compressDistortion;
 
 			float dX = offset.x;
 			float dY = offset.y;
@@ -176,7 +190,9 @@ function distortionShapeFshSource() {
 
 			highp vec4 texColor = texture2D(texture, textureCoord);
 
-			gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
+			float dryness = fD(textureCoord, center, bristleLength);
+
+			gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a * dryness);
 
 			highp vec2 vTextureCoordSc = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
@@ -235,12 +251,12 @@ function main() {
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
 	
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
-	const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
 
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);

@@ -335,10 +335,19 @@ a:focus {
 
 #personal-website-project .image-container {
 	background-image: url('../images/this-website_small.jpg');
+	/*background-image: url('../images/this-website.png');*/
 }
 
 #personal-website-project .description-container {
 	background-color: #F39C12;
+}
+
+#sunnygolf-project .image-container {
+	background-color: #CDF0F9;
+}
+
+#sunnygolf-project .description-container {
+	background-color: #B94E4F;
 }
 
 /**#lob-project img {

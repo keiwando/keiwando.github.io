@@ -31,30 +31,29 @@ var Scheduler = (function(){
 		  }
 
 		CreateEventCommand
-		  = day:Day _ start:Time _? "-" _? end:Time _ title:Title important:Important? {
+		  = day:Day _ time:TimeRange _ title:Title important:Important? {
 
 		  	  return {
 		  	  	commandID: 2,
 			  	day: day,
-			  	startTime: start,
-			  	endTime: end,
+			  	startTime: time.start,
+			  	endTime: time.end,
 			  	title:title,
 			  	important: important ? true : false
 			  };
 		  }
 
-		  / start:Time _? "-" _? end:Time _ title:Title important:Important? {
+		  / time:TimeRange _ title:Title important:Important? {
 
 		  	  return {
 		  	  	commandID: 2,
 			  	day: -1,
-			  	startTime: start,
-			  	endTime: end,
+			  	startTime: time.start,
+			  	endTime: time.end,
 			  	title:title,
 			  	important: important ? true : false
 			  };
 		  }
-
 
 		DeleteEventCommand
 		  = ("Clear"i / "Delete"i?) _ day:(Day _)? startTime:Time {
@@ -88,11 +87,46 @@ var Scheduler = (function(){
 		Title
 		  = ([A-Za-zÄÖÜäöüß0-9 ]+) { return text(); }
 
-		Time 
-		  = hour:Hour [,.:]? minute:Minute? {
+		TimeRange 
+		  = start:Time _? ("-" / "to"i) _? end:Time {
+
+		  	let startText = text().toLowerCase().split(/-|to/)[0];
+		  	let endText = text().toLowerCase().split(/-|to/)[1];
+
+		  	let startIsAM = start.hour < 12 && startText.includes("am");
+		  	let startIsPM = startText.includes("pm");
+		  	let endIsAM = end.hour < 12 && endText.includes("am");
+		  	let endIsPM = endText.includes("pm");
+
+		  	let startInMins = start.hour * 60 + start.minute;
+		  	let endInMins = end.hour * 60 + end.minute;
+
+		  	if (endIsPM && !startIsAM) {
+		  		let shiftedTime = startInMins + 12 * 60;
+		  		if (shiftedTime < Math.min(endInMins, 24 * 60)) {
+		  			start.hour = Math.floor(shiftedTime / 60);
+		  			start.minute = shiftedTime % 60;
+		  		}
+		  	}
+
+		  	if (startIsPM && end.hour < startInMins) {
+
+		  		endInMins += 12 * 60;
+		  		end.hour = Math.floor(endInMins / 60);
+		  		end.minute = endInMins % 60;
+		  	}
 
 		  	return {
-		  		hour: hour,
+		  		start: start,
+		  		end: end
+		  	};
+		  }
+
+		Time 
+		  = hour:Hour [,.:]? minute:Minute? (_? ("AM"i / "PM"i))? {
+
+		  	return {
+		  		hour: hour + (hour <= 12 && text().toLowerCase().includes("pm") ? 12 : 0),
 		  		minute: minute || 0
 		  	}
 		  }
@@ -195,6 +229,11 @@ var Scheduler = (function(){
 				dayContainer.classList.remove("current");
 			}
 		}
+	}
+
+	function getCurrentDay() {
+		let currentDay = new Date().getDay();
+		return currentDay == 0 ? 7 : currentDay;
 	}
 
 	function createEvent(container, title, day, start, end, important) {
@@ -523,6 +562,11 @@ var Scheduler = (function(){
 					parsed = clampInputTimes(parsed);
 
 					chooseCommand(parsed);
+
+					// Replace Today with the actual day
+					if (input.toLowerCase().includes("today")) {
+						input = input.replace(/today/ig, days[getCurrentDay()]);
+					}
 
 					context.previousCommands.push(input);
 					
