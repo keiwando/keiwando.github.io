@@ -161,6 +161,9 @@ function distortionShapeFshSource() {
 
 		void main() {
 
+			//highp vec2 textureCoord = vTextureCoord;
+			highp vec2 textureCoord = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+
 			float forceDistWeight = 0.6;
 			float linearFlowWeight = 1.0;
 			float compressionFlowWeight = 0.04;
@@ -174,9 +177,9 @@ function distortionShapeFshSource() {
 			highp vec2 right = vec2(cos(-rightAngle), sin(-rightAngle));
 			highp vec2 down = vec2(cos(-downAngle), sin(-downAngle)); 
 
-			highp vec2 forceDistortion = normalize(center.xy - vTextureCoord) * parabola(vTextureCoord, center, force) * forceDistWeight;
-			highp vec2 linearDistortion = linearFlow(vTextureCoord, center, right, max(0.0, speed - stiffness)) * linearFlowWeight * down;
-			highp vec2 compressDistortion = compressionFlow(vTextureCoord, center, down, right, max(0.0, speed - stiffness)) * compressionFlowWeight * down;
+			highp vec2 forceDistortion = normalize(center.xy - textureCoord) * parabola(vTextureCoord, center, force) * forceDistWeight;
+			highp vec2 linearDistortion = linearFlow(textureCoord, center, right, max(0.0, speed - stiffness)) * linearFlowWeight * down;
+			highp vec2 compressDistortion = compressionFlow(textureCoord, center, down, right, max(0.0, speed - stiffness)) * compressionFlowWeight * down;
 
 			highp vec2 offset = forceDistortion + linearDistortion + compressDistortion;
 			//highp vec2 offset = forceDistortion + compressDistortion;
@@ -184,9 +187,10 @@ function distortionShapeFshSource() {
 			float dX = offset.x;
 			float dY = offset.y;
 
-			highp vec2 textureCoord = vec2(vTextureCoord.x + dX, vTextureCoord.y + dY);
+			//highp vec2 textureCoord = vec2(textureCoord.x + dX, textureCoord.y + dY);
+			textureCoord += offset;
 
-			textureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+			//textureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
 			highp vec4 texColor = texture2D(texture, textureCoord);
 
@@ -251,12 +255,12 @@ function main() {
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
 	
-	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
 
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);
