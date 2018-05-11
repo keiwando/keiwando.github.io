@@ -13,8 +13,11 @@ days:
 - Sunday
 ---
 
-<div id="main-container">
-
+<div id="editor" class="visible">
+	<textarea name="editor-input" autocomplete="off"></textarea>
+</div>
+<div id="main-container" class="editor-visible">
+	
 	<div id="schedule-container">
 		{% include scheduler-time-container.html %}
 		{% for day in page.days %}
@@ -53,11 +56,41 @@ days:
 
 		<h3>Times</h3>
 		<p>There are many different ways to specify a time. You can choose to just write the hours, e.g. <span>8</span> means 8:00 o'clock.</p>
-		<p>If you want to also specify minutes you can use a colon, comma or a dot: <span>1:30 1,30 1.30</span> are all the same.</p>
+		<p>If you also want to specify minutes you can use a colon, comma or a dot: <span>1:30 1,30 1.30</span> are all the same.</p>
 		<p>You can also write <span>2pm</span> instead of <span>14:00</span> if you like.</p>
-		<p>Specify a time range by writing the start and end time separated by either <span>-</span> or <span>to</span>. With a time range, you only need to write <span>PM</span> 
-			once and it will be interpreted for both the start and end input time if that makes sense. For example, <span>2 to 3pm</span> means 14:00 - 15:00, but 
+		<p>Specify a time range by writing the start and end times separated by either <span>-</span> or <span>to</span>. With a time range, you only need to write <span>PM</span> 
+			once and it will be interpreted for both the start and end input time - but only if that makes sense. For example, <span>2 to 3pm</span> means 14:00 - 15:00, but 
 			<span>10 to 3pm</span> is interpreted as 10:00 - 15:00.</p>
+
+		<span class="sep-line"></span>
+
+		<h3>Delete Events</h3>
+		<p>Type <span>Clear</span> or <span>Delete</span> followed by the day, an optional <span>event at</span> and the starting time of the event to delete a single event, e.g. <span>Delete Monday event at 10AM</span></p>
+		<p>Leaving out the name of the day will make the scheduler look for the event on the currently selected day.</p>
+		<p>You can also delete all events of one day by typing <span>Clear</span> or <span>Delete</span> followed by the name of the day.</p>
+		<p><span>Clear all</span> or <span>Delete all</span> delete all of the events of the whole week.</p>
+
+		<span class="sep-line"></span>
+
+		<h3>Edit Events</h3>
+		<p><span>Rename:</span>Type <span>Rename</span> followed by the day and starting time of the event and the new name to change the name of an existing event, e.g. <span>Rename Mon 10AM Meeting</span> 
+		renames an existing event on Monday at 10AM to "Meeting"</p>
+		<p><span>Reschedule:</span>Type the day and starting time of the event followed by <span>new time</span> and the new start and end times of the event, e.g. 
+			<span>Mon event at 10 new time 11-12</span> will reschedule the event from Monday 10:00 to Monday 11:00-12:00.</p>
+		<p>As always, leaving out the day will use the currently selected day to look for the events.</p>
+
+		<span class="sep-line"></span>
+
+		<h3>Reset</h3>		
+		<p>Type <span>Reset</span> in order to reset the entire schedule, deleting all events and clearing all of the previous commands from your browser's local storage.</p>
+
+		<span class="sep-line"></span>
+
+		<h3>General Syntax</h3>		
+		<p>All of the commands are case-insensitive, so it doesn't matter if you use uppercase or lowercase letters (or a mix of both).</p>
+		<p>Whitespace is generally handled quite liberally, meaning that you can use as many spaces in your commands as you want, as long as you use at least one to separate 
+		the different parts of the command.</p>
+		<p>You can write an optional <span>event at</span> when specifying an existing event with its start time to improve readability.</p>
 
 	</div>
 	

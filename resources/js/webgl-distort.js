@@ -4,8 +4,8 @@ var pencilInputs = {
 	force: 1.0,
 	altitude: 90,
 	azimuth: 300,
-	movement: 90,
-	speed: 1.0,
+	movement: 45,
+	speed: 0.0,
 	bristleStiffness: 0.0,
 	bristleLength: 0.0
 };
@@ -82,13 +82,12 @@ function distortionShapeVshSource() {
 			float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0 + abs(max(-position.x, 0.0)) * 20.5 * sin(force);
 
 			vTextureCoord = textureCoord;
-			vScaleFactor = (1.0 + 0.8 * force);
+			vScaleFactor = (1.5 + 1.0 * force);
 
 			//vScaleFactor = 1.0;
 
 			//gl_Position = projectionMat * modelViewMat * distortion * (position + offset);
 			gl_Position = projectionMat * modelViewMat * (vec4(position.xy * vScaleFactor, 0.0, 1.0) + offset);
-			//gl_Position = vec4(position.xy * 0.5, 0.0, 1.0);
 		}
 	`;
 }
@@ -114,10 +113,13 @@ function distortionShapeFshSource() {
 
 		highp float fD(highp vec2 pos, highp vec2 center, float dryness) {
 
-			float x = (pos.x - center.x) * 15.0;// * dryness;
-			float y = (pos.y - center.y) * 15.0;// * dryness;
+			float x = (pos.x - center.x) * 15.0; // * dryness;
+			float y = (pos.y - center.y) * 15.0; // * dryness;
 
 			float val = pow(0.5 * (cos(x * sqrt(x * x + y * y)) * cos(y * sqrt(x * x + y * y)) + 1.0), 7.0 * dryness);
+
+			//val = pow(0.5 * (cos(x * 3.0) * cos(y * 3.0) + 1.0), 20.0 * dryness);
+			//val = pow(0.5 * (cos(x * pow(x * x + y * y, 0.25) * 3.0) * cos(y * pow(x * x + y * y, 0.25) * 3.0) + 1.0), 7.0 * dryness);
 
 			//return val * 2.0 - 1.0;
 			return val;
@@ -125,7 +127,8 @@ function distortionShapeFshSource() {
 
 		highp float parabola(highp vec2 x, highp vec2 center, float multiply) {
 
-			return pow(length(center - x), 2.0) * multiply;
+			return pow(min(0.8, length(center - x)), 1.4) * multiply * 1.2;
+			//return length(center - x) * multiply;
 		}
 
 		float linearFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirection, float multiply) {
@@ -164,7 +167,17 @@ function distortionShapeFshSource() {
 			//highp vec2 textureCoord = vTextureCoord;
 			highp vec2 textureCoord = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
-			float forceDistWeight = 0.6;
+			float r = 1.0 - abs(textureCoord.x - 0.5) * 2.0;
+			float g = 1.0 - abs(textureCoord.y - 0.5) * 2.0;
+			//gl_FragColor = vec4(r, g, 0.0, max(r, g));
+			//return;
+			// DEBUG Markings
+			if (min(vTextureCoord.x, vTextureCoord.y) < 0.002 || max(vTextureCoord.x, vTextureCoord.y) > 0.998) {
+				//gl_FragColor = vec4(1,1,1,1);
+				//return;
+			}
+
+			float forceDistWeight = 0.4;
 			float linearFlowWeight = 1.0;
 			float compressionFlowWeight = 0.04;
 
@@ -177,7 +190,7 @@ function distortionShapeFshSource() {
 			highp vec2 right = vec2(cos(-rightAngle), sin(-rightAngle));
 			highp vec2 down = vec2(cos(-downAngle), sin(-downAngle)); 
 
-			highp vec2 forceDistortion = normalize(center.xy - textureCoord) * parabola(vTextureCoord, center, force) * forceDistWeight;
+			highp vec2 forceDistortion = normalize(center.xy - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight;
 			highp vec2 linearDistortion = linearFlow(textureCoord, center, right, max(0.0, speed - stiffness)) * linearFlowWeight * down;
 			highp vec2 compressDistortion = compressionFlow(textureCoord, center, down, right, max(0.0, speed - stiffness)) * compressionFlowWeight * down;
 
@@ -194,7 +207,7 @@ function distortionShapeFshSource() {
 
 			highp vec4 texColor = texture2D(texture, textureCoord);
 
-			float dryness = fD(textureCoord, center, bristleLength);
+			float dryness = 1.0; //fD(textureCoord, center, bristleLength);
 
 			gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a * dryness);
 
@@ -255,12 +268,12 @@ function main() {
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
 	
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
-	const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
 
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);

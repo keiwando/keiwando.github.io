@@ -5,13 +5,31 @@ var Scheduler = (function(){
 
 		FullInput
 		  = 
-		    CreateEventCommand
+		  	ShowEditorCommand
+		  / HideEditorCommand
+		  / EditEventTimesCommand
+		  / CreateEventCommand
 		  / ResetCommand
 		  / SelectDayCommand
+		  / RenameEventCommand
 		  / DeleteEventCommand
 		  / ClearAllDayEventsCommand
 		  / ClearAllCommand
 		  / " "*
+
+		ShowEditorCommand 
+		  = ("Editor"i / "Show Editor"i) {
+		  	return {
+		  		commandID: -1
+		  	};
+		  }
+
+		HideEditorCommand
+		  = ("Exit Editor"i / "Close Editor"i / "Hide Editor"i / ":q"i / ":wq"i) {
+		  	return {
+		  		commandID: -2	
+		  	};
+		  }
 
 		SelectDayCommand
 		  = day:Day { 
@@ -56,7 +74,7 @@ var Scheduler = (function(){
 		  }
 
 		DeleteEventCommand
-		  = ("Clear"i / "Delete"i?) _ day:(Day _)? startTime:Time {
+		  = ("Clear"i / "Delete"i?) _ day:(Day _)? (_ "event at" _)? startTime:Time {
 
 		  	return {
 		  		commandID: 3,
@@ -80,6 +98,30 @@ var Scheduler = (function(){
 		  		commandID: 5
 		  	}
 		  }
+
+		RenameEventCommand
+		  = "Rename"i _ day:(Day _)? (_ "event at" _)? startTime:Time title:Title {
+
+		  	return {
+		  		commandID: 6,
+		  		day: day == null ? -1 : day[0],
+		  		startTime: startTime,
+		  		title: title
+		  	};
+		  }
+
+		EditEventTimesCommand
+		  = day:(Day _)? (_ "event at" _)? startTime:Time _ "new"i " "+ "time"i _ newTime:TimeRange {
+
+		  	return {
+		  		commandID: 7,
+		  		day: day == null ? -1 : day[0],
+		  		startTime: startTime,
+		  		newStartTime: newTime.start,
+		  		newEndTime: newTime.end
+		  	};
+		  }
+
 
 		Important 
 		  = "!!"
@@ -141,7 +183,7 @@ var Scheduler = (function(){
 		  	return parseInt(text(), 10);
 		  }
 
-		Day
+		Day "Day"
 		  = Monday / Tuesday / Wednesday / Thursday / Friday / Saturday / Sunday / Today
 
 		Monday
@@ -251,7 +293,12 @@ var Scheduler = (function(){
 			day: day,
 			startTime: start,
 			endTime: end,
-			important: important
+			important: important,
+
+			set Title(value) {
+				this.title = value;
+				label.innerHTML = value;
+			}
 		};
 	}
 
@@ -292,6 +339,24 @@ var Scheduler = (function(){
 		return parsed;
 	}
 
+	function findCurrentDayEventStartingAt(startTime) {
+
+		function formattedNum(num) {
+			return ("0" + num).slice(-2);
+		}
+
+		let index = events.findIndex(function(e){
+			
+			return e.day == context.selectedDay && e.startTime.hour == startTime.hour && e.startTime.minute == startTime.minute;
+		});
+
+		if (index == -1) {
+			throw `There is no event on ${days[context.selectedDay]} starting at ${timeToString(startTime)}`;
+		}
+
+		return events[index];
+	}
+
 	function selectDayCmd(parsed) {
 		refreshCurrentDay(parsed.day);
 	}
@@ -308,9 +373,24 @@ var Scheduler = (function(){
 			refreshContainerSizes();
 		}
 
+		var overlap = checkOverlap(context.selectedDay, parsed.startTime, parsed.endTime);
+		if (overlap.exists) {
+			showError(`An event already exists on ${days[context.selectedDay]} from ${timeToString(overlap.event.startTime)} to ${timeToString(overlap.event.endTime)}`, true);
+			return;
+		}
+
 		var eventInfo = createEvent(context.selectedDayContainer, parsed.title, context.selectedDay, parsed.startTime, parsed.endTime, parsed.important);
 		placeEvent(eventInfo);
 		events.push(eventInfo);		
+	}
+
+	function timeToString(time) {
+
+		function formattedNum(num) {
+			return ("0" + num).slice(-2);
+		}
+
+		return `${formattedNum(time.hour)}:${formattedNum(time.minute)}`;
 	}
 
 	function deleteEventCmd(parsed) {
@@ -319,18 +399,9 @@ var Scheduler = (function(){
 			refreshCurrentDay(parsed.day);
 		}
 
-		let index = events.findIndex(function(e){
-			
-			return e.day == context.selectedDay && e.startTime.hour == parsed.startTime.hour && e.startTime.minute == parsed.startTime.minute;
-		});
-
-		if (index == -1) {
-			throw "Event to be deleted unknown"
-		}
-
-		var eventInfo = events[index];
+		var eventInfo = findCurrentDayEventStartingAt(parsed.startTime);
 		eventInfo.cell.parentElement.removeChild(eventInfo.cell);
-		events.splice(index, 1);
+		events.splice(events.indexOf(eventInfo), 1);
 
 		refreshDayStartAndEndTimes();
 		refreshContainerSizes();
@@ -369,6 +440,75 @@ var Scheduler = (function(){
 		refreshContainerSizes();
 	}
 
+	function renameEventCmd(parsed) {
+
+		if ("day" in parsed && parsed["day"] != -1 && parsed["day"] != null) {
+			refreshCurrentDay(parsed.day);
+		}
+
+		var event = findCurrentDayEventStartingAt(parsed.startTime);
+
+		event.Title = parsed.title;	
+	}
+
+	function editEventTimesCmd(parsed) {
+
+		if ("day" in parsed && parsed["day"] != -1 && parsed["day"] != null) {
+			refreshCurrentDay(parsed.day);
+		}
+
+		var event = findCurrentDayEventStartingAt(parsed.startTime);
+
+		var overlap = checkOverlap(context.selectedDay, parsed.newStartTime, parsed.newEndTime, event);
+		if (overlap.exists) {
+			showError(`An event already exists on ${days[context.selectedDay]} from ${timeToString(overlap.event.startTime)} to ${timeToString(overlap.event.endTime)}`, true);
+			return;
+		}
+
+		event.startTime = parsed.newStartTime;
+		event.endTime = parsed.newEndTime;
+
+		refreshDayStartAndEndTimes();
+		refreshContainerSizes();
+	}
+
+	function checkOverlap(day, startTime, endTime, eventToIgnore = undefined) {
+
+		function timeToMins(time) {
+			return time.hour * 60 + time.minute;
+		}
+
+		function isBetween(t, start, end) {
+			return start < t && t < end;
+		}
+
+		var start = timeToMins(startTime);
+		var end = timeToMins(endTime);
+
+		for (event of events) {
+
+			var evtStart = timeToMins(event.startTime);
+			var evtEnd = timeToMins(event.endTime);
+
+			if (event.day != day || (eventToIgnore != undefined && eventToIgnore === event)) {
+				continue;
+			}
+
+			if ((evtStart == start || evtEnd == end) || isBetween(evtStart, start, end) || isBetween(evtEnd, start, end)
+				|| isBetween(start, evtStart, evtEnd) || isBetween(end, evtStart, evtEnd)) {
+
+				return {
+					exists: true,
+					event: event
+				};
+			}
+		}
+
+		return {
+			exists: false
+		}
+	}
+
 	function refreshDayStartAndEndTimes() {
 
 		settings.startHour = Math.min(8, Math.min(...events.map(ev => ev.startTime.hour)));
@@ -395,6 +535,8 @@ var Scheduler = (function(){
 			endHour: 18,
 			minEventDuration: 30
 		}
+
+		refreshCurrentDay(getCurrentDay());
 	}
 
 	function undo() {
@@ -433,6 +575,41 @@ var Scheduler = (function(){
 
 	})();
 
+	function showError(error, forced = false) {
+
+		if (forced) {
+			elem.syntaxErrorDisplay.classList.add("active");
+			elem.syntaxErrorDisplay.innerHTML = error.toString();
+			console.log("Overlap");
+			return;			
+		}
+
+		var errorText = error.toString();
+
+		// Make parser errors more user friendly
+		if (errorText.includes("or [A-Za-zÄÖÜäöüß0-9 ]")) {
+			errorText = "Missing event name";
+		} /*else if (errorText.toLowerCase().includes("syntaxerror")) {
+			//errorText = "SyntaxError";
+		}*/ else if (error.name != "ReferenceError") {
+			errorText = "Invalid Command";
+		}
+
+		elem.syntaxErrorDisplay.classList.add("active");
+		elem.syntaxErrorDisplay.innerHTML = errorText;
+	}
+
+	function showEditor() {
+		elem.mainContainer.classList.add("editor-visible");
+		editor.classList.add("visible");
+	}
+
+	function hideEditor() {
+
+		elem.mainContainer.classList.remove("editor-visible");
+		editor.classList.remove("visible");
+	}
+
 	schedule = {
 
 		elements: {
@@ -440,7 +617,10 @@ var Scheduler = (function(){
 			syntaxErrorDisplay: document.querySelector(".syntax-error-display"),
 			scheduleContainer: document.querySelector("#schedule-container"),
 			timeContainer: document.querySelector(".time-container"),
-			dayContainers: document.getElementsByClassName("day-container")
+			dayContainers: document.getElementsByClassName("day-container"),
+			editor: document.querySelector("#editor"),
+			mainContainer: document.querySelector("#main-container"),
+			editorTextarea: document.querySelector("textarea")
 		},
 
 		init: function() {
@@ -463,14 +643,32 @@ var Scheduler = (function(){
 
 			inp.oninput = function() {
 				
-				inpHandler(inp.value);
+				inpHandler(inp.value.trim());
 			}
 
 			inp.onchange = function() {
-				if (submitHandler(inp.value)) {
+				if (submitHandler(inp.value.trim())) {
 					inp.value = "";
 					context.redoCommands.length = 0;
 				}
+			}
+
+			var textarea = elem.editorTextarea;
+			var tSubmitHandler = this.handleEditorSubmit;
+
+			/*textarea.onchange = function() {
+				tSubmitHandler(textarea.innerHTML);
+				context.redoCommands.length = 0;
+			}*/
+
+			textarea.onkeyup = function(e){
+			  	e = e || event;
+			  	
+			  	if (e.keyCode === 13) {
+			    	tSubmitHandler(textarea.innerHTML);
+					context.redoCommands.length = 0;
+			  	}
+			  	return true;
 			}
 		},
 
@@ -527,16 +725,17 @@ var Scheduler = (function(){
 
 			try {
 
+				elem.syntaxErrorDisplay.classList.remove("active");
+				elem.syntaxErrorDisplay.innerHTML = "";
+
 				if (input.replace(" ", "") != "") {
 					parser.parse(input);
 				}
-				
-				elem.syntaxErrorDisplay.classList.remove("active");
-				elem.syntaxErrorDisplay.innerHTML = "";
 					
 			} catch (e) {
-				elem.syntaxErrorDisplay.classList.add("active");
-				elem.syntaxErrorDisplay.innerHTML = e;
+				//elem.syntaxErrorDisplay.classList.add("active");
+				//elem.syntaxErrorDisplay.innerHTML = e;
+				showError(e);
 			}
 		},
 
@@ -545,16 +744,23 @@ var Scheduler = (function(){
 			function chooseCommand(parsed) {
 				//console.log(JSON.stringify(parsed));
 				switch (parsed.commandID) {
+					case -2: hideEditor(); break;
+					case -1: showEditor(); break;
 					case 0: selectDayCmd(parsed); break;
 					case 1: reset(); break;
 					case 2: createEventCmd(parsed); break;
 					case 3: deleteEventCmd(parsed); break;
 					case 4: clearAllDayEventsCmd(parsed); break;
 					case 5: clearAllEventsCmd(); break;
+					case 6: renameEventCmd(parsed); break;
+					case 7: editEventTimesCmd(parsed); break;
 				}
 			}
 
 			try {
+
+				elem.syntaxErrorDisplay.classList.remove("active");
+				elem.syntaxErrorDisplay.innerHTML = "";
 
 				if (input.replace(" ", "") != "") {
 
@@ -570,21 +776,32 @@ var Scheduler = (function(){
 
 					context.previousCommands.push(input);
 					
-					if (parsed.commandID != 1) {
+					if (parsed.commandID >= 0 && parsed.commandID != 1) {
 						localStorage.setItem(COMMAND_STORAGE_KEY, context.previousCommands.join("\n"));	
 					}
 				}
 
-				elem.syntaxErrorDisplay.classList.remove("active");
-				elem.syntaxErrorDisplay.innerHTML = "";
-
 				return true;
 
 			} catch (e) {
-				elem.syntaxErrorDisplay.classList.add("active");
-				elem.syntaxErrorDisplay.innerHTML = e;
+				//elem.syntaxErrorDisplay.classList.add("active");
+				//elem.syntaxErrorDisplay.innerHTML = e;
+
+				showError(e);
 
 				return false;
+			}
+		},
+
+		handleEditorInput: function(input) {
+
+			// TODO: Improve
+			reset();
+			var commands = input.split("\n");
+			for (var cmd of commands) {
+				if (!this.handleInputSubmit(cmd)) {
+					break;
+				}  
 			}
 		},
 
@@ -619,8 +836,10 @@ var Scheduler = (function(){
 
 	let previousCommands = storage.getItem(COMMAND_STORAGE_KEY);
 	if (previousCommands != null) {
-		console.log("Previous commands: " + previousCommands);
+		//console.log("Previous commands: " + previousCommands);
 		schedule.runCommands(previousCommands.split("\n"));
+
+		elem.editorTextarea.innerHTML = previousCommands;
 	}
 
 	return schedule;

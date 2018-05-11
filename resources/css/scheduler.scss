@@ -30,6 +30,50 @@ html, body {
 	overflow-y: auto;
 }
 
+#editor {
+
+	width: 0;
+	height: 0;
+
+	textarea {
+		visibility: hidden;
+	}
+}
+
+#editor.visible {
+	display: visible;
+	float: left;
+	height: $mainHeight;
+	max-height: 90vh;
+	width: 100vw - $mainWidth;
+	background-color: $inputColor;
+	//border-bottom: 1px solid rgb;
+	border-right: 3px solid rgba(0,0,0,0.2);
+	margin: 20px auto;
+
+	//transition: 0.2s;
+
+	textarea[name=editor-input] {
+		font-family: Monospace;
+		font-size: 20px;
+
+		background-color: rgba(0,0,0,0);
+		border-style: none;
+		width: calc(100% - 20px);
+		height: calc(100% - 20px);
+		margin-top: 10px;
+
+		resize: none;
+		overflow-y: scroll;
+
+		visibility: visible;
+	}
+
+	textarea:focus {
+		outline: none;
+	}
+}
+
 #main-container {
 	width: $mainWidth;
 	height: $mainHeight;
@@ -39,9 +83,17 @@ html, body {
 	background-color: rgba(0, 0, 0, 0.2);
 	//border: 3px solid rgba(255, 255, 255, $border-alpha);
 	border-radius: 3px;
+
+	float: none;
+}
+
+#main-container.editor-visible {
+	float: right;
+	transition: 0.2s;
 }
 
 #schedule-container {
+
 	width: 100%;
 	min-width: 100%;
 	max-width: 100%;
