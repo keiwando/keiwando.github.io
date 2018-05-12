@@ -18,7 +18,7 @@ var Scheduler = (function(){
 		  / " "*
 
 		ShowEditorCommand 
-		  = ("Editor"i / "Show Editor"i) {
+		  = ("Editor"i / "Show Editor"i / "Open Editor"i) {
 		  	return {
 		  		commandID: -1
 		  	};
@@ -74,7 +74,7 @@ var Scheduler = (function(){
 		  }
 
 		DeleteEventCommand
-		  = ("Clear"i / "Delete"i?) _ day:(Day _)? (_ "event at" _)? startTime:Time {
+		  = ("Clear"i / "Delete"i?) _ day:(Day _)? (_ "event at"i _)? startTime:Time {
 
 		  	return {
 		  		commandID: 3,
@@ -93,14 +93,14 @@ var Scheduler = (function(){
 		  }
 
 		ClearAllCommand
-		  = ("Clear"i / "Delete"i?) " All"i {
+		  = ("Clear"i / "Delete"i?) _ "All"i {
 		  	return {
 		  		commandID: 5
 		  	}
 		  }
 
 		RenameEventCommand
-		  = "Rename"i _ day:(Day _)? (_ "event at" _)? startTime:Time title:Title {
+		  = "Rename"i _ day:(Day _)? ("event at"i _)? startTime:Time title:Title {
 
 		  	return {
 		  		commandID: 6,
@@ -111,7 +111,7 @@ var Scheduler = (function(){
 		  }
 
 		EditEventTimesCommand
-		  = day:(Day _)? (_ "event at" _)? startTime:Time _ "new"i " "+ "time"i _ newTime:TimeRange {
+		  = day:(Day _)? ("event at"i _)? startTime:Time _ "new"i " "+ "time"i _ newTime:TimeRange {
 
 		  	return {
 		  		commandID: 7,
@@ -127,7 +127,7 @@ var Scheduler = (function(){
 		  = "!!"
 
 		Title
-		  = ([A-Za-zÄÖÜäöüß0-9 ]+) { return text(); }
+		  = ([A-Za-zÄÖÜäöüß0-9() ]+) { return text(); }
 
 		TimeRange 
 		  = start:Time _? ("-" / "to"i) _? end:Time {
@@ -217,7 +217,7 @@ var Scheduler = (function(){
 		  = _ [0-9]+ { return parseInt(text(), 10); }
 
 		_ "whitespace"
-		  = [ \\t\\n\\r]*
+		  = [ \\t\\n\\r]+
 	`;
 
 	var parser = peg.generate(grammar);
@@ -242,6 +242,7 @@ var Scheduler = (function(){
 
 	var context = {
 		selectedDay: 1,
+		editorErrorLine: 1,
 		selectedDayContainer: undefined,
 		previousCommands: [],
 		redoCommands: []
@@ -523,6 +524,7 @@ var Scheduler = (function(){
 
 		context = {
 			selectedDay: 1,
+			editorErrorLine: 1,
 			selectedDayContainer: undefined,
 			previousCommands: [],
 			redoCommands: []
@@ -575,16 +577,146 @@ var Scheduler = (function(){
 
 	})();
 
+	function handleInputChange(input) {
+
+		try {
+
+			elem.syntaxErrorDisplay.classList.remove("active");
+			elem.syntaxErrorDisplay.innerHTML = "";
+
+			if (input.replace(" ", "") != "") {
+				parser.parse(input);
+			}
+				
+		} catch (e) {
+			showError(e);
+		}
+	}
+
+	function chooseCommand(parsed) {
+		//console.log(JSON.stringify(parsed));
+		switch (parsed.commandID) {
+			case -2: hideEditor(); break;
+			case -1: showEditor(); break;
+			case 0: selectDayCmd(parsed); break;
+			case 1: reset(); break;
+			case 2: createEventCmd(parsed); break;
+			case 3: deleteEventCmd(parsed); break;
+			case 4: clearAllDayEventsCmd(parsed); break;
+			case 5: clearAllEventsCmd(); break;
+			case 6: renameEventCmd(parsed); break;
+			case 7: editEventTimesCmd(parsed); break;
+		}
+	}
+
+	function runParsedCommand(parsed, input) {
+
+		chooseCommand(parsed);
+
+		// Replace Today with the actual day
+		if (input.toLowerCase().includes("today")) {
+			input = input.replace(/today/ig, days[getCurrentDay()]);
+		}
+
+		context.previousCommands.push(input);
+		
+		if (parsed.commandID >= 0 && parsed.commandID != 1) {
+			localStorage.setItem(COMMAND_STORAGE_KEY, context.previousCommands.join("\n"));	
+		}
+	}
+
+	function rememberCommand(cmd) {
+
+		contex.previousCommands.push(cmd);
+		localStorage.setItem(COMMAND_STORAGE_KEY, context.previousCommands.join("\n"));	
+	}
+
+	function handleInputSubmit(input) {
+
+		try {
+
+			elem.syntaxErrorDisplay.classList.remove("active");
+			elem.syntaxErrorDisplay.innerHTML = "";
+
+			if (input.replace(" ", "") != "") {
+
+				var parsed = parser.parse(input);
+				parsed = clampInputTimes(parsed);
+
+				runParsedCommand(parsed, input);
+
+				let previousCommands = storage.getItem(COMMAND_STORAGE_KEY);
+				if (previousCommands != null) {
+
+					elem.editorTextarea.value = previousCommands;
+				}
+			} else {
+				console.log("empty input");
+				rememberCommand(input);
+			}
+
+			return true;
+
+		} catch (e) {
+
+			showError(e);
+
+			return false;
+		}
+	}
+
+
+	function handleEditorUpdate(input) {
+
+		// Execute the commands if there are not errors
+		handleEditorSubmit(input);
+	}
+
+	function handleEditorSubmit(input) {
+
+		var parsedCommands = new Array();
+		var currentLine = 1;
+		// Try to parse all lines first
+		for (cmd of input.split("\n")) {
+
+			try {
+				var parsed = parser.parse(cmd);
+				parsed = clampInputTimes(parsed);
+
+				parsedCommands.push({
+					parsed: parsed,
+					cmd: cmd
+				});
+
+				hideEditorErrorIndicator();
+				currentLine++;
+			} catch (e) {
+				indicateEditorErrorOnLine(currentLine);
+				showError(e);
+				return;
+			}
+		}
+
+		hideEditorErrorIndicator();
+		hideErrorDisplay();
+
+		reset();
+		console.log(parsedCommands);
+		for (var parsed of parsedCommands) {
+			runParsedCommand(parsed.parsed, parsed.cmd);
+		}
+	}
+
 	function showError(error, forced = false) {
 
 		if (forced) {
 			elem.syntaxErrorDisplay.classList.add("active");
 			elem.syntaxErrorDisplay.innerHTML = error.toString();
-			console.log("Overlap");
 			return;			
 		}
 
 		var errorText = error.toString();
+		console.log(errorText);
 
 		// Make parser errors more user friendly
 		if (errorText.includes("or [A-Za-zÄÖÜäöüß0-9 ]")) {
@@ -599,6 +731,11 @@ var Scheduler = (function(){
 		elem.syntaxErrorDisplay.innerHTML = errorText;
 	}
 
+	function hideErrorDisplay() {
+		elem.syntaxErrorDisplay.classList.remove("active");
+		elem.syntaxErrorDisplay.innerHTML = "";	
+	}
+
 	function showEditor() {
 		elem.mainContainer.classList.add("editor-visible");
 		editor.classList.add("visible");
@@ -608,6 +745,34 @@ var Scheduler = (function(){
 
 		elem.mainContainer.classList.remove("editor-visible");
 		editor.classList.remove("visible");
+	}
+
+	function indicateEditorErrorOnLine(line) {
+
+		var marginTop = 30 - elem.editorTextarea.scrollTop;
+		var lineHeight = 28;
+
+		context.editorErrorLine = line;
+
+		var top = marginTop + (line - 1) * lineHeight;
+
+		elem.editorErrorIndicator.classList.remove("hidden");
+		elem.editorErrorIndicator.style.top = `${top}px`;
+
+	}
+
+	function refreshEditorErrorIndicator(scrollOffset) {
+
+		var marginTop = 30 - scrollOffset;
+		var lineHeight = 28;
+
+		var top = marginTop + (context.editorErrorLine - 1) * lineHeight;
+
+		elem.editorErrorIndicator.style.top = `${top}px`;
+	}
+
+	function hideEditorErrorIndicator() {
+		elem.editorErrorIndicator.classList.add("hidden");
 	}
 
 	schedule = {
@@ -620,7 +785,8 @@ var Scheduler = (function(){
 			dayContainers: document.getElementsByClassName("day-container"),
 			editor: document.querySelector("#editor"),
 			mainContainer: document.querySelector("#main-container"),
-			editorTextarea: document.querySelector("textarea")
+			editorTextarea: document.querySelector("textarea"),
+			editorErrorIndicator: document.querySelector("#error-indicator")
 		},
 
 		init: function() {
@@ -638,37 +804,38 @@ var Scheduler = (function(){
 		bindUIActions: function() {
 
 			var inp = elem.dslInput;
-			var inpHandler = this.handleInputChange;
-			var submitHandler = this.handleInputSubmit;
-
+			
 			inp.oninput = function() {
 				
-				inpHandler(inp.value.trim());
+				handleInputChange(inp.value.trim());
 			}
 
 			inp.onchange = function() {
-				if (submitHandler(inp.value.trim())) {
+				if (handleInputSubmit(inp.value.trim())) {
 					inp.value = "";
 					context.redoCommands.length = 0;
 				}
 			}
 
 			var textarea = elem.editorTextarea;
-			var tSubmitHandler = this.handleEditorSubmit;
 
-			/*textarea.onchange = function() {
-				tSubmitHandler(textarea.innerHTML);
-				context.redoCommands.length = 0;
-			}*/
-
-			textarea.onkeyup = function(e){
+			/*textarea.onkeyup = function(e){
 			  	e = e || event;
 			  	
 			  	if (e.keyCode === 13) {
-			    	tSubmitHandler(textarea.innerHTML);
+			    	handleEditorSubmit(textarea.value);
 					context.redoCommands.length = 0;
 			  	}
 			  	return true;
+			}*/
+
+			textarea.oninput = function() {
+				handleEditorUpdate(textarea.value);
+			}
+
+			textarea.onscroll = function(){
+
+				refreshEditorErrorIndicator(textarea.scrollTop);
 			}
 		},
 
@@ -721,90 +888,6 @@ var Scheduler = (function(){
 			}
 		},
 
-		handleInputChange: function(input) {
-
-			try {
-
-				elem.syntaxErrorDisplay.classList.remove("active");
-				elem.syntaxErrorDisplay.innerHTML = "";
-
-				if (input.replace(" ", "") != "") {
-					parser.parse(input);
-				}
-					
-			} catch (e) {
-				//elem.syntaxErrorDisplay.classList.add("active");
-				//elem.syntaxErrorDisplay.innerHTML = e;
-				showError(e);
-			}
-		},
-
-		handleInputSubmit: function(input) {
-
-			function chooseCommand(parsed) {
-				//console.log(JSON.stringify(parsed));
-				switch (parsed.commandID) {
-					case -2: hideEditor(); break;
-					case -1: showEditor(); break;
-					case 0: selectDayCmd(parsed); break;
-					case 1: reset(); break;
-					case 2: createEventCmd(parsed); break;
-					case 3: deleteEventCmd(parsed); break;
-					case 4: clearAllDayEventsCmd(parsed); break;
-					case 5: clearAllEventsCmd(); break;
-					case 6: renameEventCmd(parsed); break;
-					case 7: editEventTimesCmd(parsed); break;
-				}
-			}
-
-			try {
-
-				elem.syntaxErrorDisplay.classList.remove("active");
-				elem.syntaxErrorDisplay.innerHTML = "";
-
-				if (input.replace(" ", "") != "") {
-
-					var parsed = parser.parse(input);
-					parsed = clampInputTimes(parsed);
-
-					chooseCommand(parsed);
-
-					// Replace Today with the actual day
-					if (input.toLowerCase().includes("today")) {
-						input = input.replace(/today/ig, days[getCurrentDay()]);
-					}
-
-					context.previousCommands.push(input);
-					
-					if (parsed.commandID >= 0 && parsed.commandID != 1) {
-						localStorage.setItem(COMMAND_STORAGE_KEY, context.previousCommands.join("\n"));	
-					}
-				}
-
-				return true;
-
-			} catch (e) {
-				//elem.syntaxErrorDisplay.classList.add("active");
-				//elem.syntaxErrorDisplay.innerHTML = e;
-
-				showError(e);
-
-				return false;
-			}
-		},
-
-		handleEditorInput: function(input) {
-
-			// TODO: Improve
-			reset();
-			var commands = input.split("\n");
-			for (var cmd of commands) {
-				if (!this.handleInputSubmit(cmd)) {
-					break;
-				}  
-			}
-		},
-
 		runTestCommands: function() {
 
 			var commands = [
@@ -827,7 +910,7 @@ var Scheduler = (function(){
 			for (var cmd of commands) {
 				//console.log(cmd);
 				input.value = cmd;
-				this.handleInputSubmit(input.value);
+				handleInputSubmit(input.value);
 				input.value = "";
 			}
 		}
@@ -836,11 +919,12 @@ var Scheduler = (function(){
 
 	let previousCommands = storage.getItem(COMMAND_STORAGE_KEY);
 	if (previousCommands != null) {
-		//console.log("Previous commands: " + previousCommands);
-		schedule.runCommands(previousCommands.split("\n"));
-
-		elem.editorTextarea.innerHTML = previousCommands;
+		
+		elem.editorTextarea.value = previousCommands;
+		handleEditorSubmit(previousCommands);
 	}
+
+	hideEditorErrorIndicator();
 
 	return schedule;
 

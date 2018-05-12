@@ -13,10 +13,11 @@ days:
 - Sunday
 ---
 
-<div id="editor" class="visible">
+<div id="editor">
 	<textarea name="editor-input" autocomplete="off"></textarea>
+	<div id="error-indicator"></div>
 </div>
-<div id="main-container" class="editor-visible">
+<div id="main-container">
 	
 	<div id="schedule-container">
 		{% include scheduler-time-container.html %}
@@ -55,10 +56,10 @@ days:
 		<span class="sep-line"></span>
 
 		<h3>Times</h3>
-		<p>There are many different ways to specify a time. You can choose to just write the hours, e.g. <span>8</span> means 8:00 o'clock.</p>
+		<p>There are many different ways to specify a time. You can choose to just type the hours, e.g. <span>8</span> means 8:00 o'clock.</p>
 		<p>If you also want to specify minutes you can use a colon, comma or a dot: <span>1:30 1,30 1.30</span> are all the same.</p>
-		<p>You can also write <span>2pm</span> instead of <span>14:00</span> if you like.</p>
-		<p>Specify a time range by writing the start and end times separated by either <span>-</span> or <span>to</span>. With a time range, you only need to write <span>PM</span> 
+		<p>You can also type <span>2pm</span> instead of <span>14:00</span> if you like.</p>
+		<p>Specify a time range by writing the start and end times separated by either <span>-</span> or <span>to</span>. With a time range, you only need to type <span>PM</span> 
 			once and it will be interpreted for both the start and end input time - but only if that makes sense. For example, <span>2 to 3pm</span> means 14:00 - 15:00, but 
 			<span>10 to 3pm</span> is interpreted as 10:00 - 15:00.</p>
 
@@ -90,7 +91,52 @@ days:
 		<p>All of the commands are case-insensitive, so it doesn't matter if you use uppercase or lowercase letters (or a mix of both).</p>
 		<p>Whitespace is generally handled quite liberally, meaning that you can use as many spaces in your commands as you want, as long as you use at least one to separate 
 		the different parts of the command.</p>
-		<p>You can write an optional <span>event at</span> when specifying an existing event with its start time to improve readability.</p>
+		<p>You can always write an optional <span>event at</span> when specifying an existing event with its start time to improve readability.</p>
+
+		<span class="empty-sep"></span>
+
+		<h2>Editor</h2>
+
+		<span class="sep-line"></span>
+
+		<h3>Open</h3>
+		<p>Type either <span>Editor</span>, <span>Show Editor</span> or <span>Open Editor</span> to open a multiline editor which shows and lets you edit all of the previous commands.</p>
+
+		<span class="sep-line"></span>
+
+		<h3>Close</h3>
+		<p>Type any of the following to close the multiline editor: <span>Close Editor</span>, <span>Hide Editor</span>, <span>Exit Editor</span>, <span>:q</span> or <span>:wq</span></p>
+
+		<span class="empty-sep"></span>
+
+		<h2>Example</h2>
+		
+		<span class="sep-line"></span>
+		<p>The following is a set of commands that define a simple university schedule. You can copy and paste them into the editor to get a better idea of what the schedule visually looks like.</p>
+
+		<p><span>
+			Mo<br>
+			8-10 Economics Lecture<br>
+			10-12 Analysis Lecture<br>
+			12-13:30 Lunch !!<br>
+			14-15 OS Exercises<br>
+			<br>
+			Tue<br>
+			10-12 Math Exercises<br>
+			12-13:30 Lunch !!<br>
+			14-16 Material Sciences Lecture<br>
+			<br>
+			Wed<br>
+			8:30-10 Breakfast !!<br>
+			12-14 Linear Algebra Lecture<br>
+			<br>
+			Thursday<br>
+			8-10 Statistics Lecture<br>
+			18-20 Statistics Exercises<br>
+			<br>
+			Fri<br>
+			12-14 Operating Systems Lecture<br>
+		</span></p>
 
 	</div>
 	

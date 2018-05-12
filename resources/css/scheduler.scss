@@ -36,20 +36,29 @@ html, body {
 	height: 0;
 
 	textarea {
+		resize: none;
 		visibility: hidden;
+	
+		#error-indicator {
+
+		}
 	}
 }
 
 #editor.visible {
+
+	position: relative;
 	display: visible;
 	float: left;
-	height: $mainHeight;
-	max-height: 90vh;
-	width: 100vw - $mainWidth;
+	height: unquote("calc(#{$mainHeight} - #{$dsl-input-height})");
+	max-height: unquote("calc(90vh - #{$dsl-input-height})");
+	//max-height: calc(90vh - $dsl-input-height);
+	width: 100vw - $mainWidth - 2vw;
 	background-color: $inputColor;
-	//border-bottom: 1px solid rgb;
-	border-right: 3px solid rgba(0,0,0,0.2);
 	margin: 20px auto;
+	left: 1vw;
+
+	overflow: hidden;
 
 	//transition: 0.2s;
 
@@ -59,9 +68,9 @@ html, body {
 
 		background-color: rgba(0,0,0,0);
 		border-style: none;
-		width: calc(100% - 20px);
-		height: calc(100% - 20px);
-		margin-top: 10px;
+		width: calc(100% - 70px);
+		height: calc(100% - 70px);
+		margin-top: 30px;
 
 		resize: none;
 		overflow-y: scroll;
@@ -71,6 +80,24 @@ html, body {
 
 	textarea:focus {
 		outline: none;
+	}
+
+	#error-indicator {
+		display: block;
+		position: absolute;
+		//width: 10px;
+		//height: 10px;
+		width: 0;
+		height: 0;
+		border-top: 15px solid transparent;
+		border-bottom: 15px solid transparent;
+		border-left: 15px solid $redDesat;
+		top: 0;
+		left: 0;
+	}
+
+	#error-indicator.hidden {
+		display: none;
 	}
 }
 
@@ -89,6 +116,7 @@ html, body {
 
 #main-container.editor-visible {
 	float: right;
+	margin-right: 1vw;
 	transition: 0.2s;
 }
 
@@ -115,6 +143,8 @@ html, body {
 	background-color: $dayBackgroundColor;
 	margin-left: 2px;
 	margin-right: 2px;
+
+	overflow: hidden;
 
 	h3 {
 		width: 100%;
@@ -294,6 +324,12 @@ html, body {
 		height: 2px;
 		width: 80%;
 		background-color: rgba(100, 100, 100, 0.8);
+	}
+
+	.empty-sep {
+		display: block;
+		background-color: transparent;
+		height: 80px;
 	}
 }
 
