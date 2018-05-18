@@ -10,6 +10,8 @@ var pencilInputs = {
 	bristleLength: 0.0
 };
 
+var frameNum = 1;
+
 function basicQuadVshSource() {
 	return `
 		attribute vec4 position;
@@ -106,6 +108,8 @@ function distortionShapeFshSource() {
 		uniform float stiffness;
 		uniform float bristleLength; 
 
+		uniform float frameNum;
+
 		uniform sampler2D texture;
 
 		varying vec2 vTextureCoord;
@@ -162,6 +166,38 @@ function distortionShapeFshSource() {
 			}
 		}
 
+		float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio
+		float PI_2  = 3.14159265358979323846264 * 00000.1; // PI
+		float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
+
+		float gold_noise(vec2 coordinate, float seed){
+		    
+		    return pow(fract((sin(dot(coordinate*(seed+PHI), vec2(PHI, PI_2))) + 1.0) * 0.5 * SQ2), 4.0);
+		    //return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI_2)))*SQ2);
+		}
+
+		float rand(vec2 co){
+		    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+		}
+
+		float avg_noise(vec2 coord, float seed){
+		    
+		    float n1 = gold_noise(vec2(coord[0] - 1.0, coord[1] - 1.0), seed);
+		    float n2 = gold_noise(vec2(coord[0], coord[1] - 1.0), seed);
+		    float n3 = gold_noise(vec2(coord[0] + 1.0, coord[1] - 1.0), seed);
+		    float n4 = gold_noise(vec2(coord[0] - 1.0, coord[1]), seed);
+		    float n5 = gold_noise(vec2(coord[0], coord[1]), seed);
+		    float n6 = gold_noise(vec2(coord[0] + 1.0, coord[1]), seed);
+		    float n7 = gold_noise(vec2(coord[0] - 1.0, coord[1] + 1.0), seed);
+		    float n8 = gold_noise(vec2(coord[0], coord[1] + 1.0), seed);
+		    float n9 = gold_noise(vec2(coord[0] + 1.0, coord[1] + 1.0), seed);
+		    
+		    //return (n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9) / 4.0;
+		    return (n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9) / 8.0;
+		    //return (n2 + n4 + n5 + n6 + n8) / 5.0;
+		    //return n5;
+		}
+
 		void main() {
 
 			//highp vec2 textureCoord = vTextureCoord;
@@ -216,6 +252,26 @@ function distortionShapeFshSource() {
 			//markCenter(vTextureCoordSc, centers(0), vec3(1.0, 0.0, 0.0));
 			//markCenter(vTextureCoordSc, centers(1), vec3(0.0, 0.0, 1.0));
 			//markCenter(vTextureCoordSc, centers(2), vec3(0.8, 0.8, 0.0));
+
+			bool showNoise = true;
+			if (showNoise) {
+				//float noiseVal = avg_noise(floor(dryTextureCoordinate * 256.0), 456234.0);
+				//float noiseVal = avg_noise(floor(vTextureCoord * 256.0) + frameNum * 0.000001, 232.0);
+				
+				//float noiseVal = avg_noise(floor(vTextureCoord * 256.0), 232.0);
+				//float noiseVal = rand(floor(vTextureCoord * 128.0));
+				
+				//float noise_wo_offset = gold_noise(floor(vTextureCoord * 256.0), 232.0);
+				float noise_wo_offset = rand(floor(vTextureCoord * 128.0));
+
+				float offs = floor((frameNum * 0.01) / (2.0 * PI) + noise_wo_offset) * 5.0;
+
+				//float noiseVal = gold_noise(floor(vTextureCoord * 256.0 + offs), 232.0);
+				float noiseVal = rand(floor(vTextureCoord * 128.0 + offs));
+				float nVal = 0.5 * (sin(frameNum * 0.01 + noiseVal * 2.0 * PI) + 1.0);
+
+				gl_FragColor = vec4(vec3(nVal), 1.0);
+			}
 		}
 	`;
 }
@@ -261,7 +317,8 @@ function main() {
 			bristleLength: gl.getUniformLocation(program, "bristleLength"),
 			modelViewMat: gl.getUniformLocation(program, "modelViewMat"),
 			projectionMat: gl.getUniformLocation(program, "projectionMat"),
-			texture: gl.getUniformLocation(program, "texture")
+			texture: gl.getUniformLocation(program, "texture"),
+			frameNum: gl.getUniformLocation(program, "frameNum")
 		}
 	};
 
@@ -278,6 +335,7 @@ function main() {
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);
 		requestAnimationFrame(render);
+		frameNum++;
 	}
 	requestAnimationFrame(render);
 
@@ -346,6 +404,7 @@ function drawScene(gl, programInfo, buffers, texture) {
 	);
 
 	bindPencilInputs(gl, programInfo);
+	gl.uniform1f(programInfo.uniformLocations.frameNum, frameNum);
 
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
