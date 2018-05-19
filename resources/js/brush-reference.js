@@ -87,7 +87,7 @@ function populateCollectionView(collectionView) {
 }
 
 function filterString(elem) {
-	return `${elem.brushName} id:${elem.strokeNumber} ${elem.force}-force ${elem.movement}-movement ${elem.altitude}-alt ${elem.azimuth}-azm ${elem.speed}-speed`;
+	return `${elem.brushName} id:${elem.strokeNumber}# ${elem.force}-force ${elem.movement}-movement ${elem.altitude}-alt ${elem.azimuth}-azm ${elem.speed}-speed`;
 }
 
 function filter(filterStr) {
@@ -96,7 +96,7 @@ function filter(filterStr) {
 
 		var compStr = filterString(imgElem).toLowerCase();
 		var compArr = compStr.split(" ");
-		console.log(filterStr.split(" "));
+		//console.log(filterStr.split(" "));
 
 		//if (filterStr.trim() == "" || filterStr.toLowerCase().split(" ").every(x => compArr.includes(x))) {
 		if (filterStr.trim() == "" || filterStr.toLowerCase().split(" ").every(x => compArr.some(e => e.includes(x)))) {
