@@ -208,7 +208,7 @@ function filterString(elem) {
 }
 
 function labelString(elem) {
-	return `${elem.brushName} no.${elem.strokeNumber} ${elem.force}-force ${elem.movement}-movement ${elem.altitude}-alt ${elem.azimuth.replace("-", "0°")}-azm ${elem.speed}-speed`;
+	return `${elem.brushName} ${elem.force}-force ${elem.movement}-movement ${elem.altitude}-alt ${elem.azimuth.replace("-", "0°")}-azm ${elem.speed}-speed`;
 }
 
 function filter(filterStr) {

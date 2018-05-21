@@ -1,7 +1,7 @@
 main();
 
 var pencilInputs = {
-	force: 1.0,
+	force: 0.0,
 	altitude: 90,
 	azimuth: 300,
 	movement: 45,
@@ -198,6 +198,86 @@ function distortionShapeFshSource() {
 		    //return n5;
 		}
 
+		float colorAmount(float frameNum) {
+    
+		    float minAmount = 0.01;
+		    
+		    return max(1.0 - 0.8 * (1.0 / (1.0 + exp(-(frameNum / 100.0 - 4.0)))) - 0.00001 * frameNum, minAmount);
+		}
+
+		/*float colorAmountNoise(vec2 coord, float frameNum) {
+    
+			float period = 300.0 * rand(floor(coord * 64.0)) + 300.0;
+
+		    //float res = 256.0;
+		    //float res = 64.0 * rand(floor(coord * 10.0 + (frameNum / 30.0))) + 2.0;
+		    float res = 64.0 * rand(floor(coord * 10.0)) + 2.0;
+		    //float res = 64.0 * rand(floor(coord * 10.0 + floor((frameNum / period) * 2.0 * PI))) + 1.0;
+
+		    //res = 64.0 * rand(floor(vec2(0) + floor((frameNum / period) * 2.0 * PI))) + 1.0;
+		    
+		    float periodDuration = 300.0 * rand(floor(coord * res)) + 300.0;
+		    float t = (frameNum / periodDuration) * 2.0 * PI + rand(floor(coord * res)) * 500.0;
+		    
+		    float ampl = rand(floor(coord * res) + floor(t / (2.0 * PI)));
+		    
+		    float noiseVal = ampl * sin(t);// + rand(floor(coord * res));
+		    
+		    return noiseVal;
+		    //return res/65.0;
+		}*/
+
+		float baseOffset(vec2 coord, float frameNum) {
+
+			//float res = 128.0;
+			float res = 256.0 * rand(floor(coord * 20.0)) + 4.0;
+
+			return 0.5 * (1.0 + sin(coord.x * res) * sin(coord.y * res) * sin(frameNum * 2.0 * PI / 300.0 + res));
+		}
+
+		float colorAmountNoise(vec2 coord, float frameNum) {
+    
+		    //float res = 128.0;
+		    float res = 256.0 * rand(floor(coord * 20.0)) + 4.0;
+		    highp vec2 flr = floor(coord * res) / res;
+		    
+		    float periodDuration = 1000.0 * rand(flr + floor(frameNum / 300.0) / 400.0) + 50.0;
+		    float t = (frameNum / periodDuration) * 2.0 * PI + rand(flr) * 500.0;
+		    
+		    highp vec2 center = (floor(coord * res) + 0.5) / res;
+		    float dMult = min(1.0, distance(coord, center) * res * 2.0);
+		    
+		    float ampl = rand(flr + floor(t / (2.0 * PI)));// * pow((1.0 - dMult), 1.5);
+		    
+		    float bOffs = baseOffset(coord, frameNum);
+		    float offset = 0.01 + colorAmount(frameNum) * 0.1;
+		    float noiseVal = ampl * sin(t) + offset;
+		    
+		    /*if (distance(center, coord) < 0.01) {
+		        gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+		    } else if (abs(flr.x - (coord).x) < 0.005 || abs(flr.y - (coord).y) < 0.005) {
+		        gl_FragColor = vec4(0.0, 0.0, 1.0, 1.0);
+		    }*/
+		    
+		    return bOffs;
+		    return noiseVal;
+		}
+
+		float avgColorAmountNoise(vec2 coord, float frameNum) {
+
+			float n1 = colorAmountNoise(vec2(coord[0] - 1.0, coord[1] - 1.0), frameNum);
+		    float n2 = colorAmountNoise(vec2(coord[0], coord[1] - 1.0), frameNum);
+		    float n3 = colorAmountNoise(vec2(coord[0] + 1.0, coord[1] - 1.0), frameNum);
+		    float n4 = colorAmountNoise(vec2(coord[0] - 1.0, coord[1]), frameNum);
+		    float n5 = colorAmountNoise(vec2(coord[0], coord[1]), frameNum);
+		    float n6 = colorAmountNoise(vec2(coord[0] + 1.0, coord[1]), frameNum);
+		    float n7 = colorAmountNoise(vec2(coord[0] - 1.0, coord[1] + 1.0), frameNum);
+		    float n8 = colorAmountNoise(vec2(coord[0], coord[1] + 1.0), frameNum);
+		    float n9 = colorAmountNoise(vec2(coord[0] + 1.0, coord[1] + 1.0), frameNum);
+		    
+		    return (n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9) / 5.0;
+		}
+
 		void main() {
 
 			//highp vec2 textureCoord = vTextureCoord;
@@ -254,23 +334,14 @@ function distortionShapeFshSource() {
 			//markCenter(vTextureCoordSc, centers(2), vec3(0.8, 0.8, 0.0));
 
 			bool showNoise = true;
+
 			if (showNoise) {
-				//float noiseVal = avg_noise(floor(dryTextureCoordinate * 256.0), 456234.0);
-				//float noiseVal = avg_noise(floor(vTextureCoord * 256.0) + frameNum * 0.000001, 232.0);
+
+				//vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
+				gl_FragColor = vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
 				
-				//float noiseVal = avg_noise(floor(vTextureCoord * 256.0), 232.0);
-				//float noiseVal = rand(floor(vTextureCoord * 128.0));
-				
-				//float noise_wo_offset = gold_noise(floor(vTextureCoord * 256.0), 232.0);
-				float noise_wo_offset = rand(floor(vTextureCoord * 128.0));
-
-				float offs = floor((frameNum * 0.01) / (2.0 * PI) + noise_wo_offset) * 5.0;
-
-				//float noiseVal = gold_noise(floor(vTextureCoord * 256.0 + offs), 232.0);
-				float noiseVal = rand(floor(vTextureCoord * 128.0 + offs));
-				float nVal = 0.5 * (sin(frameNum * 0.01 + noiseVal * 2.0 * PI) + 1.0);
-
-				gl_FragColor = vec4(vec3(nVal), 1.0);
+				//gl_FragColor.a *= colorAmountNoise(textureCoord, frameNum);
+				//gl_FragColor.a *= avgColorAmountNoise(textureCoord, frameNum);
 			}
 		}
 	`;
