@@ -38,9 +38,16 @@
 
 #app-store-links-container {
 
+	margin: 40px auto;
+
 	img {
 		height: 70px;
 		width: auto;
 		padding: 0;
 	}
+}
+
+iframe {
+	margin-top: 40px;
+	margin-bottom: 40px;
 }
