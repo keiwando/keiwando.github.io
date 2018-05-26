@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	{% include head.html %}
+	<script src="Build/UnityLoader.js"></script>
+	<script>
+      var gameInstance = UnityLoader.instantiate("gameContainer", "Build/{{ page.gameName }}.json");
+    </script>
+
+	<body>
+		
+		{{ content }}
+
+		{% include scripts.html %}
+		{% include google-analytics.html %}
+
+		{% include footer.html %}
+	</body>
+</html>

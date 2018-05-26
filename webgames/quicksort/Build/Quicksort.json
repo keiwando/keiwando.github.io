@@ -1,0 +1,13 @@
+{
+"companyName": "keiwando",
+"productName": "Quicksort",
+"dataUrl": "Quicksort.data.unityweb",
+"asmCodeUrl": "Quicksort.asm.code.unityweb",
+"asmMemoryUrl": "Quicksort.asm.memory.unityweb",
+"asmFrameworkUrl": "Quicksort.asm.framework.unityweb",
+"TOTAL_MEMORY": 67108864,
+"graphicsAPI": ["WebGL 2.0", "WebGL 1.0"],
+"webglContextAttributes": {"preserveDrawingBuffer": false},
+"splashScreenStyle": "Dark",
+"backgroundColor": "#231F20"
+}

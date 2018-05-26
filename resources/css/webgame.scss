@@ -1,0 +1,27 @@
+---
+---
+
+@font-face {
+    font-family: 'PoetsenOne-Regular';
+    src: url('fonts/poetsenone-regular-webfont.woff2') format('woff2'),
+         url('fonts/poetsenone-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+#webgl-container {
+
+	margin: 0 auto;
+	margin-top: 30px;
+	margin-bottom: 30px;
+
+	border: 4px solid white;
+	border-radius: 4px;
+}
+
+#game-description {
+
+	font-family: "PoetsenOne-Regular";
+	font-size: 25px;
+	margin-top: 50px;
+}
