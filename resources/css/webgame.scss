@@ -21,7 +21,26 @@
 
 #game-description {
 
-	font-family: "PoetsenOne-Regular";
-	font-size: 25px;
+	width: 80vw;
+	max-width: 700px;
+	margin: 0 auto;
 	margin-top: 50px;
+	margin-bottom: 50px;
+
+	font-family: "PoetsenOne-Regular";
+	text-align: left;
+
+	p {
+		font-size: 20px;
+		color: rgb(210, 210, 210);	
+	}	
+}
+
+#app-store-links-container {
+
+	img {
+		height: 70px;
+		width: auto;
+		padding: 0;
+	}
 }
