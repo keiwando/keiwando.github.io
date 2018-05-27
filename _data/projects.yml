@@ -46,3 +46,10 @@
   description: SunnyGolf
   subtitle-description: 2D Minigolf
 
+- id: quicksort-project
+  link: /webgames/quicksort/game
+  filters: web-filter multiplatform-filter android-filter
+  imgSrc: resources/images/quicksort-icon-small.jpg
+  description: Quicksort
+  subtitle-description: Sorting. Leaderboards.
+

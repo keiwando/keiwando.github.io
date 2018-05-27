@@ -350,6 +350,14 @@ a:focus {
 	background-color: #B94E4F;
 }
 
+#quicksort-project .image-container {
+	background-color: #2A2A2A;
+}
+
+#quicksort-project .description-container {
+	background-color: #EB5556; /*#5BBBDB;*/
+}
+
 /**#lob-project img {
 
 	width: 10vw;
