@@ -1,3 +1,6 @@
+---
+---
+
 div {
 	-webkit-transition: 0.2s ease-out;
 	-moz-transition: 0.2s ease-out;
@@ -318,11 +321,13 @@ a:focus {
 }
 
 #rocket-project .image-container {
-	background-image: url('../images/rocket-banner_small.jpg');
+	//background-image: url('../images/rocket-banner_small.jpg');
+	background-image: url('../images/rocket_itch_cover.jpg');
 }
 
 #rocket-project .description-container {
-	background-color: #3C252B;
+	//background-color: #3C252B;
+	background-color: #ED8529;
 }
 
 #musicgenerator-project .image-container {

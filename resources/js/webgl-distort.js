@@ -333,7 +333,7 @@ function distortionShapeFshSource() {
 			//markCenter(vTextureCoordSc, centers(1), vec3(0.0, 0.0, 1.0));
 			//markCenter(vTextureCoordSc, centers(2), vec3(0.8, 0.8, 0.0));
 
-			bool showNoise = true;
+			bool showNoise = false;
 
 			if (showNoise) {
 
