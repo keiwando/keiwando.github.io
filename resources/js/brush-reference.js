@@ -215,6 +215,14 @@ function filter(filterStr) {
 
 	filtered.length = 0;
 
+	escapedFilter = filterStr.replace(/ +/, "%");
+	var sep = "?filter="
+	var newURL = location.href.split(sep)[0] + sep + escapedFilter;
+	if (window.history.replaceState) {
+	   //prevents browser from storing history with each change:
+	   window.history.replaceState({}, "Brush Reference", newURL);
+	}
+
 	function shouldShow(elemFilter, userFilter) {
 
 		var compArr = elemFilter.split(" ");
@@ -305,7 +313,18 @@ function main() {
 	};
 
 	populateCollectionView(collectionView);
-	filter("");
+	
+	var sep = "?filter="
+	var parts = location.href.split(sep);
+	if (parts.length > 1) {
+		var filterStr = parts[1].replace("%", " ");
+		filter(filterStr);
+		filterInput.value = filterStr;
+	} else {
+		filter("");
+	}
+
+	//filter("");
 
 	filterInput.oninput = function() {
 		filter(filterInput.value);
