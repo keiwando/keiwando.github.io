@@ -215,8 +215,8 @@ function filter(filterStr) {
 
 	filtered.length = 0;
 
-	escapedFilter = filterStr.replace(/ +/, "%");
-	var sep = "?filter="
+	escapedFilter = filterStr.replace(/ +/g, "&").replace(/°/g, "##");
+	var sep = "?filter=";
 	var newURL = location.href.split(sep)[0] + sep + escapedFilter;
 	if (window.history.replaceState) {
 	   //prevents browser from storing history with each change:
@@ -226,7 +226,9 @@ function filter(filterStr) {
 	function shouldShow(elemFilter, userFilter) {
 
 		var compArr = elemFilter.split(" ");
-		return userFilter.trim() == "" || userFilter.toLowerCase().split(" ").every(x => compArr.some(e => e.includes(x)));
+		//return userFilter.trim() == "" || userFilter.toLowerCase().split(" ").every(x => compArr.some(e => e.includes(x)));
+		return userFilter.trim() == "" || userFilter.toLowerCase().split(" ").every(x => compArr.some(e => e.startsWith(x)));
+		//return userFilter.trim() == "" || userFilter.toLowerCase().split(" ").every(x => compArr.some(e => e.startsWith(x) || e.endsWith(x)));
 	}
 
 	for (var imgElem of strokes) {
@@ -316,8 +318,9 @@ function main() {
 	
 	var sep = "?filter="
 	var parts = location.href.split(sep);
+	console.log(parts[1]);
 	if (parts.length > 1) {
-		var filterStr = parts[1].replace("%", " ");
+		var filterStr = parts[1].replace(/&/g, " ").replace(/##/g, "°");
 		filter(filterStr);
 		filterInput.value = filterStr;
 	} else {
