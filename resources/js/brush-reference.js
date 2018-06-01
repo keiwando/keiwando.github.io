@@ -204,7 +204,8 @@ function hide(elem) {
 }
 
 function filterString(elem) {
-	return `${elem.brushName} id:${elem.strokeNumber}# ${elem.force}-force ${elem.movement}-movement ${elem.altitude}-alt ${elem.azimuth}-azm ${elem.speed}-speed`;
+	//return `${elem.brushName} id:${elem.strokeNumber}# ${elem.force}-force ${elem.movement}-movement -alt ${elem.azimuth}-azm ${elem.speed}-speed`;
+	return `${elem.brushName} id:${elem.strokeNumber}# ${elem.force}-force ${elem.movement}-movement ${elem.altitude}-alt ${elem.azimuth.replace("-", "0°")}-azm ${elem.speed}-speed`;
 }
 
 function labelString(elem) {
