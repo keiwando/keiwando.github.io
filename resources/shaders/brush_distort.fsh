@@ -147,7 +147,7 @@ float baseOffset(vec2 coord, float frameNum) {
 
 float valueAtCenter(vec2 center, float frameNum) {
 
-	highp float randFromCenter = rand(center);
+	float randFromCenter = rand(center);
 
     float frameNumFloor = floor(frameNum / 70.0) + randFromCenter * 20000.0;
     
@@ -165,8 +165,8 @@ float valueAtCenter(vec2 center, float frameNum) {
 
 highp vec2 centerForCoord(vec2 coord, float res) {
 
-    highp vec2 coordFloor = floor(coord * res);// + coordShift;// / res;
-    highp vec2 center = (floor(coord * res) + 0.5);// - coordShift;
+    vec2 coordFloor = floor(coord * res);// + coordShift;// / res;
+    vec2 center = (floor(coord * res) + 0.5);// - coordShift;
 
     return center;
 }
@@ -312,24 +312,25 @@ float avgColorAmountNoise(vec2 coord, float frameNum) {
 
 // --------------------    Pressure    ------------------------- // 
 
-highp float fP(highp vec2 pos, highp vec2 center, float dryness) {
+float fP(vec2 pos, vec2 center) {
 
-	float x = (pos.x - center.x) * 15.0; // * dryness;
-	float y = (pos.y - center.y) * 15.0; // * dryness;
+	//float x = (pos.x - center.x) * 15.0; // * dryness;
+	//float y = (pos.y - center.y) * 15.0; // * dryness;
 
-	float val = pow(0.5 * (cos(x * sqrt(x * x + y * y)) * cos(y * sqrt(x * x + y * y)) + 1.0), 7.0 * dryness);
+	//float val = pow(0.5 * (cos(x * sqrt(x * x + y * y)) * cos(y * sqrt(x * x + y * y)) + 1.0), 7.0 * dryness);
+
+	return 1.0 - smoothstep(0.2, 0.7, distance(pos, center));
 
 	//val = pow(0.5 * (cos(x * 3.0) * cos(y * 3.0) + 1.0), 20.0 * dryness);
 	//val = pow(0.5 * (cos(x * pow(x * x + y * y, 0.25) * 3.0) * cos(y * pow(x * x + y * y, 0.25) * 3.0) + 1.0), 7.0 * dryness);
 
 	//return val * 2.0 - 1.0;
-	return val;
 }
 
 // --------------------    Distortion    ------------------------- // 
 
 
-highp float parabola(highp vec2 x, highp vec2 center, float multiply) {
+highp float parabola(vec2 x, vec2 center, float multiply) {
 
 	//return pow(min(1.0, length(center - x)), 1.4) * multiply;
 	//return length(center - x) * multiply;
@@ -351,11 +352,18 @@ highp float parabola(highp vec2 x, highp vec2 center, float multiply) {
 /// --> --> --> --> -->
 /// ---> ---> ---> --->
 ///
-float quadraticParallelFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirection, float multiply) {
+float quadraticParallelFlow(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
 
 	float dist = length(dot(center - x, relativeDirection) / length(relativeDirection));
 	//return pow(dist, 2.0) * multiply;
 	return smoothstep(0.0, 1.0, dist) * multiply;
+}
+
+float quadraticParallelFlow2(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
+
+	float dist = length(dot(center - x, relativeDirection) / length(relativeDirection));
+	//return pow(dist, 2.0) * multiply;
+	return dist * multiply;
 }
 
 /// Linearly increasing values that simulate compression on one side and expansion on the other side of 
@@ -377,9 +385,9 @@ float quadraticParallelFlow(highp vec2 x, highp vec2 center, highp vec2 relative
 ///
 /// - expansion -- comp --
 ///
-float compressionFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirection, float multiply) {
+float compressionFlow(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
 
-	highp vec2 dX = center - x;
+	vec2 dX = center - x;
 
 	float dist = length(dot(dX, relativeDirection) / length(relativeDirection));
 
@@ -394,7 +402,37 @@ float compressionFlow(highp vec2 x, highp vec2 center, highp vec2 relativeDirect
 	return pow(dist, 1.0) * multiply * 2.0;
 }
 
-void markCenter(highp vec2 texturePos, highp vec3 center, highp vec3 color) {
+float compressionFlowInv(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
+
+	highp vec2 dX = center - x;
+
+	float dist = length(dot(dX, relativeDirection) / length(relativeDirection));
+
+	dist = smoothstep(0.0, 1.0, dist) * 1.0;
+
+	float angle = asin(dot(dX, relativeDirection)) / (length(dX) * length(relativeDirection));
+
+	if (angle > 0.0) {
+		// compression
+		return -pow(dist, 1.0) * multiply * 5.0 * quadraticParallelFlow2(x, center, vec2(-relativeDirection.y, relativeDirection.x), multiply);
+	}
+	return pow(dist, 1.0) * multiply * 2.0 * quadraticParallelFlow2(x, center, vec2(-relativeDirection.y, relativeDirection.x), multiply);
+}
+
+float distanceInDirection(highp vec2 x, highp vec2 center, vec2 relativeDirection) {
+
+	float dotPr = dot(center - x, relativeDirection);
+
+	if (dotPr <= 0.0) {
+		return 0.0;
+	}
+
+	float dist = smoothstep(0.0, 1.0, length(dotPr / length(relativeDirection)));
+
+	return dist;
+}
+
+void markCenter(vec2 texturePos, vec3 center, vec3 color) {
 
 	if (center.z == 0.0) return;
 
@@ -406,7 +444,7 @@ void markCenter(highp vec2 texturePos, highp vec3 center, highp vec3 color) {
 void main() {
 
 	//highp vec2 textureCoord = vTextureCoord;
-	highp vec2 textureCoord = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+	vec2 textureCoord = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
 	float r = 1.0 - abs(textureCoord.x - 0.5) * 2.0;
 	float g = 1.0 - abs(textureCoord.y - 0.5) * 2.0;
@@ -417,6 +455,8 @@ void main() {
 		//gl_FragColor = vec4(1,1,1,1);
 		//return;
 	}
+
+	float stiffnessWeight = (1.0 - stiffness);
 
 	float forceDistWeight = 0.3;
 	float linearFlowWeight = 0.1;
@@ -431,29 +471,33 @@ void main() {
 	float rightAzmAngle = upAzmAngle + PI / 2.0;
 	float downAzmAngle = rightAzmAngle + PI / 2.0;
 
-	float altWeight = min(30.0, (90.0 - altitude)) / 22.5; // ∈ [0, 2]
+	float altWeight = min(60.0, (90.0 - altitude)) / 22.5; // ∈ [0, 2]
 
-	highp vec2 center = vec2(0.5, 0.5);
+	vec2 center = vec2(0.5, 0.5);
 	float azm = -azimuth * PI / 180.0;
 	//center += altWeight * 0.25 * vec2(cos(azm), sin(azm));
 
-	highp vec2 rightMov = vec2(cos(-rightMovAngle), sin(-rightMovAngle));
-	highp vec2 downMov = vec2(cos(-downMovAngle), sin(-downMovAngle)); 
+	vec2 rightMov = vec2(cos(-rightMovAngle), sin(-rightMovAngle));
+	vec2 downMov = vec2(cos(-downMovAngle), sin(-downMovAngle)); 
 
-	highp vec2 rightAzm = vec2(cos(-rightAzmAngle), sin(-rightAzmAngle));
-	highp vec2 downAzm = vec2(cos(-downAzmAngle), sin(-downAzmAngle));
+	vec2 rightAzm = vec2(cos(-rightAzmAngle), sin(-rightAzmAngle));
+	vec2 downAzm = vec2(cos(-downAzmAngle), sin(-downAzmAngle));
 
 	// Distortion caused by the force
-	highp vec2 forceDistortion = normalize(center.xy - textureCoord) * parabola(textureCoord, center, force - stiffness) * forceDistWeight;
-	// Distortion caused by the movement direction + speed
-	highp vec2 linearMovDistortion = quadraticParallelFlow(textureCoord, center, rightMov, max(0.0, speed - stiffness)) * linearFlowWeight * downMov;
-	highp vec2 compressMovDistortion = compressionFlow(textureCoord, center, downMov, max(0.0, 2.0 * speed - stiffness)) * compressionFlowWeight * downMov;
-	// Distortion caused by the azimuth and altitude angles
-	
-	highp vec2 linearAngleDistortion = quadraticParallelFlow(textureCoord, center, rightAzm, max(0.0, altWeight)) * linearFlowWeight * (1.0 - stiffness) * downAzm;
-	highp vec2 compressAngleDistortion = compressionFlow(textureCoord, center, downAzm, max(0.0, altWeight)) * compressionFlowWeight * downAzm;
+	vec2 forceDistortion = normalize(center.xy - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight * stiffnessWeight;
+    // Distortion caused by the movement direction + speed
+    vec2 linearMovDistortion = quadraticParallelFlow(textureCoord, center, rightMov, max(0.0, speed)) * linearFlowWeight * stiffnessWeight * downMov;
+    vec2 compressMovDistortion = compressionFlow(textureCoord, center, downMov, max(0.0, smoothstep(0.0, 1.0, speed))) * compressionFlowWeight * stiffnessWeight * downMov;
+    // Distortion caused by the azimuth and altitude angles
+    
+    vec2 linearAngleDistortion = quadraticParallelFlow(textureCoord, center, rightAzm, max(0.0, altWeight)) * linearFlowWeight * stiffnessWeight* downAzm;
+    //highp vec2 linearAngleDistortion = compressionFlowInv(textureCoord, center, downAzm, max(0.0, altWeight)) * linearFlowWeight * (1.0 - stiffness) * downAzm;
+    vec2 compressAngleDistortion = compressionFlow(textureCoord, center, downAzm, max(0.0, altWeight)) * compressionFlowWeight * stiffnessWeight * downAzm;
+    
+    vec2 zeroRef = vec2(0.5, 0.5) + 0.7 * vec2(-cos(azm), sin(azm));
+    linearAngleDistortion *= min(1.0, max(0.0, distanceInDirection(textureCoord, zeroRef, -downAzm))) * 5.0;
 
-	highp vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + linearAngleDistortion + compressAngleDistortion;
+    vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + linearAngleDistortion + compressAngleDistortion;
 	//highp vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion;
 	//highp vec2 offset = forceDistortion + compressMovDistortion + compressAngleDistortion;
 	//highp vec2 offset = forceDistortion + compressDistortion;
@@ -470,13 +514,13 @@ void main() {
 
 	//textureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
-	highp vec4 texColor = texture2D(texture, textureCoord);
+	vec4 texColor = texture2D(texture, textureCoord);
 
 	float dryness = 1.0; //fD(textureCoord, center, bristleLength);
 
 	gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a * dryness);
 
-	highp vec2 vTextureCoordSc = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+	vec2 vTextureCoordSc = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
 	//markCenter(vTextureCoordSc, centers(0), vec3(1.0, 0.0, 0.0));
 	//markCenter(vTextureCoordSc, centers(1), vec3(0.0, 0.0, 1.0));
@@ -491,8 +535,11 @@ void main() {
 		//vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
 		
 		//gl_FragColor.a *= colorAmountNoise(textureCoord, frameNum);
+		
 		//gl_FragColor.a *= avgColorAmountNoise(textureCoord, frameNum);
 	}
+
+	//gl_FragColor = vec4(vec3(fP(textureCoord, center)), 1.0);
 }
 
 

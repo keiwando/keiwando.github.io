@@ -103,11 +103,16 @@ function readShaderToString(filename) {
 
 function main() {
 
-	var vshSource = distortionShapeVshSource();
+	var vshSource = ""; //distortionShapeVshSource();
 
-	fetch('/resources/shaders/brush_distort.fsh')
+	fetch('/resources/shaders/brush_distort.vsh')
 	.then(response => response.text())
-	.then(fshSource => setupGL(vshSource, fshSource));
+	.then(source => vshSource = source)
+	.then(x => fetch('/resources/shaders/brush_distort.fsh')
+	.then(response => response.text())
+	.then(fshSource => setupGL(vshSource, fshSource)));
+
+	
 }
 
 function setupGL(vshSource, fshSource) {
@@ -162,11 +167,11 @@ function setupGL(vshSource, fshSource) {
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
 	
-	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
 
 	function render() {
