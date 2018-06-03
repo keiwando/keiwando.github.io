@@ -149,16 +149,18 @@ float valueAtCenter(vec2 center, float frameNum) {
 
 	float randFromCenter = rand(center);
 
-    float frameNumFloor = floor(frameNum / 70.0) + randFromCenter * 20000.0;
+	frameNum = mod(frameNum, 10000.0 + randFromCenter * 100000.0);
+
+    float frameNumFloor = floor(frameNum / (50.0 + 50.0 * randFromCenter)) + randFromCenter * 20000.0;
     
-    float periodDuration = 1000.0 * rand(center + frameNumFloor / (center * 1000.0)) + 500.0;
+    float periodDuration = 10000.0 * rand(center + frameNumFloor / (center * 1000.0)) + 500.0;
     
-    float t = (frameNum / periodDuration) * 2.0 * PI; + randFromCenter * 50000.0;
+    float t = (frameNum / periodDuration) * 2.0 * PI + randFromCenter * 50000.0;
     
     float ampl = rand(center + floor(t / (2.0 * PI)));
 
     float offset = 0.01 + colorAmount(frameNum) * 0.1;
-    float noiseVal = ampl * sin(t) + offset;
+    float noiseVal = ampl * 0.5 * (sin(t) + 1.0);// + offset;
 
     return noiseVal;
 }
@@ -194,7 +196,7 @@ vec2 nextCenter(vec2 center, float angle) {
 
 float distanceWeight(vec2 coord, vec2 center, float res) {
 
-	float radius = 4.0;
+	float radius = 3.0;
 
 	return (radius - min(radius, distance(coord * res, center) * 4.0));
 }
@@ -291,11 +293,15 @@ float colorAmountNoise(vec2 coord, float frameNum, float res) {
 
 float colorAmountNoise(vec2 coord, float frameNum) {
 
-	float res = 20.0;
-	return colorAmountNoise(coord + 0.5, frameNum, res);
+	float res = 32.0;
+	float noise1 = colorAmountNoise(coord + 0.5, frameNum, res);
+	float noise2 = colorAmountNoise(coord + 0.5, frameNum, res * 2.3);
+
+	return 0.5 * (noise1 + noise2);
+	//return noise1;
 }
 
-float avgColorAmountNoise(vec2 coord, float frameNum) {
+/*float avgColorAmountNoise(vec2 coord, float frameNum) {
 
 	float n1 = colorAmountNoise(vec2(coord[0] - 1.0, coord[1] - 1.0), frameNum);
     float n2 = colorAmountNoise(vec2(coord[0], coord[1] - 1.0), frameNum);
@@ -308,23 +314,14 @@ float avgColorAmountNoise(vec2 coord, float frameNum) {
     float n9 = colorAmountNoise(vec2(coord[0] + 1.0, coord[1] + 1.0), frameNum);
     
     return (n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9) / 5.0;
-}
+}*/
 
 // --------------------    Pressure    ------------------------- // 
 
 float fP(vec2 pos, vec2 center) {
 
-	//float x = (pos.x - center.x) * 15.0; // * dryness;
-	//float y = (pos.y - center.y) * 15.0; // * dryness;
-
-	//float val = pow(0.5 * (cos(x * sqrt(x * x + y * y)) * cos(y * sqrt(x * x + y * y)) + 1.0), 7.0 * dryness);
-
-	return 1.0 - smoothstep(0.2, 0.7, distance(pos, center));
-
-	//val = pow(0.5 * (cos(x * 3.0) * cos(y * 3.0) + 1.0), 20.0 * dryness);
-	//val = pow(0.5 * (cos(x * pow(x * x + y * y, 0.25) * 3.0) * cos(y * pow(x * x + y * y, 0.25) * 3.0) + 1.0), 7.0 * dryness);
-
-	//return val * 2.0 - 1.0;
+	//return 1.0 - smoothstep(0.2, 0.7, distance(pos, center));
+	return 1.0 - smoothstep(0.1, 0.4, distance(pos, center));
 }
 
 // --------------------    Distortion    ------------------------- // 
@@ -354,17 +351,17 @@ highp float parabola(vec2 x, vec2 center, float multiply) {
 ///
 float quadraticParallelFlow(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
 
-	float dist = length(dot(center - x, relativeDirection) / length(relativeDirection));
+	float dist = abs(dot(center - x, relativeDirection) / length(relativeDirection));
 	//return pow(dist, 2.0) * multiply;
 	return smoothstep(0.0, 1.0, dist) * multiply;
 }
 
-float quadraticParallelFlow2(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
+/*float quadraticParallelFlow2(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
 
 	float dist = length(dot(center - x, relativeDirection) / length(relativeDirection));
 	//return pow(dist, 2.0) * multiply;
 	return dist * multiply;
-}
+}*/
 
 /// Linearly increasing values that simulate compression on one side and expansion on the other side of 
 /// a reference line specified by a point (center) and a vector (relativeDirection) pointing in the 
@@ -383,7 +380,7 @@ float quadraticParallelFlow2(vec2 x, vec2 center, vec2 relativeDirection, float 
 /// <--- <-- <- . <- <----
 /// <--- <-- <- . <- <----
 ///
-/// - expansion -- comp --
+/// - expansion -  compr -
 ///
 float compressionFlow(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
 
@@ -395,14 +392,20 @@ float compressionFlow(vec2 x, vec2 center, vec2 relativeDirection, float multipl
 
 	float angle = asin(dot(dX, relativeDirection)) / (length(dX) * length(relativeDirection));
 
+	float maxMult = 1.0 + 0.2 * speed;
+
 	if (angle < 0.0) {
 		// compression
-		return pow(dist, 1.0) * multiply * 5.0;
+		//return dist * multiply * 5.0;
+		return min(0.2, dist * multiply * 5.0);
+		//return dist * min(maxMult, multiply * 5.0);
 	}
-	return pow(dist, 1.0) * multiply * 2.0;
+	//return dist * multiply * 2.0;
+	return min(0.2, dist * multiply * 2.0);
+	//return dist * min(maxMult, multiply * 2.0);
 }
 
-float compressionFlowInv(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
+/*float compressionFlowInv(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
 
 	highp vec2 dX = center - x;
 
@@ -417,7 +420,7 @@ float compressionFlowInv(vec2 x, vec2 center, vec2 relativeDirection, float mult
 		return -pow(dist, 1.0) * multiply * 5.0 * quadraticParallelFlow2(x, center, vec2(-relativeDirection.y, relativeDirection.x), multiply);
 	}
 	return pow(dist, 1.0) * multiply * 2.0 * quadraticParallelFlow2(x, center, vec2(-relativeDirection.y, relativeDirection.x), multiply);
-}
+}*/
 
 float distanceInDirection(highp vec2 x, highp vec2 center, vec2 relativeDirection) {
 
@@ -427,7 +430,7 @@ float distanceInDirection(highp vec2 x, highp vec2 center, vec2 relativeDirectio
 		return 0.0;
 	}
 
-	float dist = smoothstep(0.0, 1.0, length(dotPr / length(relativeDirection)));
+	float dist = smoothstep(0.0, 1.0, dotPr / length(relativeDirection));
 
 	return dist;
 }
@@ -446,17 +449,9 @@ void main() {
 	//highp vec2 textureCoord = vTextureCoord;
 	vec2 textureCoord = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
-	float r = 1.0 - abs(textureCoord.x - 0.5) * 2.0;
-	float g = 1.0 - abs(textureCoord.y - 0.5) * 2.0;
-	//gl_FragColor = vec4(r, g, 0.0, max(r, g));
-	//return;
-	// DEBUG Markings
-	if (min(vTextureCoord.x, vTextureCoord.y) < 0.002 || max(vTextureCoord.x, vTextureCoord.y) > 0.998) {
-		//gl_FragColor = vec4(1,1,1,1);
-		//return;
-	}
+	vec2 center = vec2(0.5, 0.5);
 
-	float stiffnessWeight = (1.0 - stiffness);
+	float stiffnessWeight = (1.0 - stiffness); 
 
 	float forceDistWeight = 0.3;
 	float linearFlowWeight = 0.1;
@@ -471,17 +466,21 @@ void main() {
 	float rightAzmAngle = upAzmAngle + PI / 2.0;
 	float downAzmAngle = rightAzmAngle + PI / 2.0;
 
-	float altWeight = min(60.0, (90.0 - altitude)) / 22.5; // ∈ [0, 2]
-
-	vec2 center = vec2(0.5, 0.5);
-	float azm = -azimuth * PI / 180.0;
-	//center += altWeight * 0.25 * vec2(cos(azm), sin(azm));
-
 	vec2 rightMov = vec2(cos(-rightMovAngle), sin(-rightMovAngle));
 	vec2 downMov = vec2(cos(-downMovAngle), sin(-downMovAngle)); 
 
 	vec2 rightAzm = vec2(cos(-rightAzmAngle), sin(-rightAzmAngle));
 	vec2 downAzm = vec2(cos(-downAzmAngle), sin(-downAzmAngle));
+
+	float altWeight = min(60.0, (90.0 - altitude)) / 22.5; // ∈ [0, 2]
+
+	// increase the force distortion weight if azimuth and movement are pointing in
+	// the opposite direction
+	float oppWeightIncrease = 0.2 * speed * max(0.0, 0.5 - abs(abs(upMovAngle - upAzmAngle) - PI)) * abs(dot(rightAzm, textureCoord - center));
+	forceDistWeight += oppWeightIncrease;
+
+	float azm = -azimuth * PI / 180.0;
+	//center += altWeight * 0.25 * vec2(cos(azm), sin(azm));
 
 	// Distortion caused by the force
 	vec2 forceDistortion = normalize(center.xy - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight * stiffnessWeight;
@@ -490,21 +489,24 @@ void main() {
     vec2 compressMovDistortion = compressionFlow(textureCoord, center, downMov, max(0.0, smoothstep(0.0, 1.0, speed))) * compressionFlowWeight * stiffnessWeight * downMov;
     // Distortion caused by the azimuth and altitude angles
     
-    vec2 linearAngleDistortion = quadraticParallelFlow(textureCoord, center, rightAzm, max(0.0, altWeight)) * linearFlowWeight * stiffnessWeight* downAzm;
+    vec2 linearAngleDistortion = quadraticParallelFlow(textureCoord, center, rightAzm, max(0.0, altWeight)) * linearFlowWeight * stiffnessWeight * downAzm;
     //highp vec2 linearAngleDistortion = compressionFlowInv(textureCoord, center, downAzm, max(0.0, altWeight)) * linearFlowWeight * (1.0 - stiffness) * downAzm;
     vec2 compressAngleDistortion = compressionFlow(textureCoord, center, downAzm, max(0.0, altWeight)) * compressionFlowWeight * stiffnessWeight * downAzm;
     
-    vec2 zeroRef = vec2(0.5, 0.5) + 0.7 * vec2(-cos(azm), sin(azm));
-    linearAngleDistortion *= min(1.0, max(0.0, distanceInDirection(textureCoord, zeroRef, -downAzm))) * 5.0;
+    vec2 zeroRef = vec2(0.5, 0.5) - 0.5 * vec2(cos(azm), sin(azm));
+    linearAngleDistortion *= min(1.0, max(0.0, distanceInDirection(vTextureCoord, zeroRef, -downAzm))) * 5.0;
+    //linearAngleDistortion *= smoothstep(0.0, 1.0, distanceInDirection(textureCoord, zeroRef, -downAzm)) * 5.0;
 
     vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + linearAngleDistortion + compressAngleDistortion;
+    //vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + compressAngleDistortion;
 	//highp vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion;
 	//highp vec2 offset = forceDistortion + compressMovDistortion + compressAngleDistortion;
 	//highp vec2 offset = forceDistortion + compressDistortion;
 
 	float maxOffset = 0.3;
-	//offset = min(offset, vec2(maxOffset));
 	//offset *= maxOffset;
+
+	//offset = max(vec2(-0.9), min(vec2(0.9), offset));
 
 	float dX = offset.x;
 	float dY = offset.y;
@@ -539,7 +541,12 @@ void main() {
 		//gl_FragColor.a *= avgColorAmountNoise(textureCoord, frameNum);
 	}
 
+	/*if (distance(zeroRef, vTextureCoord) < 0.01) {
+		gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+	}*/
+
 	//gl_FragColor = vec4(vec3(fP(textureCoord, center)), 1.0);
+	gl_FragColor.a *= fP(textureCoord, center);
 }
 
 
