@@ -24,28 +24,6 @@ float rand(vec2 co){
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
-/*float rand(vec2 co){
-    return fract(dot(co.xy * 0.001 , vec2(12.9898,78.233)) * 43758.5453);
-}*/
-
-float avg_noise(vec2 coord, float seed){
-    
-    float n1 = gold_noise(vec2(coord[0] - 1.0, coord[1] - 1.0), seed);
-    float n2 = gold_noise(vec2(coord[0], coord[1] - 1.0), seed);
-    float n3 = gold_noise(vec2(coord[0] + 1.0, coord[1] - 1.0), seed);
-    float n4 = gold_noise(vec2(coord[0] - 1.0, coord[1]), seed);
-    float n5 = gold_noise(vec2(coord[0], coord[1]), seed);
-    float n6 = gold_noise(vec2(coord[0] + 1.0, coord[1]), seed);
-    float n7 = gold_noise(vec2(coord[0] - 1.0, coord[1] + 1.0), seed);
-    float n8 = gold_noise(vec2(coord[0], coord[1] + 1.0), seed);
-    float n9 = gold_noise(vec2(coord[0] + 1.0, coord[1] + 1.0), seed);
-    
-    //return (n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9) / 4.0;
-    return (n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9) / 8.0;
-    //return (n2 + n4 + n5 + n6 + n8) / 5.0;
-    //return n5;
-}
-
 float colorAmount(float frameNum) {
 
     float minAmount = 0.01;
