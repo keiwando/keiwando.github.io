@@ -17,94 +17,10 @@ uniform sampler2D texture;
 varying vec2 vTextureCoord;
 varying float vScaleFactor;
 
-// --------------------    Simplex NOISE    ------------------------- //
-
-//
-// Description : Array and textureless GLSL 2D simplex noise function.
-//      Author : Ian McEwan, Ashima Arts.
-//  Maintainer : stegu
-//     Lastmod : 20110822 (ijm)
-//     License : Copyright (C) 2011 Ashima Arts. All rights reserved.
-//               Distributed under the MIT License. See LICENSE file.
-//               https://github.com/ashima/webgl-noise
-//               https://github.com/stegu/webgl-noise
-// 
-
-vec3 mod289(vec3 x) {
-  return x - floor(x * (1.0 / 289.0)) * 289.0;
-}
-
-vec2 mod289(vec2 x) {
-  return x - floor(x * (1.0 / 289.0)) * 289.0;
-}
-
-vec3 permute(vec3 x) {
-  return mod289(((x*34.0)+1.0)*x);
-}
-
-float snoise(vec2 v)
-  {
-  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
-                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
-                     -0.577350269189626,  // -1.0 + 2.0 * C.x
-                      0.024390243902439); // 1.0 / 41.0
-// First corner
-  vec2 i  = floor(v + dot(v, C.yy) );
-  vec2 x0 = v -   i + dot(i, C.xx);
-
-// Other corners
-  vec2 i1;
-  //i1.x = step( x0.y, x0.x ); // x0.x > x0.y ? 1.0 : 0.0
-  //i1.y = 1.0 - i1.x;
-  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-  // x0 = x0 - 0.0 + 0.0 * C.xx ;
-  // x1 = x0 - i1 + 1.0 * C.xx ;
-  // x2 = x0 - 1.0 + 2.0 * C.xx ;
-  vec4 x12 = x0.xyxy + C.xxzz;
-  x12.xy -= i1;
-
-// Permutations
-  i = mod289(i); // Avoid truncation effects in permutation
-  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
-		+ i.x + vec3(0.0, i1.x, 1.0 ));
-
-  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-  m = m*m ;
-  m = m*m ;
-
-// Gradients: 41 points uniformly over a line, mapped onto a diamond.
-// The ring size 17*17 = 289 is close to a multiple of 41 (41*7 = 287)
-
-  vec3 x = 2.0 * fract(p * C.www) - 1.0;
-  vec3 h = abs(x) - 0.5;
-  vec3 ox = floor(x + 0.5);
-  vec3 a0 = x - ox;
-
-// Normalise gradients implicitly by scaling m
-// Approximation of: m *= inversesqrt( a0*a0 + h*h );
-  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
-
-// Compute final noise value at P
-  vec3 g;
-  g.x  = a0.x  * x0.x  + h.x  * x0.y;
-  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-  return 130.0 * dot(m, g);
-}
-
 // --------------------    Color Transfer    ------------------------- //
 
-float PHI = 1.61803398874989484820459 * 00000.1; // Golden Ratio
-float PI_2  = 3.14159265358979323846264 * 00000.1; // PI
-float SQ2 = 1.41421356237309504880169 * 10000.0; // Square Root of Two
-
-float gold_noise(vec2 coordinate, float seed){
-    
-    return pow(fract((sin(dot(coordinate*(seed+PHI), vec2(PHI, PI_2))) + 1.0) * 0.5 * SQ2), 4.0);
-    //return fract(sin(dot(coordinate*(seed+PHI), vec2(PHI, PI_2)))*SQ2);
-}
-
 float rand(vec2 co){
-	//return snoise(co);
+	
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 
@@ -201,7 +117,7 @@ float distanceWeight(vec2 coord, vec2 center, float res) {
 	return (radius - min(radius, distance(coord * res, center) * 4.0));
 }
 
-/*float avgBetweenCenters(vec2 center, vec2 coord, float frameNum, float res) {
+float avgBetweenCenters(vec2 center, vec2 coord, float frameNum, float res) {
 
 	float angle = angleBetween(center, coord * res);
 
@@ -239,44 +155,6 @@ float distanceWeight(vec2 coord, vec2 center, float res) {
 	//return (dist0 * noise0 + dist1 * noise1 + dist2 * noise2 + dist3 * noise3);
 	//return (dist0 * noise0 + dist1 * noise1);
 	//return dist0 * noise0;
-}*/
-
-float avgBetweenCenters(vec2 center, vec2 coord, float frameNum, float res) {
-
-	float angle = angleBetween(center, coord * res);
-
-	float dAngle = PI / 2.0;
-
-	// Determine 3 surrounding center values and average them
-	vec2 centerRight = nextCenter(center, 0.0);
-	vec2 centerLeft = nextCenter(center, PI);
-	vec2 centerTop = nextCenter(center, PI / 2.0);
-	vec2 centerBottom = nextCenter(center, -PI / 2.0);
-
-	float noise0 = valueAtCenter(center, 	  frameNum);
-	float noiseRight = valueAtCenter(centerRight, frameNum);
-	float noiseLeft = valueAtCenter(centerLeft, frameNum);
-	float noiseTop = valueAtCenter(centerTop, frameNum);
-	float noiseBottom = valueAtCenter(centerBottom, frameNum);
-
-	float dist0 = distanceWeight(coord, center, 	 res);
-	float dist1 = distanceWeight(coord, centerRight, res);
-	float dist2 = distanceWeight(coord, centerLeft, res);
-	float dist3 = distanceWeight(coord, centerTop, res);
-	float dist4 = distanceWeight(coord, centerBottom, res);
-
-	// Top - Bottom
-	//return (dist0 * noise0 + dist3 * noiseTop + dist4 * noiseBottom) / (dist0 + dist3 + dist4);
-
-	// Left - Right
-	//return (dist0 * noise0 + dist1 * noiseRight + dist2 * noiseLeft) / (dist0 + dist1 + dist2);
-
-	// Top - Bottom - Left - Right
-	return (dist0 * noise0 + dist1 * noiseRight + dist2 * noiseLeft + dist3 * noiseTop + dist4 * noiseBottom) / (dist0 + dist1 + dist2 + dist3 + dist4);
-	
-	//return (dist0 * noise0 + dist1 * noise1 + dist2 * noise2 + dist3 * noise3);
-	//return (dist0 * noise0 + dist1 * noise1);
-	//return dist0 * noise0;
 }
 
 float colorAmountNoise(vec2 coord, float frameNum, float res) {
@@ -299,22 +177,8 @@ float colorAmountNoise(vec2 coord, float frameNum) {
 
 	return 0.5 * (noise1 + noise2);
 	//return noise1;
+	//return noise2;
 }
-
-/*float avgColorAmountNoise(vec2 coord, float frameNum) {
-
-	float n1 = colorAmountNoise(vec2(coord[0] - 1.0, coord[1] - 1.0), frameNum);
-    float n2 = colorAmountNoise(vec2(coord[0], coord[1] - 1.0), frameNum);
-    float n3 = colorAmountNoise(vec2(coord[0] + 1.0, coord[1] - 1.0), frameNum);
-    float n4 = colorAmountNoise(vec2(coord[0] - 1.0, coord[1]), frameNum);
-    float n5 = colorAmountNoise(vec2(coord[0], coord[1]), frameNum);
-    float n6 = colorAmountNoise(vec2(coord[0] + 1.0, coord[1]), frameNum);
-    float n7 = colorAmountNoise(vec2(coord[0] - 1.0, coord[1] + 1.0), frameNum);
-    float n8 = colorAmountNoise(vec2(coord[0], coord[1] + 1.0), frameNum);
-    float n9 = colorAmountNoise(vec2(coord[0] + 1.0, coord[1] + 1.0), frameNum);
-    
-    return (n1 + n2 + n3 + n4 + n5 + n6 + n7 + n8 + n9) / 5.0;
-}*/
 
 // --------------------    Pressure    ------------------------- // 
 
@@ -451,7 +315,7 @@ void main() {
 
 	vec2 center = vec2(0.5, 0.5);
 
-	float stiffnessWeight = (1.0 - stiffness); 
+	float stiffnessWeight = (1.0 - stiffness) * bristleLength; 
 
 	float forceDistWeight = 0.3;
 	float linearFlowWeight = 0.1;
@@ -485,7 +349,7 @@ void main() {
 	// Distortion caused by the force
 	vec2 forceDistortion = normalize(center.xy - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight * stiffnessWeight;
     // Distortion caused by the movement direction + speed
-    vec2 linearMovDistortion = quadraticParallelFlow(textureCoord, center, rightMov, max(0.0, speed)) * linearFlowWeight * stiffnessWeight * downMov;
+    vec2 linearMovDistortion = quadraticParallelFlow(textureCoord, center, rightMov, max(0.0, speed)) * linearFlowWeight * stiffnessWeight * downMov * 2.0;
     vec2 compressMovDistortion = compressionFlow(textureCoord, center, downMov, max(0.0, smoothstep(0.0, 1.0, speed))) * compressionFlowWeight * stiffnessWeight * downMov;
     // Distortion caused by the azimuth and altitude angles
     
@@ -541,12 +405,19 @@ void main() {
 		//gl_FragColor.a *= avgColorAmountNoise(textureCoord, frameNum);
 	}
 
+	/*if (textureCoord.x > 1.0 || textureCoord.x < 0.0 || textureCoord.y > 1.0 || textureCoord.y < 0.0) {
+		gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+	}*/
+	if (textureCoord.x >= 1.0 || textureCoord.x <= 0.0 || textureCoord.y >= 1.0 || textureCoord.y <= 0.0) {
+		gl_FragColor.a = 0.0;
+	}
+
 	/*if (distance(zeroRef, vTextureCoord) < 0.01) {
 		gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
 	}*/
 
 	//gl_FragColor = vec4(vec3(fP(textureCoord, center)), 1.0);
-	gl_FragColor.a *= fP(textureCoord, center);
+	//gl_FragColor.a *= fP(textureCoord, center);
 }
 
 

@@ -2,12 +2,12 @@ main();
 
 var pencilInputs = {
 	force: 0.0,
-	altitude: 0,
+	altitude: 90,
 	azimuth: 180,
 	movement: 314,
 	speed: 0.0,
 	bristleStiffness: 0.0,
-	bristleLength: 0.0
+	bristleLength: 1.0
 };
 
 var frameNum = 1;
@@ -130,7 +130,7 @@ function setupGL(vshSource, fshSource) {
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);
 		requestAnimationFrame(render);
-		frameNum++;
+		//frameNum++;
 	}
 	requestAnimationFrame(render);
 

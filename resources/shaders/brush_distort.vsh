@@ -29,11 +29,12 @@ void main() {
 	float offsetX = -cos(directionRad) * cos(altitudeRad) * bristleLength;
 	float offsetY = -sin(directionRad) * cos(altitudeRad) * bristleLength;
 	highp vec4 offset = vec4(offsetX, offsetY, 0.0, 0.0);
+	offset = vec4(0.0);
 
 	float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0 + abs(max(-position.x, 0.0)) * 20.5 * sin(force);
 
 	vTextureCoord = textureCoord;
-	vScaleFactor = (1.0 + (0.7 * force + 0.2 * speed + 0.4 * min(60.0, (90.0 - altitude)) / 60.0) * (1.0 - stiffness));
+	vScaleFactor = (1.0 + (0.7 * force + 0.28 * speed + 0.4 * min(60.0, (90.0 - altitude)) / 60.0) * (1.0 - stiffness));
 
 	//vScaleFactor = 1.0;
 
