@@ -21,7 +21,12 @@ varying float vScaleFactor;
 
 float rand(vec2 co){
 	
-    return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+    return fract(sin(dot(co.xy , vec2(12.9898, 78.233))) * 43758.5453);
+    //return fract(sin(dot(co.xy , vec2(12.9898, 78.233))) * 314192.567);
+    //return fract(dot(co.xy , vec2(12.9898,78.233)));
+    //return fract(co.x * co.y * 0.01241234);
+    
+    //return fract(dot(co.xy, vec2(35.5 * co.y, 12.4235)));
 }
 
 float colorAmount(float frameNum) {
@@ -29,14 +34,6 @@ float colorAmount(float frameNum) {
     float minAmount = 0.01;
     
     return max(1.0 - 0.8 * (1.0 / (1.0 + exp(-(frameNum / 100.0 - 4.0)))) - 0.00001 * frameNum, minAmount);
-}
-
-float baseOffset(vec2 coord, float frameNum) {
-
-	float res = 128.0;
-	//float res = 256.0 * rand(floor(coord * 20.0)) + 4.0;
-
-	return 0.5 * (1.0 + sin(coord.x * res) * sin(coord.y * res) * sin(frameNum * 2.0 * PI / 300.0 + res));
 }
 
 float valueAtCenter(vec2 center, float frameNum) {
@@ -59,22 +56,38 @@ float valueAtCenter(vec2 center, float frameNum) {
     return noiseVal;
 }
 
-highp vec2 centerForCoord(vec2 coord, float res) {
-
-    vec2 coordFloor = floor(coord * res);// + coordShift;// / res;
-    vec2 center = (floor(coord * res) + 0.5);// - coordShift;
-
-    return center;
+float valueAtCenterOpt(vec2 center, float frameNum) {
+    
+    highp float randFromCenter = rand(center);
+    
+    //frameNum = mod(frameNum, 10000.0 + randFromCenter * 100000.0);
+    
+    float frameNumFloor = floor(frameNum / (50.0 + 50.0 * randFromCenter)) + randFromCenter * 20000.0;
+    
+    //float periodDuration = 1000.0 * rand(center + frameNumFloor / (center * 1000.0)) + 500.0;
+    float periodDuration = 1000.0 * randFromCenter + 500.0;
+    
+    float t = (frameNum / periodDuration) * 2.0 * PI + randFromCenter * 50000.0;
+    
+    float ampl = rand(center + floor(t / (2.0 * PI)));
+    //float ampl = fract(randFromCenter * 1.234);// rand(center + floor(t / (2.0 * PI)));
+    
+    //float offset = 0.01 + colorAmount(frameNum) * 0.1;
+    //float offset = 0.01 + vGlobalColorAmount * 0.1;
+    
+    //float noiseVal = ampl * sin(t);// + offset;
+    float noiseVal = ampl * 0.5 * (sin(t) + 1.0);
+    //float noiseVal = ampl;
+    
+    return min(1.0, max(0.0, noiseVal));
 }
 
-float angleBetween(vec2 origin, vec2 point) {
+highp vec2 centerForCoord(vec2 coord, float res) {
 
-	vec2 norm = normalize(point - origin);
+    //vec2 coordFloor = floor(coord * res);// + coordShift;// / res;
+    return floor(coord * res) + 0.5;// - coordShift;
 
-	return sign(norm.y) * acos(dot(norm, vec2(1.0, 0.0)));
-
-	//return atan2((point.y - origin.y) / (point.x - origin.x));
-	//return acos(dot(origin, point));
+    //return center;
 }
 
 vec2 nextCenter(vec2 center, float angle) {
@@ -95,51 +108,12 @@ float distanceWeight(vec2 coord, vec2 center, float res) {
 	return (radius - min(radius, distance(coord * res, center) * 4.0));
 }
 
-float avgBetweenCenters(vec2 center, vec2 coord, float frameNum, float res) {
-
-	float angle = angleBetween(center, coord * res);
-
-	float dAngle = PI / 2.0;
-
-	// Determine 3 surrounding center values and average them
-	vec2 nextCenter1 = nextCenter(center, angle);
-	vec2 nextCenter2 = nextCenter(center, angle + dAngle);
-	vec2 nextCenter3 = nextCenter(center, angle - dAngle);
-
-	float noise0 = valueAtCenter(center, 	  frameNum);
-	float noise1 = valueAtCenter(nextCenter1, frameNum);
-	float noise2 = valueAtCenter(nextCenter2, frameNum);
-	float noise3 = valueAtCenter(nextCenter3, frameNum);
-
-	float dist0 = distanceWeight(coord, center, 	 res);
-	float dist1 = distanceWeight(coord, nextCenter1, res);
-	float dist2 = distanceWeight(coord, nextCenter2, res);
-	float dist3 = distanceWeight(coord, nextCenter3, res);
-
-	// DEBUG
-	if (nextCenter1.x < center.x && nextCenter1.y < center.y) {
-		
-		gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-		return 0.0;
-	}
-	// if (abs(angle) > PI / 1.1) {
-	// //if (angle < 0.0) {
-		
-	// 	gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-	// 	return 0.0;
-	// }
-
-	return (dist0 * noise0 + dist1 * noise1 + dist2 * noise2 + dist3 * noise3) / (dist0 + dist1 + dist2 + dist3);
-	//return (dist0 * noise0 + dist1 * noise1 + dist2 * noise2 + dist3 * noise3);
-	//return (dist0 * noise0 + dist1 * noise1);
-	//return dist0 * noise0;
-}
 
 float colorAmountNoise(vec2 coord, float frameNum, float res) {
 
 	vec2 center = centerForCoord(coord, res);
 
-	float noiseVal = valueAtCenter(center, frameNum) * distanceWeight(coord, center, res);
+	float noiseVal = valueAtCenterOpt(center, frameNum) * distanceWeight(coord, center, res);
 
 	//float noiseVal = avgBetweenCenters(center, coord, frameNum, res);
     
@@ -162,8 +136,9 @@ float colorAmountNoise(vec2 coord, float frameNum) {
 
 float fP(vec2 pos, vec2 center) {
 
+	return 1.0 - smoothstep(0.1, 0.6, distance(pos, center));
 	//return 1.0 - smoothstep(0.2, 0.7, distance(pos, center));
-	return 1.0 - smoothstep(0.1, 0.4, distance(pos, center));
+	//return 1.0 - smoothstep(0.0, 0.4, distance(pos, center));
 }
 
 // --------------------    Distortion    ------------------------- // 
@@ -288,8 +263,8 @@ void markCenter(vec2 texturePos, vec3 center, vec3 color) {
 
 void main() {
 
-	//highp vec2 textureCoord = vTextureCoord;
-	vec2 textureCoord = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+	highp vec2 textureCoord = vTextureCoord;
+	//vec2 textureCoord = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
 	vec2 center = vec2(0.5, 0.5);
 
@@ -309,10 +284,12 @@ void main() {
 	float downAzmAngle = rightAzmAngle + PI / 2.0;
 
 	vec2 rightMov = vec2(cos(-rightMovAngle), sin(-rightMovAngle));
-	vec2 downMov = vec2(cos(-downMovAngle), sin(-downMovAngle)); 
+	//vec2 downMov = vec2(cos(-downMovAngle), sin(-downMovAngle)); 
+	vec2 downMov = vec2(rightMov.y, -rightMov.x);
 
 	vec2 rightAzm = vec2(cos(-rightAzmAngle), sin(-rightAzmAngle));
-	vec2 downAzm = vec2(cos(-downAzmAngle), sin(-downAzmAngle));
+	//vec2 downAzm = vec2(cos(-downAzmAngle), sin(-downAzmAngle));
+	vec2 downAzm = vec2(rightAzm.y, -rightAzm.x);
 
 	float altWeight = min(60.0, (90.0 - altitude)) / 22.5; // ∈ [0, 2]
 
@@ -347,6 +324,7 @@ void main() {
 
 	float maxOffset = 0.3;
 	//offset *= maxOffset;
+	//offset = vec2(0);
 
 	//offset = max(vec2(-0.9), min(vec2(0.9), offset));
 
@@ -366,16 +344,13 @@ void main() {
 
 	vec2 vTextureCoordSc = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
-	//markCenter(vTextureCoordSc, centers(0), vec3(1.0, 0.0, 0.0));
-	//markCenter(vTextureCoordSc, centers(1), vec3(0.0, 0.0, 1.0));
-	//markCenter(vTextureCoordSc, centers(2), vec3(0.8, 0.8, 0.0));
-
-	bool showNoise = false;
+	bool showNoise = true;
 
 	if (showNoise) {
 
 		
 		gl_FragColor = vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
+		//gl_FragColor = vec4(vec3(colorAmountNoise(vTextureCoord, frameNum)), 1.0);
 		//vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
 		
 		//gl_FragColor.a *= colorAmountNoise(textureCoord, frameNum);
@@ -388,13 +363,9 @@ void main() {
 	}*/
 	if (textureCoord.x >= 1.0 || textureCoord.x <= 0.0 || textureCoord.y >= 1.0 || textureCoord.y <= 0.0) {
 		gl_FragColor.a = 0.0;
+		//gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
 	}
 
-	/*if (distance(zeroRef, vTextureCoord) < 0.01) {
-		gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-	}*/
-
-	//gl_FragColor = vec4(vec3(fP(textureCoord, center)), 1.0);
 	//gl_FragColor.a *= fP(textureCoord, center);
 }
 

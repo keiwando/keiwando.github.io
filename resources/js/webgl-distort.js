@@ -130,7 +130,7 @@ function setupGL(vshSource, fshSource) {
 	function render() {
 		drawScene(gl, programInfo, buffers, texture);
 		requestAnimationFrame(render);
-		//frameNum++;
+		frameNum++;
 	}
 	requestAnimationFrame(render);
 

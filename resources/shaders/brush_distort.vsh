@@ -33,8 +33,11 @@ void main() {
 
 	float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0 + abs(max(-position.x, 0.0)) * 20.5 * sin(force);
 
-	vTextureCoord = textureCoord;
+	
 	vScaleFactor = (1.0 + (0.7 * force + 0.28 * speed + 0.4 * min(60.0, (90.0 - altitude)) / 60.0) * (1.0 - stiffness));
+
+	//vTextureCoord = textureCoord;
+	vTextureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
 	//vScaleFactor = 1.0;
 
