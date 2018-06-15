@@ -58,19 +58,24 @@ float valueAtCenter(vec2 center, float frameNum) {
 
 float valueAtCenterOpt(vec2 center, float frameNum) {
     
-    highp float randFromCenter = rand(center);
+    float randFromCenter = rand(center);
+    
+    float frameNumFloorOffset = randFromCenter * 500.0 * stiffness;
+    float tOffset = randFromCenter * 500.0;
     
     //frameNum = mod(frameNum, 10000.0 + randFromCenter * 100000.0);
     
-    float frameNumFloor = floor(frameNum / (50.0 + 50.0 * randFromCenter)) + randFromCenter * 20000.0;
+    //float frameNumFloor = floor(frameNum / (50.0 + 50.0 * randFromCenter));// + randFromCenter * 200.0;
+    float frameNumFloor = floor(frameNum * 0.005 * randFromCenter) + frameNumFloorOffset;
     
     //float periodDuration = 1000.0 * rand(center + frameNumFloor / (center * 1000.0)) + 500.0;
     float periodDuration = 1000.0 * randFromCenter + 500.0;
     
-    float t = (frameNum / periodDuration) * 2.0 * PI + randFromCenter * 50000.0;
+    float t = (frameNum / periodDuration) * 2.0 * PI + tOffset;
     
-    float ampl = rand(center + floor(t / (2.0 * PI)));
-    //float ampl = fract(randFromCenter * 1.234);// rand(center + floor(t / (2.0 * PI)));
+    //float ampl = rand(center + floor(t / (2.0 * PI)));
+    //float ampl = fract(randFromCenter * 1.234 + frameNumFloor * 0.1445);// rand(center + floor(t / (2.0 * PI)));
+    float ampl = fract(randFromCenter * 1.2134 + frameNumFloor * 0.1445);
     
     //float offset = 0.01 + colorAmount(frameNum) * 0.1;
     //float offset = 0.01 + vGlobalColorAmount * 0.1;
@@ -88,17 +93,6 @@ highp vec2 centerForCoord(vec2 coord, float res) {
     return floor(coord * res) + 0.5;// - coordShift;
 
     //return center;
-}
-
-vec2 nextCenter(vec2 center, float angle) {
-
-	float cA = cos(angle);
-	float sA = sin(angle);
-
-	float x = cA > 0.0 ? floor(cA) : ceil(cA);
-	float y = sA > 0.0 ? floor(sA) : ceil(sA);
-
-	return center + vec2(x, y);
 }
 
 float distanceWeight(vec2 coord, vec2 center, float res) {
@@ -148,8 +142,8 @@ highp float parabola(vec2 x, vec2 center, float multiply) {
 
 	//return pow(min(1.0, length(center - x)), 1.4) * multiply;
 	//return length(center - x) * multiply;
-
 	return smoothstep(0.0, 1.0, length(center - x)) * multiply;
+	//return smoothstep(0.0, 1.0, length(center - x)) * multiply;
 }
 
 /// Quadratically increasing value in the direction specified by relativeDirection with the values of 0 being 
@@ -169,8 +163,8 @@ highp float parabola(vec2 x, vec2 center, float multiply) {
 float quadraticParallelFlow(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
 
 	float dist = abs(dot(center - x, relativeDirection) / length(relativeDirection));
-	//return pow(dist, 2.0) * multiply;
-	return smoothstep(0.0, 1.0, dist) * multiply;
+	return pow(dist, 1.8) * multiply;
+	//return smoothstep(0.0, 1.0, dist) * multiply;
 }
 
 /*float quadraticParallelFlow2(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
@@ -252,15 +246,6 @@ float distanceInDirection(highp vec2 x, highp vec2 center, vec2 relativeDirectio
 	return dist;
 }
 
-void markCenter(vec2 texturePos, vec3 center, vec3 color) {
-
-	if (center.z == 0.0) return;
-
-	if (length(texturePos - center.xy) < 0.01) {
-		gl_FragColor = vec4(color, 1.0);
-	}
-}
-
 void main() {
 
 	highp vec2 textureCoord = vTextureCoord;
@@ -295,14 +280,16 @@ void main() {
 
 	// increase the force distortion weight if azimuth and movement are pointing in
 	// the opposite direction
-	float oppWeightIncrease = 0.2 * speed * max(0.0, 0.5 - abs(abs(upMovAngle - upAzmAngle) - PI)) * abs(dot(rightAzm, textureCoord - center));
+	float oppWeightIncrease = 0.3 * speed * max(0.0, 0.5 - abs(abs(upMovAngle - upAzmAngle) - PI)) * abs(dot(rightAzm, textureCoord - center));
 	forceDistWeight += oppWeightIncrease;
 
 	float azm = -azimuth * PI / 180.0;
 	//center += altWeight * 0.25 * vec2(cos(azm), sin(azm));
 
 	// Distortion caused by the force
-	vec2 forceDistortion = normalize(center.xy - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight * stiffnessWeight;
+	vec2 forceDistortion = normalize(center - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight * stiffnessWeight;
+	//vec2 forceDistortion = normalize(center - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight;
+	//vec2 forceDistortion = normalize(center - textureCoord) * force * forceDistWeight * stiffnessWeight;
     // Distortion caused by the movement direction + speed
     vec2 linearMovDistortion = quadraticParallelFlow(textureCoord, center, rightMov, max(0.0, speed)) * linearFlowWeight * stiffnessWeight * downMov * 2.0;
     vec2 compressMovDistortion = compressionFlow(textureCoord, center, downMov, max(0.0, smoothstep(0.0, 1.0, speed))) * compressionFlowWeight * stiffnessWeight * downMov;
@@ -316,13 +303,14 @@ void main() {
     linearAngleDistortion *= min(1.0, max(0.0, distanceInDirection(vTextureCoord, zeroRef, -downAzm))) * 5.0;
     //linearAngleDistortion *= smoothstep(0.0, 1.0, distanceInDirection(textureCoord, zeroRef, -downAzm)) * 5.0;
 
-    vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + linearAngleDistortion + compressAngleDistortion;
+    //vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + linearAngleDistortion + compressAngleDistortion;
+    vec2 offset = forceDistortion + linearMovDistortion + linearAngleDistortion + compressAngleDistortion;
     //vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + compressAngleDistortion;
 	//highp vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion;
 	//highp vec2 offset = forceDistortion + compressMovDistortion + compressAngleDistortion;
 	//highp vec2 offset = forceDistortion + compressDistortion;
 
-	float maxOffset = 0.3;
+	//float maxOffset = 0.3;
 	//offset *= maxOffset;
 	//offset = vec2(0);
 
@@ -344,7 +332,7 @@ void main() {
 
 	vec2 vTextureCoordSc = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
-	bool showNoise = true;
+	bool showNoise = false;
 
 	if (showNoise) {
 
@@ -354,8 +342,6 @@ void main() {
 		//vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
 		
 		//gl_FragColor.a *= colorAmountNoise(textureCoord, frameNum);
-		
-		//gl_FragColor.a *= avgColorAmountNoise(textureCoord, frameNum);
 	}
 
 	/*if (textureCoord.x > 1.0 || textureCoord.x < 0.0 || textureCoord.y > 1.0 || textureCoord.y < 0.0) {
@@ -366,7 +352,8 @@ void main() {
 		//gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
 	}
 
-	//gl_FragColor.a *= fP(textureCoord, center);
+	//vec2 forceCenter = center + vec2(-cos(azm), sin(azm)) * 0.1 * altWeight;
+	//gl_FragColor.a *= fP(textureCoord, forceCenter);
 }
 
 
