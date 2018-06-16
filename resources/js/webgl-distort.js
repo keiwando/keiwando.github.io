@@ -123,8 +123,8 @@ function setupGL(vshSource, fshSource) {
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
-	const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
 
 	function render() {

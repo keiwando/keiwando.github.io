@@ -117,7 +117,11 @@ float colorAmountNoise(vec2 coord, float frameNum, float res) {
 
 float colorAmountNoise(vec2 coord, float frameNum) {
 
-	float res = 32.0;
+	float randFromFrameNum = rand(vec2(floor(frameNum * 0.005) * 0.002));
+
+	//float res = 32.0;
+	float res = 7.0 + 20.0 * randFromFrameNum;
+
 	float noise1 = colorAmountNoise(coord + 0.5, frameNum, res);
 	float noise2 = colorAmountNoise(coord + 0.5, frameNum, res * 2.3);
 
@@ -167,13 +171,6 @@ float quadraticParallelFlow(vec2 x, vec2 center, vec2 relativeDirection, float m
 	//return smoothstep(0.0, 1.0, dist) * multiply;
 }
 
-/*float quadraticParallelFlow2(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
-
-	float dist = length(dot(center - x, relativeDirection) / length(relativeDirection));
-	//return pow(dist, 2.0) * multiply;
-	return dist * multiply;
-}*/
-
 /// Linearly increasing values that simulate compression on one side and expansion on the other side of 
 /// a reference line specified by a point (center) and a vector (relativeDirection) pointing in the 
 /// direction of compression
@@ -216,23 +213,6 @@ float compressionFlow(vec2 x, vec2 center, vec2 relativeDirection, float multipl
 	//return dist * min(maxMult, multiply * 2.0);
 }
 
-/*float compressionFlowInv(vec2 x, vec2 center, vec2 relativeDirection, float multiply) {
-
-	highp vec2 dX = center - x;
-
-	float dist = length(dot(dX, relativeDirection) / length(relativeDirection));
-
-	dist = smoothstep(0.0, 1.0, dist) * 1.0;
-
-	float angle = asin(dot(dX, relativeDirection)) / (length(dX) * length(relativeDirection));
-
-	if (angle > 0.0) {
-		// compression
-		return -pow(dist, 1.0) * multiply * 5.0 * quadraticParallelFlow2(x, center, vec2(-relativeDirection.y, relativeDirection.x), multiply);
-	}
-	return pow(dist, 1.0) * multiply * 2.0 * quadraticParallelFlow2(x, center, vec2(-relativeDirection.y, relativeDirection.x), multiply);
-}*/
-
 float distanceInDirection(highp vec2 x, highp vec2 center, vec2 relativeDirection) {
 
 	float dotPr = dot(center - x, relativeDirection);
@@ -256,7 +236,7 @@ void main() {
 	float stiffnessWeight = (1.0 - stiffness) * bristleLength; 
 
 	float forceDistWeight = 0.3;
-	float linearFlowWeight = 0.1;
+	float linearFlowWeight = 0.2;
 	float compressionFlowWeight = 0.04;
 
 	float upMovAngle = (movementDirection + 180.0) * PI / 180.0;
@@ -280,14 +260,19 @@ void main() {
 
 	// increase the force distortion weight if azimuth and movement are pointing in
 	// the opposite direction
-	float oppWeightIncrease = 0.3 * speed * max(0.0, 0.5 - abs(abs(upMovAngle - upAzmAngle) - PI)) * abs(dot(rightAzm, textureCoord - center));
+	float oppWeightIncrease = 0.3 * speed * max(0.0, 0.5 - abs(abs(upMovAngle - upAzmAngle) - PI)) * abs(dot(rightAzm, textureCoord - center)) * altWeight * 0.5;
 	forceDistWeight += oppWeightIncrease;
 
 	float azm = -azimuth * PI / 180.0;
+
+	vec2 zeroRef = vec2(0.5, 0.5) - 0.8 * vec2(cos(azm), sin(azm));
 	//center += altWeight * 0.25 * vec2(cos(azm), sin(azm));
 
 	// Distortion caused by the force
 	vec2 forceDistortion = normalize(center - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight * stiffnessWeight;
+
+	textureCoord += forceDistortion;
+
 	//vec2 forceDistortion = normalize(center - textureCoord) * parabola(textureCoord, center, force) * forceDistWeight;
 	//vec2 forceDistortion = normalize(center - textureCoord) * force * forceDistWeight * stiffnessWeight;
     // Distortion caused by the movement direction + speed
@@ -297,49 +282,62 @@ void main() {
     
     vec2 linearAngleDistortion = quadraticParallelFlow(textureCoord, center, rightAzm, max(0.0, altWeight)) * linearFlowWeight * stiffnessWeight * downAzm;
     //highp vec2 linearAngleDistortion = compressionFlowInv(textureCoord, center, downAzm, max(0.0, altWeight)) * linearFlowWeight * (1.0 - stiffness) * downAzm;
+    //vec2 compressAngleDistortion = compressionFlow(textureCoord, center, downAzm, max(0.0, altWeight)) * compressionFlowWeight * stiffnessWeight * downAzm;
     vec2 compressAngleDistortion = compressionFlow(textureCoord, center, downAzm, max(0.0, altWeight)) * compressionFlowWeight * stiffnessWeight * downAzm;
     
-    vec2 zeroRef = vec2(0.5, 0.5) - 0.5 * vec2(cos(azm), sin(azm));
-    linearAngleDistortion *= min(1.0, max(0.0, distanceInDirection(vTextureCoord, zeroRef, -downAzm))) * 5.0;
+    
+    //linearAngleDistortion *= min(1.0, max(0.0, distanceInDirection(vTextureCoord, zeroRef, -downAzm))) * 5.0;
+    //linearAngleDistortion *= distanceInDirection(vTextureCoord, zeroRef, -downAzm) * 5.0;
     //linearAngleDistortion *= smoothstep(0.0, 1.0, distanceInDirection(textureCoord, zeroRef, -downAzm)) * 5.0;
 
     //vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + linearAngleDistortion + compressAngleDistortion;
-    vec2 offset = forceDistortion + linearMovDistortion + linearAngleDistortion + compressAngleDistortion;
+    vec2 offset = linearMovDistortion + compressMovDistortion + linearAngleDistortion;// + compressAngleDistortion;
+    //vec2 offset = linearMovDistortion + compressMovDistortion + compressAngleDistortion;
+
+    //vec2 offset = forceDistortion + linearMovDistortion + linearAngleDistortion + compressAngleDistortion;
     //vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion + compressAngleDistortion;
-	//highp vec2 offset = forceDistortion + linearMovDistortion + compressMovDistortion;
-	//highp vec2 offset = forceDistortion + compressMovDistortion + compressAngleDistortion;
-	//highp vec2 offset = forceDistortion + compressDistortion;
 
-	//float maxOffset = 0.3;
-	//offset *= maxOffset;
-	//offset = vec2(0);
 
-	//offset = max(vec2(-0.9), min(vec2(0.9), offset));
-
-	float dX = offset.x;
-	float dY = offset.y;
-
-	//highp vec2 textureCoord = vec2(textureCoord.x + dX, textureCoord.y + dY);
 	textureCoord += offset;
-
-	//textureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
 
 	vec4 texColor = texture2D(texture, textureCoord);
 
-	float dryness = 1.0; //fD(textureCoord, center, bristleLength);
+	gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
 
-	gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a * dryness);
 
-	vec2 vTextureCoordSc = (vTextureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+	float bristleColorAmount = max(0.0, 1.0 - colorAmountNoise(textureCoord, frameNum)); // PERFORMANCE CRITICAL!
+	
+	float dryThreshold = 1.0;
+            
+    //float force = fP(textureCoord, center) * vForce;
+    
+    float forceWeight = 0.5;
+    float speedWeight = 0.6;
+    
+    //dryThreshold = min(1.0, max(0.0, colAmountWeight * colAmount + forceWeight * force + drynessWeight * abs(wetness) + speedWeight * vSpeed + grainWeight * (1.0 - grainInfluence * grainInfluence)));
+    
+    //dryThreshold = min(1.0, max(0.05, colAmountWeight * colAmount + forceWeight * force + drynessWeight * abs(wetness) + speedWeight * vSpeed + grainWeight * (1.0 - grainInfluence)));
+    dryThreshold = min(1.0, max(0.0, forceWeight * force));
+    //dryThreshold = min(1.0, max(0.0, forceWeight * force));
+    
+    dryThreshold *= (1.0 - speedWeight * speed);
+    
+    
+    //float dryVal = (bristleColorAmount >= dryThreshold) ? bristleColorAmount : 0.0;
+    float dryVal = (bristleColorAmount <= dryThreshold) ? bristleColorAmount : 0.0;
+    //float dryVal = (bristleColorAmount <= dryThreshold) ? 1.0 - bristleColorAmount / (dryThreshold + 0.01) : 0.0;
 
-	bool showNoise = false;
+	bool showNoise = true;
 
 	if (showNoise) {
 
 		
-		gl_FragColor = vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
+		//gl_FragColor = vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
+		
 		//gl_FragColor = vec4(vec3(colorAmountNoise(vTextureCoord, frameNum)), 1.0);
 		//vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
+		gl_FragColor = vec4(vec3(1.0), dryVal);
+
 		
 		//gl_FragColor.a *= colorAmountNoise(textureCoord, frameNum);
 	}
