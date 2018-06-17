@@ -3,14 +3,15 @@ main();
 var pencilInputs = {
 	force: 0.0,
 	altitude: 90,
-	azimuth: 180,
-	movement: 314,
+	azimuth: 275,
+	movement: 0,
 	speed: 0.0,
 	bristleStiffness: 0.0,
 	bristleLength: 1.0
 };
 
 var frameNum = 1;
+var vertexSize = 2;
 
 function basicQuadVshSource() {
 	return `
@@ -113,17 +114,18 @@ function setupGL(vshSource, fshSource) {
 			modelViewMat: gl.getUniformLocation(program, "modelViewMat"),
 			projectionMat: gl.getUniformLocation(program, "projectionMat"),
 			texture: gl.getUniformLocation(program, "texture"),
-			frameNum: gl.getUniformLocation(program, "frameNum")
+			frameNum: gl.getUniformLocation(program, "frameNum"),
+			vertexSize: gl.getUniformLocation(program, "vertexSize")
 		}
 	};
 
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
 	
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
-	const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/rays.png");
 
@@ -200,6 +202,7 @@ function drawScene(gl, programInfo, buffers, texture) {
 
 	bindPencilInputs(gl, programInfo);
 	gl.uniform1f(programInfo.uniformLocations.frameNum, frameNum);
+	gl.uniform1f(programInfo.uniformLocations.vertexSize, vertexSize);
 
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texture);

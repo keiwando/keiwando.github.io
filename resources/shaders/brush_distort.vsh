@@ -17,6 +17,8 @@ uniform float bristleLength;
 uniform mat4 modelViewMat;
 uniform mat4 projectionMat;
 
+uniform float vertexSize;
+
 varying vec2 vTextureCoord;
 varying float vScaleFactor;
 
@@ -26,21 +28,24 @@ void main() {
 	float altitudeRad = altitude * PI / 180.0;
 	float azimuthRad = azimuth * PI / 180.0;
 
-	float offsetX = -cos(directionRad) * cos(altitudeRad) * bristleLength;
-	float offsetY = -sin(directionRad) * cos(altitudeRad) * bristleLength;
-	highp vec4 offset = vec4(offsetX, offsetY, 0.0, 0.0);
-	offset = vec4(0.0);
+	float altWeight = min(60.0, (90.0 - altitude)) / 60.0;
 
-	float distortion = min(abs(position.x), abs(position.y)) * 5.5 * force + 1.0 + abs(max(-position.x, 0.0)) * 20.5 * sin(force);
+	//vScaleFactor = (1.0 + (0.55 * force + 0.4 * speed + 0.4 * altWeight * (1.0 - stiffness)));
+	vScaleFactor = (1.0 + (0.55 * force + 0.16 * speed + 0.2 * altWeight * (1.0 - stiffness)));
+	//vScaleFactor = (1.0 + (0.55 * force + min(0.3, 0.16 * speed + 0.2 * altWeight) * (1.0 - stiffness)));
 
-	
-	vScaleFactor = (1.0 + (0.7 * force + 0.28 * speed + 0.4 * min(60.0, (90.0 - altitude)) / 60.0) * (1.0 - stiffness));
+	vec2 pixelOffset = -0.1 * vec2(cos(azimuthRad), sin(azimuthRad)) * altWeight * vertexSize;
+	pixelOffset += -0.18 * vec2(cos(directionRad), sin(directionRad)) * speed * vertexSize;
+
+	vec2 texOffset = pixelOffset / vertexSize;
+	//offset = vec4(cos(altitudeRad), sin(altitudeRad), 0.0, 0.0) * 0.3;
+	//offset = vec4(-0.7, 0.0, 0.0, 0.0);
 
 	//vTextureCoord = textureCoord;
-	vTextureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5);
+	vTextureCoord = (textureCoord - vec2(0.5, 0.5)) * vScaleFactor + vec2(0.5, 0.5) + vec2(texOffset.x, -texOffset.y);
 
 	//vScaleFactor = 1.0;
 
 	//gl_Position = projectionMat * modelViewMat * distortion * (position + offset);
-	gl_Position = projectionMat * modelViewMat * (vec4(position.xy * vScaleFactor, 0.0, 1.0) + offset);
+	gl_Position = projectionMat * modelViewMat * (vec4(position.xy * vScaleFactor, 0.0, 1.0) + vec4(pixelOffset, 0.0, 0.0));
 }
