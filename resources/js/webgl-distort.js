@@ -1,10 +1,10 @@
 main();
 
 var pencilInputs = {
-	force: 0.0,
+	force: 1.0,
 	altitude: 90,
 	azimuth: 275,
-	movement: 0,
+	movement: 90,
 	speed: 0.0,
 	bristleStiffness: 0.0,
 	bristleLength: 1.0
@@ -122,8 +122,8 @@ function setupGL(vshSource, fshSource) {
 	const buffers = createQuadBuffers(gl);
 	//const buffers = createDistortionBuffers(gl);
 	
-	const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
-	//const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
+	//const texture = loadTexture(gl, "resources/images/webgl-textures/brush.png");
+	const texture = loadTexture(gl, "resources/images/webgl-textures/round.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/canvas_grain.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/grid.png");
 	//const texture = loadTexture(gl, "resources/images/webgl-textures/fine-grid.png");

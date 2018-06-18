@@ -34,7 +34,7 @@ void main() {
 	vScaleFactor = (1.0 + (0.55 * force + 0.16 * speed + 0.2 * altWeight * (1.0 - stiffness)));
 	//vScaleFactor = (1.0 + (0.55 * force + min(0.3, 0.16 * speed + 0.2 * altWeight) * (1.0 - stiffness)));
 
-	vec2 pixelOffset = -0.1 * vec2(cos(azimuthRad), sin(azimuthRad)) * altWeight * vertexSize;
+	vec2 pixelOffset = 0.1 * vec2(cos(azimuthRad), sin(azimuthRad)) * altWeight * vertexSize;
 	pixelOffset += -0.18 * vec2(cos(directionRad), sin(directionRad)) * speed * vertexSize;
 
 	vec2 texOffset = pixelOffset / vertexSize;
