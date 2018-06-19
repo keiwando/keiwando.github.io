@@ -12,6 +12,7 @@ var pencilInputs = {
 
 var frameNum = 1;
 var vertexSize = 2;
+var displayMode = 0;
 
 function basicQuadVshSource() {
 	return `
@@ -115,7 +116,8 @@ function setupGL(vshSource, fshSource) {
 			projectionMat: gl.getUniformLocation(program, "projectionMat"),
 			texture: gl.getUniformLocation(program, "texture"),
 			frameNum: gl.getUniformLocation(program, "frameNum"),
-			vertexSize: gl.getUniformLocation(program, "vertexSize")
+			vertexSize: gl.getUniformLocation(program, "vertexSize"),
+			displayMode: gl.getUniformLocation(program, "displayMode")
 		}
 	};
 
@@ -203,6 +205,7 @@ function drawScene(gl, programInfo, buffers, texture) {
 	bindPencilInputs(gl, programInfo);
 	gl.uniform1f(programInfo.uniformLocations.frameNum, frameNum);
 	gl.uniform1f(programInfo.uniformLocations.vertexSize, vertexSize);
+	gl.uniform1f(programInfo.uniformLocations.displayMode, displayMode);
 
 	gl.activeTexture(gl.TEXTURE0);
 	gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -388,6 +391,20 @@ function connectInputs() {
 	create360AngleInput("#azimuth-input", "azimuth");
 	create360AngleInput("#movement-direction-input", "movement");
 	create90AngleInput("#altitude-input", "altitude");
+
+	connectDisplayModeButton("#shape-button", 0);
+	connectDisplayModeButton("#noise-button", 1);
+	connectDisplayModeButton("#pressure-button", 2);
+	connectDisplayModeButton("#bristle-color-button", 3);
+	connectDisplayModeButton("#result-button", 4);
+}
+
+function connectDisplayModeButton(elemId, mode) {
+
+	var inputElem = document.querySelector(elemId);
+	inputElem.onclick = function(event) {
+		displayMode = mode;
+	};
 }
 
 function connectSlider(elemId, valueName) {

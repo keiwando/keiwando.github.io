@@ -18,6 +18,7 @@ uniform mat4 modelViewMat;
 uniform mat4 projectionMat;
 
 uniform float vertexSize;
+uniform float displayMode;
 
 varying vec2 vTextureCoord;
 varying float vScaleFactor;

@@ -6,6 +6,10 @@ $angle-input-width: 14vh;
 $angle-input-thumb-width: 0.27 * $angle-input-width;
 $angle-input-font-size: 4vh;
 
+body {
+	min-height: 100vh;
+}
+
 canvas {
 	
 	width: 65%;
@@ -81,7 +85,6 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	max-width: 1280;
 	max-height: 768;
 	margin: 40px auto;
-
 }
 
 #distortion-control-container {
@@ -193,6 +196,44 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	font-size: 2.3vw;
 	top: 50%;
 	left: -0.5vw;
+}
+
+#display-mode-container {
+
+	position: fixed;
+	top: 93vh;
+	left: 20vw;
+
+	width: 60vw;
+	height: 7vh;
+
+	padding-top: 2vh;
+
+	display: flex;
+
+	border-radius: 10px 10px 0 0;
+
+	background-color: rgba(255, 255, 255, 0.9);
+
+	label {
+
+		font-size: 3vh;
+		color: rgba(50, 50, 50, 0.3);
+
+		flex: 1;
+	}
+
+	label:hover {
+		cursor: pointer;
+	}
+
+	input[type='radio']:checked + span {
+		color: rgb(50, 50, 50);
+	}
+
+	input {
+		visibility: hidden;
+	}
 }
 
 .left {

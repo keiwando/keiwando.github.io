@@ -11,6 +11,7 @@ uniform float stiffness;
 uniform float bristleLength; 
 
 uniform float frameNum;
+uniform float displayMode;
 
 uniform sampler2D texture;
 
@@ -365,10 +366,12 @@ void main() {
     //float dryVal = (bristleColorAmount <= dryThreshold) ? 1.0 - bristleColorAmount - dryThreshold : 0.0;
     //float dryVal = (bristleColorAmount <= dryThreshold) ? 1.0 - bristleColorAmount / (dryThreshold + 0.01) : 0.0;
 
-	bool showNoise = false;
-	bool showBristleColor = false;
-	bool showFullResult = false;
-	bool showPressure = false;
+    bool showShape = int(displayMode) == 0;
+	bool showNoise = int(displayMode) == 1;
+	bool showPressure = int(displayMode) == 2;
+	bool showBristleColor = int(displayMode) == 3;
+	bool showFullResult = int(displayMode) == 4;
+	
 	bool markOutside = false;
 
 	if (showNoise) {
