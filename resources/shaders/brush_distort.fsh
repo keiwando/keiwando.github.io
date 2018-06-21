@@ -18,6 +18,8 @@ uniform sampler2D texture;
 varying vec2 vTextureCoord;
 varying float vScaleFactor;
 
+varying float vGlobalColorAmount;
+
 // --------------------    Color Transfer    ------------------------- //
 
 float rand(vec2 co){
@@ -61,7 +63,7 @@ float valueAtCenterOpt(vec2 center, float frameNum) {
     
     float randFromCenter = rand(center);
     
-    float frameNumFloorOffset = randFromCenter * 500.0 * stiffness;
+    float frameNumFloorOffset = randFromCenter * 500.0;
     float tOffset = randFromCenter * 500.0;
     
     //frameNum = mod(frameNum, 10000.0 + randFromCenter * 100000.0);
@@ -82,7 +84,7 @@ float valueAtCenterOpt(vec2 center, float frameNum) {
     //float offset = 0.01 + vGlobalColorAmount * 0.1;
     
     //float noiseVal = ampl * sin(t);// + offset;
-    float noiseVal = ampl * 0.5 * (sin(t) + 1.0);
+    float noiseVal = ampl * 0.5 * (sin(t) + 1.0);// + vGlobalColorAmount * 0.5;
     //float noiseVal = ampl;
     
     return min(1.0, max(0.0, noiseVal));
@@ -338,33 +340,7 @@ void main() {
 
 	textureCoord += offset;
 
-	vec4 texColor = texture2D(texture, textureCoord);
-
-	gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
-
-
-	float bristleColorAmount = max(0.0, 1.0 - colorAmountNoise(textureCoord, frameNum)); // PERFORMANCE CRITICAL!
-	
-	float dryThreshold = 1.0;
-            
-    //float force = fP(textureCoord, center) * vForce;
-    
-    float forceWeight = 0.5;
-    float speedWeight = 0.6;
-    
-    //dryThreshold = min(1.0, max(0.0, colAmountWeight * colAmount + forceWeight * force + drynessWeight * abs(wetness) + speedWeight * vSpeed + grainWeight * (1.0 - grainInfluence * grainInfluence)));
-    
-    //dryThreshold = min(1.0, max(0.05, colAmountWeight * colAmount + forceWeight * force + drynessWeight * abs(wetness) + speedWeight * vSpeed + grainWeight * (1.0 - grainInfluence)));
-    dryThreshold = min(1.0, max(0.0, forceWeight * force));
-    //dryThreshold = min(1.0, max(0.0, forceWeight * force));
-    
-    dryThreshold *= (1.0 - speedWeight * speed);
-    
-    
-    //float dryVal = (bristleColorAmount >= dryThreshold) ? bristleColorAmount : 0.0;
-    float dryVal = (bristleColorAmount <= dryThreshold) ? bristleColorAmount : 0.0;
-    //float dryVal = (bristleColorAmount <= dryThreshold) ? 1.0 - bristleColorAmount - dryThreshold : 0.0;
-    //float dryVal = (bristleColorAmount <= dryThreshold) ? 1.0 - bristleColorAmount / (dryThreshold + 0.01) : 0.0;
+	// ------------------------------------- Draw results ------------------------------------------- //
 
     bool showShape = int(displayMode) == 0;
 	bool showNoise = int(displayMode) == 1;
@@ -374,55 +350,57 @@ void main() {
 	
 	bool markOutside = false;
 
-	if (showNoise) {
-
-		
-		gl_FragColor = vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
-		
-		//gl_FragColor = vec4(vec3(colorAmountNoise(vTextureCoord, frameNum)), 1.0);
-		//vec4(vec3(colorAmountNoise(textureCoord, frameNum)), 1.0);
-		
-		//gl_FragColor.a *= colorAmountNoise(textureCoord, frameNum);
-	}
-
-	if (showBristleColor) {
-		gl_FragColor = vec4(vec3(1.0), dryVal);
-	}
-
-	/*if (textureCoord.x > 1.0 || textureCoord.x < 0.0 || textureCoord.y > 1.0 || textureCoord.y < 0.0) {
-		gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-	}*/
 	if (markOutside) {
 		if (textureCoord.x >= 1.0 || textureCoord.x <= 0.0 || textureCoord.y >= 1.0 || textureCoord.y <= 0.0) {
 			//gl_FragColor.a = 0.0;
 			gl_FragColor = vec4(1.0, 0.0, 0.0, 0.5);
 		}
+	} else {
+		if (textureCoord.x > 1.0 || textureCoord.x < 0.0 || textureCoord.y > 1.0 || textureCoord.y < 0.0) {
+			gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+		}
 	}
+
+	vec4 texColor = texture2D(texture, textureCoord);
+	gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
+
+	if (showNoise) {
+
+		gl_FragColor = vec4(vec3(colorAmountNoise(vTextureCoord, frameNum)), 1.0);
+	}
+
+	vec2 forceCenter = center - vec2(cos(azm), sin(azm)) * 0.05 * altWeight;
 
 	if (showPressure) {
 
-		vec2 forceCenter = center - vec2(cos(azm), sin(azm)) * 0.05 * altWeight;
-		//gl_FragColor.a *= fP(textureCoord, forceCenter);
 		gl_FragColor = vec4(1.0, 0.0, 0.0, fP(textureCoord, forceCenter, force, -downAzm, altWeight));	
 	}
 
-	if (showFullResult) {
-
-		vec2 forceCenter = center + vec2(cos(azm), sin(azm)) * 0.05 * altWeight;
-		float pressure = fP(textureCoord, forceCenter, force, -downAzm, altWeight);	
-
-		dryThreshold = min(1.0, max(0.0, forceWeight * pressure));
+	float bristleColorAmount = max(0.0, 1.0 - colorAmountNoise(vTextureCoord, frameNum)); // PERFORMANCE CRITICAL!
+	
+	float dryThreshold = 1.0;
+            
+    float pressure = fP(textureCoord, forceCenter, force, -downAzm, altWeight);	
     
-	    dryThreshold *= (1.0 - speedWeight * speed);
-	    
-	    float dryVal = (bristleColorAmount <= dryThreshold) ? bristleColorAmount : 0.0;
+    float colAmountWeight = 0.6;
+    float pressureWeight = 0.5;
+    float speedWeight = 0.6;
+    
+    dryThreshold = min(1.0, max(0.0, colAmountWeight * vGlobalColorAmount + pressureWeight * pressure));
+    
+    dryThreshold *= (1.0 - speedWeight * speed);
+    
+    float dryVal = (bristleColorAmount <= dryThreshold) ? bristleColorAmount : 0.0;
 
-	    if (!showBristleColor) {
-	    	//dryVal = (bristleColorAmount <= dryThreshold) ? 1.0 : 0.0;
-	    	dryVal = texColor.a > dryThreshold ? texColor.a * pressure : 0.0;
-	    }
+	if (showBristleColor) {
+		gl_FragColor = vec4(vec3(1.0), dryVal);
+	}
 
-	    gl_FragColor = vec4(vec3(1.0), dryVal);
+	if (showFullResult) {
+	    	
+	    //dryVal = texColor.a > dryThreshold ? texColor.a * pressure : 0.0;
+
+	    gl_FragColor = vec4(vec3(1.0), dryVal * texColor.a);
 	}
 }
 

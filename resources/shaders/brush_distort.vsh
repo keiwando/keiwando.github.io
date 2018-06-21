@@ -19,9 +19,20 @@ uniform mat4 projectionMat;
 
 uniform float vertexSize;
 uniform float displayMode;
+uniform float frameNum;
 
 varying vec2 vTextureCoord;
 varying float vScaleFactor;
+
+varying float vGlobalColorAmount;
+
+// The global color amount of the brush
+float colorAmount(float frameNum) {
+    
+    float minAmount = 0.01;
+    
+    return max(1.0 - 0.8 * (1.0 / (1.0 + exp(-(frameNum / 60.0 - 4.0)))) - 0.00001 * frameNum, minAmount);
+}
 
 void main() {
 
@@ -49,4 +60,6 @@ void main() {
 
 	//gl_Position = projectionMat * modelViewMat * distortion * (position + offset);
 	gl_Position = projectionMat * modelViewMat * (vec4(position.xy * vScaleFactor, 0.0, 1.0) + vec4(pixelOffset, 0.0, 0.0));
+
+	vGlobalColorAmount = colorAmount(frameNum);
 }
