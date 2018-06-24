@@ -40,14 +40,27 @@ void main() {
 	float altitudeRad = altitude * PI / 180.0;
 	float azimuthRad = azimuth * PI / 180.0;
 
-	float altWeight = min(60.0, (90.0 - altitude)) / 60.0;
+	float altWeight = min(75.0, (90.0 - altitude)) / 75.0;
+
+	float distortionWeight = (1.0 - stiffness);
 
 	//vScaleFactor = (1.0 + (0.55 * force + 0.4 * speed + 0.4 * altWeight * (1.0 - stiffness)));
-	vScaleFactor = (1.0 + (0.55 * force + 0.16 * speed + 0.2 * altWeight * (1.0 - stiffness)));
+	vScaleFactor = (1.0 + (0.55 * force + 0.16 * speed + 0.25 * altWeight));
+
+	vScaleFactor = (1.0 + (force * (0.45 + altWeight * 0.25) + altWeight * (0.2) + speed * 0.11));
 	//vScaleFactor = (1.0 + (0.55 * force + min(0.3, 0.16 * speed + 0.2 * altWeight) * (1.0 - stiffness)));
 
-	vec2 pixelOffset = 0.1 * vec2(cos(azimuthRad), sin(azimuthRad)) * altWeight * vertexSize;
-	pixelOffset += -0.18 * vec2(cos(directionRad), sin(directionRad)) * speed * vertexSize;
+	vScaleFactor *= distortionWeight;
+
+	vec2 azmVec = vec2(cos(azimuthRad), sin(azimuthRad));
+	vec2 dirVec = vec2(cos(directionRad), sin(directionRad));
+
+	vec2 pixelOffset = 0.1 * azmVec * altWeight * vertexSize;
+	pixelOffset += -0.13 * dirVec * speed * vertexSize;
+	pixelOffset += -0.1 * dirVec * speed * force * vertexSize;
+	pixelOffset += -0.2 * azmVec * altWeight * force * vertexSize;
+
+	pixelOffset *= distortionWeight;
 
 	vec2 texOffset = pixelOffset / vertexSize;
 	//offset = vec4(cos(altitudeRad), sin(altitudeRad), 0.0, 0.0) * 0.3;
