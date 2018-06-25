@@ -305,6 +305,7 @@ void main() {
 
 	//float altWeight = min(60.0, (90.0 - altitude)) / 22.5; // ∈ [0, 1]
 	float altWeight = max(0.0, min(75.0, (90.0 - altitude)) / 75.0); // ∈ [0, 1]
+	//altWeight = min(2.0 * PI / 3.0, (PI / 2.0 - altitude * PI / 180.0)) / (PI / 8.0); // ∈ [0, 1]
 
 	// increase the force distortion weight if azimuth and movement are pointing in
 	// the opposite direction

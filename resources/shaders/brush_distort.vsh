@@ -45,12 +45,12 @@ void main() {
 	float distortionWeight = (1.0 - stiffness);
 
 	//vScaleFactor = (1.0 + (0.55 * force + 0.4 * speed + 0.4 * altWeight * (1.0 - stiffness)));
-	vScaleFactor = (1.0 + (0.55 * force + 0.16 * speed + 0.25 * altWeight));
+	//vScaleFactor = (1.0 + (0.55 * force + 0.16 * speed + 0.25 * altWeight));
 
-	vScaleFactor = (1.0 + (force * (0.45 + altWeight * 0.25) + altWeight * (0.2) + speed * 0.11));
+	vScaleFactor = (1.0 + (force * (0.45 + altWeight * 0.25) + altWeight * (0.2) + speed * 0.11) * distortionWeight);
 	//vScaleFactor = (1.0 + (0.55 * force + min(0.3, 0.16 * speed + 0.2 * altWeight) * (1.0 - stiffness)));
 
-	vScaleFactor *= distortionWeight;
+	//vScaleFactor *= distortionWeight;
 
 	vec2 azmVec = vec2(cos(azimuthRad), sin(azimuthRad));
 	vec2 dirVec = vec2(cos(directionRad), sin(directionRad));
