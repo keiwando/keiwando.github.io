@@ -135,6 +135,9 @@ function setupGL(vshSource, fshSource) {
 		drawScene(gl, programInfo, buffers, texture);
 		requestAnimationFrame(render);
 		frameNum++;
+
+		//pencilInputs.force = 0.5 * (Math.sin(frameNum / 100) + 1.0);
+		//pencilInputs.altitude = 0.5 * (Math.sin(frameNum / 40) + 1.0) * 90;
 	}
 	requestAnimationFrame(render);
 

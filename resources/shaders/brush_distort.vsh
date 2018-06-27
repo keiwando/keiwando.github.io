@@ -47,7 +47,8 @@ void main() {
 	//vScaleFactor = (1.0 + (0.55 * force + 0.4 * speed + 0.4 * altWeight * (1.0 - stiffness)));
 	//vScaleFactor = (1.0 + (0.55 * force + 0.16 * speed + 0.25 * altWeight));
 
-	vScaleFactor = (1.0 + (force * (0.45 + altWeight * 0.25) + altWeight * (0.2) + speed * 0.11) * distortionWeight);
+	//vScaleFactor = (1.0 + (force * (0.45 + altWeight * 0.25) + altWeight * (0.2) + speed * 0.11) * distortionWeight);
+	vScaleFactor = (1.0 + (force * (0.58 * pow(force, 0.6) + altWeight * 0.45 + 0.13 * speed) + altWeight * (0.2) + speed * 0.11) * distortionWeight);
 	//vScaleFactor = (1.0 + (0.55 * force + min(0.3, 0.16 * speed + 0.2 * altWeight) * (1.0 - stiffness)));
 
 	//vScaleFactor *= distortionWeight;
@@ -58,7 +59,8 @@ void main() {
 	vec2 pixelOffset = 0.1 * azmVec * altWeight * vertexSize;
 	pixelOffset += -0.13 * dirVec * speed * vertexSize;
 	pixelOffset += -0.1 * dirVec * speed * force * vertexSize;
-	pixelOffset += -0.2 * azmVec * altWeight * force * vertexSize;
+	//pixelOffset += -0.2 * azmVec * altWeight * force * vertexSize;
+	pixelOffset += -0.45 * azmVec * altWeight * pow(force, 2.0) * vertexSize;
 
 	pixelOffset *= distortionWeight;
 
@@ -73,6 +75,7 @@ void main() {
 
 	//gl_Position = projectionMat * modelViewMat * distortion * (position + offset);
 	gl_Position = projectionMat * modelViewMat * (vec4(position.xy * vScaleFactor, 0.0, 1.0) + vec4(pixelOffset, 0.0, 0.0));
+	//gl_Position = projectionMat * modelViewMat * (vec4(vec2(position.x, position.y - 0.3) * vScaleFactor, 0.0, 1.0) + vec4(pixelOffset, 0.0, 0.0));
 
 	vGlobalColorAmount = colorAmount(frameNum);
 }

@@ -46,7 +46,7 @@ float fP(vec2 pos, vec2 center, float force, vec2 azmDirection, float altWeight)
 
 	//return 1.0 - smoothstep(0.1, 0.6 - 0.1 * force, length(dX) - azmWeight * azmDotPr * altWeightAdj);
 	//return 1.0 - smoothstep(0.3 - 0.1 * altWeight, 1.0 - 0.1 * force, pow(length(dX), 0.4) - azmWeight * azmDotPr * altWeightAdj);
-	return 1.0 - smoothstep(0.3 - 0.1 * altWeight, 1.0 - 0.1 * force + 0.05 * altWeight, pow(length(dX), 0.4) - azmWeight * azmDotPr * altWeightAdj);
+	return 1.0 - smoothstep(0.3 - 0.1 * altWeight, 1.0 - 0.03 * force + 0.05 * altWeight, pow(length(dX), 0.4) - azmWeight * azmDotPr * altWeightAdj);
 	//return smoothstep(0.1, 0.6 + 0.1 * force, azmDotPr * orthDotPr);
 
 	//return 1.0 - smoothstep(0.1, 0.6 - 0.1 * force, distance(pos, center));
@@ -241,7 +241,7 @@ float distanceWeight(vec2 coord, vec2 center, float res) {
 }
 
 
-float colorAmountNoise(vec2 coord, float frameNum, float res) {
+float paintDistribution(vec2 coord, float frameNum, float res) {
 
 	vec2 center = centerForCoord(coord, res);
 
@@ -253,7 +253,7 @@ float colorAmountNoise(vec2 coord, float frameNum, float res) {
     return noiseVal;
 }
 
-float colorAmountNoise(vec2 coord, float frameNum) {
+float paintDistribution(vec2 coord, float frameNum) {
 
 	//float fN = floor(coord.y * 3.0) * 0.3333 * frameNum;
 	//float fN = floor(dot(coord.x, coord.y) * frameNum);
@@ -264,12 +264,13 @@ float colorAmountNoise(vec2 coord, float frameNum) {
 	//float res = 32.0;
 	float res = 6.0 + 20.0 * randFromFrameNum;
 
-	float noise1 = colorAmountNoise(coord + 0.5, frameNum, res);
-	float noise2 = colorAmountNoise(coord + 0.5, frameNum, res * 2.3);
-
-	return 0.5 * (noise1 + noise2);
-	//return noise1;
-	//return noise2;
+	float noise1 = paintDistribution(coord + 0.5, frameNum, res);
+    float noise2 = paintDistribution(coord + 0.5, frameNum, res * 2.8);
+    float noise3 = paintDistribution(coord + 0.5, frameNum, res * 4.0);
+    
+    //return noise1;
+    return 0.5 * (noise1 + noise2);
+    //return 0.333 * (noise1 + noise2 + noise3);
 }
 
 void main() {
@@ -281,7 +282,8 @@ void main() {
 
 	float stiffnessWeight = (1.0 - stiffness) * bristleLength; 
 
-	float forceDistWeight = 0.3; // 0.3;
+	//float forceDistWeight = 0.3;
+	float forceDistWeight = 0.35;
 	float linearFlowWeight = 0.3; // 0.2;
 	float compressionFlowWeight = 0.3;
 	float sideStrechingWeight = 1.1;
@@ -317,7 +319,8 @@ void main() {
 	vec2 zeroRef = vec2(0.5, 0.5) - 0.8 * vec2(cos(azm), sin(azm)) * altWeight;
 	//center += altWeight * 0.25 * vec2(cos(azm), sin(azm));
 	vec2 strechingCenter = center - 0.15 * vec2(cos(azm), sin(azm)) * altWeight;
-	vec2 bristleBindingCenter = center + 0.4 * vec2(cos(azm), sin(azm)) * altWeight; 
+	//vec2 bristleBindingCenter = center + 0.4 * vec2(cos(azm), sin(azm)) * altWeight; 
+	vec2 bristleBindingCenter = center + 0.55 * vec2(cos(azm), sin(azm)) * altWeight; 
 	//vec2 bristleBindingCenter = center + 0.3 * vec2(cos(azm), sin(azm)) * altWeight; 
 	//vec2 bristleBindingCenter = center;
 
@@ -384,7 +387,7 @@ void main() {
 
 	if (showNoise) {
 
-		gl_FragColor = vec4(vec3(colorAmountNoise(vTextureCoord, frameNum)), 1.0);
+		gl_FragColor = vec4(vec3(paintDistribution(vTextureCoord, frameNum)), 1.0);
 	}
 
 	//vec2 forceCenter = center + vec2(cos(azm), sin(azm)) * 0.1 * altWeight;
@@ -398,7 +401,7 @@ void main() {
 		gl_FragColor = vec4(1.0, 0.0, 0.0, pressureDistribution);	
 	}
 
-	float bristleColorAmount = max(0.0, 1.0 - colorAmountNoise(vTextureCoord, frameNum)); // PERFORMANCE CRITICAL!
+	float bristleColorAmount = max(0.0, 1.0 - paintDistribution(vTextureCoord, frameNum)); // PERFORMANCE CRITICAL!
 	
     float pressure = fP(textureCoord, forceCenter, force, -downAzm, altWeight) * force;	
     
@@ -420,9 +423,14 @@ void main() {
 
     paintThreshold = min(1.0, max(0.0, paintThreshold));
     
-     float paintAmount = (bristleColorAmount <= paintThreshold) ? bristleColorAmount : 0.0;
-    //float dryVal = (bristleColorAmount <= dryThreshold) ? bristleColorAmount : 0.0;
-    //float dryVal = (bristleColorAmount <= dryThreshold) ? dryThreshold : 0.0;
+
+    //float paintAmount = (bristleColorAmount <= paintThreshold) ? bristleColorAmount : 0.0;
+    //float paintAmount = (bristleColorAmount <= paintThreshold) ? bristleColorAmount : 0.0;
+    float paintAmount = (bristleColorAmount <= paintThreshold) ? mix(paintThreshold, bristleColorAmount, force) : 0.0;
+    //float paintAmount = (bristleColorAmount <= paintThreshold) ? pow(bristleColorAmount, 0.7) : 0.0;
+    //float paintAmount = (bristleColorAmount <= paintThreshold) ? paintThreshold : 0.0;
+    //float paintAmount = (bristleColorAmount <= paintThreshold) ? 1.0 - bristleColorAmount : 0.0;
+    
 
 	if (showBristleColor) {
 		gl_FragColor = vec4(vec3(1.0), paintAmount);
