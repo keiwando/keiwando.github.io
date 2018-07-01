@@ -3,7 +3,7 @@ main();
 var pencilInputs = {
 	force: 1.0,
 	altitude: 90,
-	azimuth: 275,
+	azimuth: 270,
 	movement: 90,
 	speed: 0.0,
 	bristleStiffness: 0.0,
@@ -160,14 +160,18 @@ function drawScene(gl, programInfo, buffers, texture) {
 	const zFar = 100.0;
 	const projectionMatrix = mat4.create();
 
+	const camWidth = 6;
+
 	mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 	//mat4.ortho(projectionMatrix, 0, gl.canvas.clientWidth, 0, gl.canvas.clientHeight, zNear, zFar);
-	mat4.ortho(projectionMatrix, 0, 5, 0, 5, zNear, zFar);
+	//mat4.ortho(projectionMatrix, 0, 5, 0, 5, zNear, zFar);
+	mat4.ortho(projectionMatrix, 0, camWidth, 0, camWidth, zNear, zFar);
 
 	const modelViewMatrix = mat4.create();
 
 	//mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
-	mat4.translate(modelViewMatrix, modelViewMatrix, [2.5, 2.5, -6.0]);
+	//mat4.translate(modelViewMatrix, modelViewMatrix, [2.5, 2.5, -6.0]);
+	mat4.translate(modelViewMatrix, modelViewMatrix, [camWidth / 2, camWidth / 2, -6.0]);
 
 	{
 		const numComponents = 2;
