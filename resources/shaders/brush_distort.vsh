@@ -64,6 +64,9 @@ void main() {
 
 	pixelOffset *= distortionWeight;
 
+	// vScaleFactor = 1.0;
+	// pixelOffset = vec2(0.0);
+
 	vec2 texOffset = pixelOffset / vertexSize;
 	//offset = vec4(cos(altitudeRad), sin(altitudeRad), 0.0, 0.0) * 0.3;
 	//offset = vec4(-0.7, 0.0, 0.0, 0.0);

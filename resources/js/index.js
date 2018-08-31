@@ -82,17 +82,18 @@ $(document).ready(function(){
 
   if (!$('.masthead').hasClass('fixed-position')) {
     
-    $(window).scroll(function(){
-
+    var handleScroll = function(){
       if($(window).width() > 640 && $(window).height() > 640){
-        // we round here to reduce a little workload
+        
         var top = Math.round($(window).scrollTop());
         var offset = 20;
         var opacity = "" + 100/(Math.abs(top - $('carousel').height()));
         var text = $('.item').find('.carousel-caption');
         //console.log("top: " + top + " opacity " + opacity);
 
-        var textPosition = (Math.abs(top)/6).toFixed(0);
+        //var textPosition = (Math.abs(top)/6).toFixed(0);
+        var textPosition = (Math.max(0, top)/6).toFixed(0);
+
         //text.css('transform','translateY(' + textPosition + "px)");
         text.css({ 'transform': 'translate3d(' + 0 +'px, -' +  textPosition*2 + 'px, 0)'});
         
@@ -114,8 +115,16 @@ $(document).ready(function(){
             deactivateScrollMasthead();
           }
         }
-      }    
+      }
+    };
 
+    $(window).scroll(function(){
+
+      handleScroll();
+
+    
+
+      
     });
   }
   

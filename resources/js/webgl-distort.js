@@ -1,5 +1,15 @@
 main();
 
+// var pencilInputs = {
+// 	force: 0.95,
+// 	altitude: 39,
+// 	azimuth: 270,
+// 	movement: 184,
+// 	speed: 0.75,
+// 	bristleStiffness: 0.0,
+// 	bristleLength: 1.0
+// };
+
 var pencilInputs = {
 	force: 1.0,
 	altitude: 90,

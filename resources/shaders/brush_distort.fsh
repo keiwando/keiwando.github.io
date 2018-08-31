@@ -20,19 +20,17 @@ varying float vScaleFactor;
 
 varying float vGlobalColorAmount;
 
-// --------------------    Paint Transfer    ------------------------- //
-
 // --------------------    Pressure    ------------------------- // 
 
-float pressureDistribution(vec2 pos, vec2 center, float force, vec2 azmDirection, float altWeight) {
+/*float pressureDistribution(vec2 pos, vec2 center, float force, vec2 azmDirection, float altWeight) {
 
 	vec2 azmDirectionOrth = vec2(-azmDirection.y, azmDirection.x);
 
 	vec2 dX = pos - center;
 	float azmDotPr = dot(azmDirection, dX);
-	float orthDotPr = abs(dot(azmDirectionOrth, dX));
+	//float orthDotPr = abs(dot(azmDirectionOrth, dX));
 
-	const float orthWeight = 0.4;
+	//const float orthWeight = 0.4;
 	const float azmWeight = 0.4;
 
 	float altWeightAdj = sin(altWeight * PI * 1.1);
@@ -41,6 +39,26 @@ float pressureDistribution(vec2 pos, vec2 center, float force, vec2 azmDirection
 	//return 1.0 - smoothstep(0.3 - 0.1 * altWeight, 1.0 - 0.1 * force, pow(length(dX), 0.4) - azmWeight * azmDotPr * altWeightAdj);
 	return 1.0 - smoothstep(0.3 - 0.1 * altWeight, 1.0 - 0.03 * force + 0.05 * altWeight, pow(length(dX), 0.4) - azmWeight * azmDotPr * altWeightAdj);
 	
+}*/
+
+float pressureDistribution(vec2 pos, vec2 center, float force, vec2 azmDirection, float altWeight) {
+    
+    vec2 dX = pos - center;
+    float azmDotPr = dot(azmDirection, dX);
+    
+    const float azmWeight = 0.6;
+    
+    float altWeightAdj = sin(PI * ((0.8 + 0.4 * force) * altWeight));
+    //altWeightAdj = 0.0;
+    
+    float minRadius = 0.3;
+    float maxRadius = 1.0 - 0.03 * force + 0.05 * altWeight;
+    float adjustedDistance = pow(length(dX), 0.4) - azmWeight * azmDotPr * altWeightAdj;
+
+    //maxRadius = 1.0 - 0.1 * force + 0.05 * altWeight;
+
+    //return 1.0 - smoothstep(0.3 - 0.1 * altWeight, 1.0 - 0.03 * force + 0.05 * altWeight, pow(length(dX), 0.4) - azmWeight * azmDotPr * altWeightAdj);
+    return 1.0 - smoothstep(minRadius, maxRadius, adjustedDistance);
 }
 
 // --------------------    Distortion    ------------------------- // 
@@ -264,6 +282,7 @@ void main() {
 	bool showFullResult = int(displayMode) == 4;
 	
 	bool markOutside = false;
+	bool markBackground = false;
 
 	if (markOutside) {
 		if (textureCoord.x >= 1.0 || textureCoord.x <= 0.0 || textureCoord.y >= 1.0 || textureCoord.y <= 0.0) {
@@ -279,13 +298,17 @@ void main() {
 	vec4 texColor = texture2D(texture, textureCoord);
 	gl_FragColor = vec4(1.0, 1.0, 1.0, texColor.a);
 
+	if (markBackground && texColor.a < 1.0) {
+		gl_FragColor = mix(gl_FragColor, vec4(0.0, 0.6, 0.8, 1.0), 1.0 - texColor.a);
+	}
+
 	if (showNoise) {
 
 		gl_FragColor = vec4(vec3(paintDistribution(vTextureCoord, frameNum)), 1.0);
 	}
 
-	vec2 forceCenter = center + vec2(cos(azm), sin(azm)) * 0.1 * altWeight;
-	//vec2 forceCenter = center;
+	//vec2 forceCenter = center + vec2(cos(azm), sin(azm)) * 0.1 * altWeight;
+	vec2 forceCenter = center;
 
 	if (showPressure) {
 
@@ -304,9 +327,9 @@ void main() {
     float speedWeight = 0.6;
     
 
-    float paintThreshold = 7.0 * vGlobalColorAmount;
+    float paintThreshold = 3.5 * vGlobalColorAmount;
 
-    paintThreshold *= (pressureWeight * pressure);
+    paintThreshold *= pressure;
     paintThreshold *= (1.0 - speedWeight * speed);
     
     //paintThreshold += grainWeight * (1.0 - grainInfluence);
@@ -314,6 +337,7 @@ void main() {
     paintThreshold = min(1.0, max(0.0, paintThreshold));
     
     float paintAmount = (bristlePaintDistribution <= paintThreshold) ? paintThreshold : 0.0;
+    //float paintAmount = max(paintThreshold - bristlePaintDistribution, 0.0);
     //float paintAmount = (bristleColorAmount <= paintThreshold) ? bristleColorAmount : 0.0;
     //float paintAmount = (bristlePaintDistribution <= paintThreshold) ? mix(paintThreshold, bristlePaintDistribution, pressure) : 0.0;
 

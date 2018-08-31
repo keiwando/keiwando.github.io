@@ -100,6 +100,12 @@ ul {
     border-bottom: 1px solid;
     border-bottom-color: rgba(256,256,256,0.3); 
     transition: 0.3s ease-out;
+
+    //-webkit-transform-style: preserve-3d;
+    //-webkit-perspective: 1000;
+    //-webkit-backface-visibility: hidden; 
+    //backface-visibility: hidden;
+    //-webkit-backface-visibility: hidden;
 }
 
 @media (max-width: 640px) {
@@ -182,10 +188,9 @@ ul {
 
 .scroll-masthead {
   background-color: rgba(256,256,256,1);
-  /*border-bottom-color: rgba(0,0,0,0.2);*/
-
-  backface-visibility: hidden;
+  
   transition: 0.3s ease-out; 
+  
   padding-top: 3px;
   padding-bottom: 3px;
 
