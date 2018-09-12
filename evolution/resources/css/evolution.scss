@@ -1,0 +1,26 @@
+---
+---
+
+#evolution-navbar {
+	
+	min-width: 100%;
+	max-width: 100%;
+
+	font-size: 30px;
+
+	padding-top: 40px;
+}
+
+#evolution-navbar > ul {
+	display: inline-block;
+}
+
+#evolution-navbar > ul > li {
+  display: inline-block;
+}
+
+#evolution-title {
+	position: relative;
+	left: 0px;
+	display: inline-block;
+}

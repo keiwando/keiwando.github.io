@@ -8,8 +8,8 @@
   <a href="javascript:;" class="menu-button sandwich-button"><span></span></a>
 
   <div class="logo-container">
-    <img id="K" {% if layout.pageName == 'home' %} class="logo" {% else %} class="hidden logo" {% endif %} src="resources/images/K_white.png">
-    <img id="K_blk" {% if layout.pageName == 'home' %} class="hidden logo" {% else %} class="logo" {% endif %} src="resources/images/K.png">
+    <img id="K" {% if layout.pageName == 'home' %} class="logo" {% else %} class="hidden logo" {% endif %} src="/resources/images/K_white.png">
+    <img id="K_blk" {% if layout.pageName == 'home' %} class="hidden logo" {% else %} class="logo" {% endif %} src="/resources/images/K.png">
     <a href="index.html">
       <h2 class="masthead-brand"><span style="font-size: 0px">Keiwan Donyagard</span>eiwan</h2>
     </a>
@@ -19,16 +19,16 @@
   <nav>
     <ul class="nav masthead-nav hide-on-mobile">
       <li {% if layout.pageName == 'home' %} class="active" {% endif %}>
-        <a {% if layout.pageName == 'home' %} href="#" {% else %} href="index.html" {% endif %} >HOME</a>
+        <a {% if layout.pageName == 'home' %} href="#" {% else %} href="/" {% endif %} >HOME</a>
       </li>
       <li {% if layout.pageName == 'projects' %} class="active" {% endif %}>
-        <a {% if layout.pageName == 'projects' %} href="#" {% else %} href="projects.html" {% endif %} >PROJECTS</a>
+        <a {% if layout.pageName == 'projects' %} href="#" {% else %} href="/projects" {% endif %} >PROJECTS</a>
       </li>
       <li {% if layout.pageName == 'videos' %} class="active" {% endif %}>
-        <a {% if layout.pageName == 'videos' %} href="#" {% else %} href="videos.html" {% endif %} >VIDEOS</a>
+        <a {% if layout.pageName == 'videos' %} href="#" {% else %} href="/videos" {% endif %} >VIDEOS</a>
       </li>
       <li {% if page.pageName == 'contact' %} class="active" {% endif %}>
-        <a {% if page.pageName == 'contact' %} href="#" {% else %} href="contact.html" {% endif %} >CONTACT</a>
+        <a {% if page.pageName == 'contact' %} href="#" {% else %} href="/contact" {% endif %} >CONTACT</a>
       </li>
     </ul>
   </nav>
