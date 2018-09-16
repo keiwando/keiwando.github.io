@@ -1,22 +1,66 @@
-<div class="mastfoot">
+<div class="footer">
   <div class="inner">
-    <!--<h4>Copyright © Keiwan Donyagard</h4>-->
 
-    <div class="footer-col footer-col-2">
-      <ul class="social-media-list">
-        
-        {% if site.twitter_username %}
-        <li>
-          {% include icon-twitter.html username=site.twitter_username %}
-        </li>
-        {% endif %}
+    <div id="social-media-container">
+      <ul>
 
-        {% if site.github_username %}
-        <li>
-          {% include icon-github.html username=site.github_username %}
-        </li>
-        {% endif %}
-        
+      {% if site.twitter_username %}
+      <li>
+        {% include icon-twitter.html username=site.twitter_username %}
+      </li>
+      {% endif %}
+
+      {% if site.github_username %}
+      <li>
+        {% include icon-github.html username=site.github_username %}
+      </li>
+      {% endif %}
+      
+      </ul>
+    </div>
+
+    <div class="footer-main-sep"></div>
+
+    <div id="footer-main-section">      
+
+      <div class="footer-link-section">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/videos">Videos</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-link-section">
+        <h4>Main Projects</h4>
+        <ul>
+          <li><a href="/evolution">Evolution</a></li>
+          <li><a href="https://keiwan.itch.io/library-of-babel-3d">Library of Babel 3D</a></li>
+          <li><a href="/sheets">Sheets</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-link-section">
+        <h4>Unlisted Links</h4>
+        <ul>
+          <li><a href="/brush-deformation">Brush Deformation</a></li>
+          <li><a href="/brush-reference">Brush Stroke Collection</a></li>
+          <li><a href="/scheduler">Scheduler</a></li>
+        </ul>
+      </div>
+      
+    </div>
+
+    <div class="footer-main-sep"></div>
+
+    <div id="footer-bottom-links">
+      <h4>© 2018 Keiwan Donyagard</h4>
+      <ul>
+        <li><a href="/policies/privacy-policy/">Privacy Policy</a></li>
+        <li><a href="/policies/cookie-policy/">Cookie Policy</a></li>
+        <li><a href="/sitemap/">Site Map</a></li>
       </ul>
     </div>
 

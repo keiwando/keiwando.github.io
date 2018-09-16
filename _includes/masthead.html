@@ -1,35 +1,41 @@
 <div 
-  {% if layout.pageName == 'home' %} 
+  {% if page.pageName == 'home' %} 
     class="masthead" 
   {% else %} 
-    class="masthead scroll-masthead fixed-position masthead-default-size" 
+    class="masthead scroll-masthead fixed-position masthead-default-size"  
   {% endif %}
 >
   <a href="javascript:;" class="menu-button sandwich-button"><span></span></a>
 
-  <div class="logo-container">
-    <img id="K" {% if layout.pageName == 'home' %} class="logo" {% else %} class="hidden logo" {% endif %} src="/resources/images/K_white.png">
-    <img id="K_blk" {% if layout.pageName == 'home' %} class="hidden logo" {% else %} class="logo" {% endif %} src="/resources/images/K.png">
+  <div class="masthead-content-container">
+    <div class="logo-container">
+    <img id="K" {% if page.pageName == 'home' %} class="logo" {% else %} class="hidden logo" {% endif %} src="/resources/images/K_white.png">
+    <img id="K_blk" {% if page.pageName == 'home' %} class="hidden logo" {% else %} class="logo" {% endif %} src="/resources/images/K.png">
     <a href="index.html">
       <h2 class="masthead-brand"><span style="font-size: 0px">Keiwan Donyagard</span>eiwan</h2>
     </a>
   </div>
   
-  <!--<h2 class="masthead-brand">KEIWAN</h2>-->
   <nav>
     <ul class="nav masthead-nav hide-on-mobile">
-      <li {% if layout.pageName == 'home' %} class="active" {% endif %}>
-        <a {% if layout.pageName == 'home' %} href="#" {% else %} href="/" {% endif %} >HOME</a>
+      <li {% if page.pageName == 'home' %} class="active" {% endif %}>
+        <a href="/">HOME</a>
       </li>
-      <li {% if layout.pageName == 'projects' %} class="active" {% endif %}>
-        <a {% if layout.pageName == 'projects' %} href="#" {% else %} href="/projects" {% endif %} >PROJECTS</a>
+      <li {% if page.pageName == 'projects' %} class="active" {% endif %}>
+        <a href="/projects">PROJECTS</a>
       </li>
-      <li {% if layout.pageName == 'videos' %} class="active" {% endif %}>
-        <a {% if layout.pageName == 'videos' %} href="#" {% else %} href="/videos" {% endif %} >VIDEOS</a>
+      <li {% if page.pageName == 'videos' %} class="active" {% endif %}>
+        <a href="/videos">VIDEOS</a>
       </li>
       <li {% if page.pageName == 'contact' %} class="active" {% endif %}>
-        <a {% if page.pageName == 'contact' %} href="#" {% else %} href="/contact" {% endif %} >CONTACT</a>
+        <a href="/contact">CONTACT</a>
       </li>
     </ul>
   </nav>
+  </div>
+  
 </div>
+
+{% if page.pageName != 'home' %}
+<!--<div id="masthead-spacing"></div>-->
+{% endif %}

@@ -1,3 +1,36 @@
 ---
-layout: videos
+layout: default
+title: Videos
+description: I had a lot more time to make these kinds of videos back in high school.
+pageName: videos
+addedScript: <script src="/resources/js/videos.js"></script>
 ---
+
+<div id="projects-container" class="videos-container">
+	
+	{% include video-filter.html %}
+
+	<div class="projects-grid">
+		
+		{% for video in site.data.videos %}
+
+		<a href= {{ video.link }} class="{{ video.filters }}">
+	      <div class="project-container" id={{ video.id }}>
+	          
+	        <div class="image-container">
+	          <span class="centerer"></span>
+	        </div>
+
+	        <div class="description-container">
+	          <p>{{ video.description }}<p>
+	          <p class="subtitle-description">{{ video.subtitle-description }}</p>
+	        </div>
+	      </div>
+	    </a>
+
+		{% endfor %}
+
+	</div>
+
+</div>
+

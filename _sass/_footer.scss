@@ -1,0 +1,166 @@
+
+
+body {
+	display: flex;
+	min-height: 100vh;
+	flex-direction: column;
+}
+
+#main-content {
+	flex: 1;
+}
+
+.footer {
+
+	z-index: 10;
+	width: 100%;
+	//margin-top: 20px;
+
+	background-color: rgb(50, 50, 50);
+
+	font-family: "OpenSans";
+
+	ul {
+		text-align: left;
+		-webkit-padding-start: 0;
+
+		li a {
+			color: rgb(200, 200, 200);
+			transition: 0.2s;
+		}
+
+		li a:hover {
+			color: rgb(250, 250, 250);
+			transition: 0.2s;
+		}
+	}
+}
+
+.inner {
+	width: 100%;
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+.footer-link-section {
+	display: inline-block;
+	vertical-align: top;
+	box-sizing: border-box;
+	width: 20%;
+	height: 140px;
+	padding-left: 10px;
+
+	//background-color: yellow;
+
+	h4 {
+		font-size: 15px;
+		text-align: left;
+	}
+}
+
+@media (max-width: 640px) {
+	.footer-link-section {
+		display: block;
+		width: 70%;
+		height: 150px;
+		padding-left: 55px;
+
+		h4 {
+			font-size: 20px;
+		}
+
+		ul > li > a {
+			font-size: 15px;
+		}
+	}
+}
+
+#social-media-container {
+	//width: 80px;
+	display: block;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 20px;
+
+	ul {
+		display: inline-block;
+		width: auto;
+		li {
+			display: inline-block;
+			width: 50px;
+		}
+
+		li > a {
+			display: inline-block;
+			width: 100%;
+			
+			.icon {
+				display: block;
+				margin: 0 auto;
+			}
+		}
+	}
+}
+
+#footer-main-section {
+	padding-top: 20px;
+
+}
+
+.footer-main-sep {
+	height: 2px;
+	width: 98%;
+	border: 1px solid rgb(100, 100, 100);
+	margin: 0 auto;
+}
+
+#footer-bottom-links {
+
+	margin-bottom: 10px;
+
+	h4 {
+		display: inline-block;
+		font-size: 15px;
+		padding-right: 30px;
+	}
+
+	ul {
+		display: inline-block
+	}
+
+	ul > li {
+		display: inline-block;
+	}
+
+	ul > li + li {
+		padding-left: 10px;
+	}
+}
+
+/* GITHUB PAGES FIX -- The updated version of the jekyll theme on GitHub Pages apparently doesn't contain some of the assets anymore. */
+
+.icon > svg {
+  display: block;
+  vertical-align: middle; 
+  //margin: 0 auto;
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.icon > svg path {
+  fill: #828282; 
+}
+
+.icon:hover > svg path {
+  fill: #bbbbbb; 
+}
+
+.contact-list,
+.social-media-list {
+  list-style: none;
+  margin-left: 0; }
+
+.social-media-list a:hover {
+    text-decoration: none; }
+    .social-media-list a:hover .username {
+      text-decoration: underline; }

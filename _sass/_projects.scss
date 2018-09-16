@@ -1,6 +1,3 @@
----
----
-
 div {
 	-webkit-transition: 0.2s ease-out;
 	-moz-transition: 0.2s ease-out;
@@ -18,7 +15,7 @@ a:focus {
 #filter-container {
 	position: relative;
 	background-color: #2a2b2d;
-	height: 100px;
+	height: 60px;
 	color: white;
 	font-family: "OpenSans";
 }
@@ -131,7 +128,7 @@ a:focus {
 
 #projects-container {
 	position: relative;
-	padding-top: 50px;
+	//padding-top: 50px;
 }
 
 @media (max-height: 640px) and (orientation: landscape) {

@@ -1,0 +1,255 @@
+ .logo {
+  display: inline;
+  width: 35px;
+  height: 35px;
+  color: rgba(255,255,255,1);
+  padding: 0px;
+  margin: 0px;
+
+  float: left;
+  margin-left: 8vw;
+  margin-top: 15px;
+ }
+
+.masthead,
+.mastfoot,
+.cover-container {
+  width: 100%; /* Must be percentage or pixels for horizontal alignment */
+}
+
+.masthead {
+    position: fixed;
+    z-index: 100;
+    top: 0px;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    border-bottom: 1px solid;
+    border-bottom-color: rgba(256,256,256,0.3); 
+    transition: 0.3s ease-out;
+
+    //-webkit-transform-style: preserve-3d;
+    //-webkit-perspective: 1000;
+    //-webkit-backface-visibility: hidden; 
+    //backface-visibility: hidden;
+    //-webkit-backface-visibility: hidden;
+}
+
+@media (max-width: 640px) {
+
+  .masthead {
+    position: relative;
+    padding-top: 16px;
+    padding-bottom: 10px;
+  }
+
+  .scroll-masthead {
+    padding-top: 12px;
+    padding-bottom: 4px;
+  }
+
+  .scroll-masthead .masthead-brand {
+    font-size: 35px;
+  }
+}
+
+.masthead + #masthead-spacing {
+  display: block;
+  height: 0;
+}
+
+.masthead-content-container {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.masthead-brand {
+  float: left;
+  margin-left: 2px;
+  margin-top: 20px;
+  padding: 0px;
+  font-size: 35px;
+  /*color: rgba(140, 218, 235,1);*/
+  color: rgba(256,256,256,1);
+  transition: 0.3s ease-out;
+}
+
+@media (max-width: 640px) {
+  .masthead-brand {
+    margin: 0px;
+    margin-top: 10px;
+    display: inline-block;
+  }
+}
+
+.masthead-nav {
+    float: right;
+    margin-right: 7vw;
+}
+
+.masthead-nav > li {
+  display: inline-block;
+}
+.masthead-nav > li + li {
+  margin-left: 2vw;
+}
+.masthead-nav > li > a {
+  padding-right: 0;
+  padding-left: 0;
+  padding-top: 22.5px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff; /* IE8 proofing */
+  color: rgba(255,255,255,.5);
+  transition: .3s ease-out;
+  /*border-bottom: 2px solid transparent;*/
+}
+
+.masthead-nav > li > a:hover,
+.masthead-nav > li > a:focus {
+  background-color: transparent;
+  color: rgba(255,255,255,1);
+  border-bottom-color: #a9a9a9;
+  border-bottom-color: rgba(255,255,255,.25);
+}
+
+.masthead-nav > .active > a,
+.masthead-nav > .active > a:hover,
+.masthead-nav > .active > a:focus {
+  color: #fff;
+
+  border-bottom-color: #fff;
+}
+
+/* SCROLL MASTHEAD */
+
+.scroll-masthead {
+  position: relative;
+
+  background-color: rgba(256,256,256,1);
+  
+  transition: 0.3s ease-out; 
+  
+  padding-top: 3px;
+  padding-bottom: 3px;
+
+  -webkit-box-shadow: 0px -1px 12px -6px rgba(61,61,61,1);
+  -moz-box-shadow: 0px -1px 12px -6px rgba(61,61,61,1);
+  box-shadow: 0px -1px 12px -6px rgba(61,61,61,1); 
+}
+
+@media (max-width: 640px) and (orientation: portrait) {
+
+  .scroll-masthead {
+    padding-top: 12px;
+    padding-bottom: 4px;
+  }
+}
+
+@media (max-height: 640px) and (orientation: landscape) {
+  .scroll-masthead {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+}
+
+.scroll-masthead + #masthead-spacing {
+  display: block;
+  height: 80px;
+  transition: 0.5s;
+}
+
+.scroll-masthead  .masthead-brand {
+  transition: 0.3s ease-out;
+  color: rgba(32 ,32 ,32 ,1);
+  font-size: 30px;
+}
+
+@media (max-width: 640px) {
+
+  .scroll-masthead .masthead-brand {
+    font-size: 35px;
+  }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .scroll-masthead .masthead-brand {
+    padding-top: 0px;
+  }  
+}
+
+.scroll-masthead .logo {
+  transition: 0.3s ease-out;
+  width: 30px;
+  height: 30px;
+  margin-top: 16px;
+}
+
+
+
+.scroll-masthead .masthead-nav > li > a {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff; /* IE8 proofing */
+  color: rgba(0,0,0,.6);
+  transition: .3s ease-out;
+  /*border-bottom: 2px solid transparent;*/
+}
+
+.scroll-masthead .masthead-nav > li > a:hover,
+.scroll-masthead .masthead-nav > li > a:focus {
+  
+  color: rgba(243,156,18,1);
+  border-bottom-color: rgba(255,255,255,.25);
+}
+
+.scroll-masthead .masthead-nav > .active > a,
+.scroll-masthead .masthead-nav > .active > a:hover,
+.scroll-masthead .masthead-nav > .active > a:focus {
+  color: $orange;
+}
+
+.masthead-default-size {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+@media (max-width: 640px) and (orientation: portrait) {
+  .masthead-default-size {
+    padding-top: 12px;
+    padding-bottom: 4px;
+  }
+}
+
+@media (max-height: 640px) and (orientation: landscape) {
+  .masthead-default-size {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+}
+
+.below-masthead {
+  margin-top: 100px;
+}
+
+@media (max-width: 640px) {
+  .below-masthead {
+    margin-top: 20px;
+  }
+}
+
+@media (max-height: 640px) {
+  .below-masthead {
+    margin-top: 75px;
+  } 
+}
+
+@media (max-width: 570px) and (orientation: landscape), 
+       (max-height: 570px) and (orientation: portrait) {
+  .below-masthead {
+    margin-top: 10px;
+  } 
+}
+
+.below-masthead .standard-text {
+  margin-top: 0;
+}

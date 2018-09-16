@@ -1,0 +1,48 @@
+.contact-container {
+  margin-top: 6px;
+
+  .standard-text {
+    margin-top: 0px;
+  }
+}
+
+.contact-container h3 {
+  font-family: "Helvetica Neue Light", "OpenSans", Helvetica;
+}
+
+.contact-social-media-link {
+  margin-top: 20px;
+  max-width: 50%;
+}
+
+.contact-social-media-link img {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  float: left;
+  margin-right: 15px;
+}
+
+.contact-social-media-link h3 {
+  display: block;
+  font-weight: bold;
+  font-family: "Helvetica Neue";
+  font-size: 25px;
+  padding-top: 15px;
+  padding-right: 15px;
+  letter-spacing: -0.3px;
+}
+
+.contact-social-media-link#twitter-contact-link h3:before {
+
+  width: 50px;
+  height: 50px;
+  content: " ";
+  padding: 0px 20px;
+  font-size: 35px;
+  position: relative;
+  top: 5px;
+  right: 5px;
+  background-image: url("../images/twitter-icon-blue.svg");
+  background-repeat: no-repeat;
+}

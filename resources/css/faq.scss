@@ -13,10 +13,13 @@ $top-bottom-pad: ($question-height - $font-size) * 0.5;
 
 	width: 70vw;
 	height: $question-height;
+	overflow: hidden;
 
 	font-size: $font-size;
 	text-align: center;
 	word-break: break-word;
+
+	font-family: "OpenSans";
 
 	transition: 0.2s;
 }
@@ -30,7 +33,7 @@ $top-bottom-pad: ($question-height - $font-size) * 0.5;
 	padding: 15px;
 	padding-top: $top-bottom-pad;
 	padding-bottom: $top-bottom-pad;
-	//line-height: 15px;
+	line-height: $font-size;
 	background-color: white;
 	color: rgb(25, 25, 25);
 	text-align: center;

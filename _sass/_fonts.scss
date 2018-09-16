@@ -1,0 +1,38 @@
+
+@font-face {
+  font-family: "Lovelo";
+  src: url("fonts/Lovelo_Black.otf") format("opentype"),
+       url("fonts/Lovelo_Black.woff") format("woff");
+}
+
+@font-face {
+  font-family: "BebasNeue";
+  src: url("fonts/BebasNeue/BebasNeue.otf") format("opentype"),
+       url("fonts/BebasNeue/BebasNeue.otf") format("woff2"),
+       url("fonts/BebasNeue/BebasNeue.woff") format("woff"),
+       url("fonts/BebasNeue/BebasNeue.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*@font-face {
+  font-family: "OpenSans";
+  src: url("fonts/OpenSans-Regular.ttf") format("truetype")
+}*/
+
+@font-face {
+    font-family: 'OpenSans';
+    src: url('fonts/opensans-regular-webfont.woff2') format('woff2'),
+         url('fonts/opensans-regular-webfont.woff') format('woff'),
+         url('fonts/opensans-regular-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'OpenSansBold';
+    src: url('fonts/opensans-bold-webfont.woff2') format('woff2'),
+         url('fonts/opensans-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

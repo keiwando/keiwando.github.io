@@ -11,6 +11,29 @@ days:
 - Friday
 - Saturday
 - Sunday
+
+cookieConsent: |
+ <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+ <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+ <script>
+ window.addEventListener("load", function(){
+ window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#404040"
+    },
+    "button": {
+      "background": "#facf61"
+    }
+  },
+  "theme": "classic",
+  "content": {
+    "message": "This page uses HTML local storage in order to remember your schedule. Please note that everything is stored on your device and not sent to any external servers. By continuing to use this page and by creating your own schedule, you consent to the usage of this storage functionality and cookies.",
+    "allow": "Got it!",
+    "href": "/policies/cookie-policy"
+  }
+ })});
+ </script>
 ---
 
 <div id="editor">

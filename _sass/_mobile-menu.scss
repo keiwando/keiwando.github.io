@@ -1,0 +1,182 @@
+@media (max-width: 640px) {
+
+  #menu {
+    min-height: 100vh;
+    width: 100vw;
+    position: absolute;
+    overflow-y: scroll;
+    background-color: #1f1f1f;
+    transform: translateY(-100%);
+    z-index: 50;
+    transition: 0.2s ease-out;
+  }
+
+  #menu.activated {
+    transform: translateY(0vh);
+    transition: 0.2s ease-out;
+  }
+
+  .menu-list {
+    position: relative;
+  }
+
+  .menu-list ul {
+    width: 100vw;
+    padding: 0;
+    margin: 0 auto;
+    margin-top: 100px; 
+    vertical-align: middle;
+  }
+
+  .menu-list li {
+    
+    width: 100%;
+    position: relative;
+    left: 10vw;
+    overflow: visible;
+    color: white;
+  }
+
+  .menu-list a {
+    display: block;
+    font-size: 50px;
+
+    text-align: left;
+    margin-left: 0;
+    float: left;
+    width: 80vw;
+
+    margin-bottom: 10px;
+
+    border-bottom: 1px solid white;
+    
+    color: white;
+  }
+
+  @media (orientation: landscape) {
+    .menu-list a {
+      font-size: 30px;
+    }
+
+    .menu-list li:nth-last-of-type(1) a {
+      border-bottom: 0px;
+    }
+  }
+
+  .menu-list a:hover {
+    text-decoration: none;
+  }
+
+  .menu-button {
+    float: left;
+    position: relative;
+    display:  inline-block;
+    width: 30px;
+    height: 30px;
+    margin-top: 8px;
+    margin-left: 22px;
+  }
+
+  .menu-button span {
+    margin: 0 auto;
+    position: relative;
+    top: 12px;
+  }
+
+  @media (orientation: landscape) {
+    .menu-button span {
+      top: 17px;
+    }
+  }
+
+  .menu-button span:before, 
+  .menu-button span:after {
+    position: absolute;
+    content: '';
+  }
+
+  .menu-button span, 
+  .menu-button span:before, 
+  .menu-button span:after {
+    width: 30px;
+    height: 6px;
+    background-color: white;
+    display: block;
+  }
+
+  .menu-button.scrolling span, 
+  .menu-button.scrolling span:before, 
+  .menu-button.scrolling span:after {
+    background-color: black;
+  }
+
+  .menu-button span:before {
+    margin-top: -12px;
+  }
+
+  .menu-button span:after {
+    margin-top: 12px;
+  }
+
+
+  .logo-container {
+    position: relative;
+    display: inline-block;
+    float: center;
+    margin-left: -50px;
+  }
+
+  @media (orientation: landscape) {
+    .logo-container {
+      top: 5px;
+    }
+  }
+
+  #K,
+  #K_blk {
+    width: 35px;
+    height: 35px;
+    color: rgba(255,255,255,1);
+    padding: 0px;
+    margin: 0 auto;
+    margin-top: 5px;
+  }
+
+  .standard-text {
+    margin-top: 0px;
+  }
+
+  /*
+    ANIMATIONS
+  */
+
+  .sandwich-button span {
+    -webkit-transition-duration: 0s; transition-duration: 0s;
+    -webkit-transition-delay: 0s; transition-delay: 0s;
+  }
+
+  .sandwich-button.selected span {
+    background-color: rgba(0,0,0,0.0);
+    -webkit-transition-delay: 0.2s; transition-delay: 0.2s;
+  }
+  .sandwich-button span:before {
+    -webkit-transition-property: margin, -webkit-transform; transition-property: margin, transform;
+    -webkit-transition-duration: 0.2s; transition-duration: 0.2s;
+    -webkit-transition-delay: 0.2s, 0s; transition-delay: 0.2s, 0s;
+  }
+  .sandwich-button.selected span:before {
+    margin-top: 0;
+    -webkit-transform: rotate(45deg); transform: rotate(45deg);
+    -webkit-transition-delay: 0s, 0.2s; transition-delay: 0s, 0.2s;
+  }
+  .sandwich-button span:after {
+    -webkit-transition-property: margin, -webkit-transform; transition-property: margin, transform;
+    -webkit-transition-duration: 0.2s; transition-duration: 0.2s;
+    -webkit-transition-delay: 0.2s, 0s; transition-delay: 0.2s, 0s;
+  }
+  .sandwich-button.selected span:after {
+    margin-top: 0;
+    -webkit-transform: rotate(-45deg); transform: rotate(-45deg);
+    -webkit-transition-delay: 0s, 0.2s; transition-delay: 0s, 0.2s;
+  }
+}

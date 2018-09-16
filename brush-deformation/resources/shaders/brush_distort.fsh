@@ -250,6 +250,7 @@ void main() {
 	float azm = -azimuth * PI / 180.0;
 
 	vec2 strechingCenter = center - (0.15 * altWeight) * vec2(cos(azm), sin(azm));
+	//vec2 strechingCenter = center;
 	//vec2 bristleBindingCenter = center + 0.4 * vec2(cos(azm), sin(azm)) * altWeight; 
 	vec2 bristleBindingCenter = center + (0.55 * altWeight) * vec2(cos(azm), sin(azm)); 
 	//vec2 bristleBindingCenter = center + 0.3 * vec2(cos(azm), sin(azm)) * altWeight; 

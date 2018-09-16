@@ -11,10 +11,14 @@ layoutCSS: <link href="/evolution/resources/css/evolution.css" rel="stylesheet">
 		<!--{% include mobile-header.html %}-->
 		{% include evolution-navbar.html %}
 
-		{{ content }}
+		<div id="main-content">
+			{{ content }}
+		</div>
 
 		{% include scripts.html %}
-		{% include google-analytics.html %}
+		<!--{% include google-analytics.html %}-->
+
+		{% include footer.html %}
 	</body>
 
 </html>

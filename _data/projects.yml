@@ -13,7 +13,7 @@
   subtitle-description: Sheet Music
 
 - id: evolution-project
-  link: https://keiwan.itch.io/evolution
+  link: /evolution #https://keiwan.itch.io/evolution
   filters: web-filter multiplatform-filter ios-filter android-filter
   imgSrc: /resources/images/evolution-icon_small.jpg
   description: Evolution

@@ -1,0 +1,204 @@
+.carousel {
+	/*margin-top: 0px;*/
+  height: 100%;
+  width: 100%;
+  z-index: 0;
+  position: fixed;
+}
+
+@media (max-height: 640px) and (orientation: landscape) {
+  .carousel {
+    position: relative;
+  }
+}
+
+@media (max-width: 640px) {
+  .carousel {
+    position: relative;
+    margin-top: -55px;
+  }
+}
+
+.carousel.noparallax {
+  position: relative;
+}
+
+.carousel,
+.item, 
+.active{
+  height: 100%;
+}
+
+.carousel-inner{
+  height: 100%;
+  background-size: cover;
+}
+
+.carousel-inner .item {
+  height: 100%;
+}
+
+@media (max-height: 640px) and (orientation: landscape) {
+  .carousel-inner .item {
+    background-position: center top 20px;
+  }
+}
+
+.carousel-inner #lob-slide {
+  background-image: url("../images/LOB1.jpg");
+}
+
+@media screen and (orientation: portrait) {
+  .carousel-inner #lob-slide {
+    background-image: url("../images/lob_backdrop_vert_ipad.jpg");
+  } 
+
+  @media (max-width: 640px) {
+    .carousel-inner #lob-slide {
+      background-image: url("../images/lob_backdrop_vert.jpg");
+    }  
+  } 
+}
+
+.carousel-inner #evolution-slide {
+  background-image: url("../images/evolution_backdrop3.jpg");
+}
+
+@media screen and (max-width: 640px) and (orientation: portrait) {
+  .carousel-inner #evolution-slide {
+    background-image: url("../images/evolution_backdrop_vert.jpg");
+  }  
+}
+
+.carousel-inner #sheet-slide {
+  background-image: url("../images/sheets_backdrop.jpg");
+}
+
+@media screen and (orientation: portrait) {
+  .carousel-inner #sheet-slide {
+    background-image: url("../images/sheets_backdrop_vert_ipad.jpg");
+  }  
+
+  @media (max-width: 640px) {
+    .carousel-inner #sheet-slide {
+      background-image: url("../images/sheets_backdrop_vert.jpg");
+    }  
+  }
+}
+
+.carousel-inner #youtube-slide {
+  background-image: url("../images/camera1.jpg");
+}
+
+@media(max-width: 640px) {
+  .carousel-inner #youtube-slide {
+    background-image: url("../images/youtube_backdrop_vert.jpg");
+  }  
+}
+
+.full-screen {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.carousel-caption {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 40%;
+}
+
+@media screen and (orientation: landscape) {
+  
+  @media (max-height: 640px) {
+    .carousel-caption {
+      top: 35%;
+    }
+  }
+}
+
+@media screen and (orientation: portrait) {
+  
+  .carousel-caption {
+    top: 60%;
+  }
+
+  @media (max-width: 768px) {
+    .carousel-caption {
+      top: 55%;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .carousel-caption {
+      top: 50%;
+    }
+  }
+}
+
+.carousel-caption > h1 {
+  font-size: 100px;
+  margin-bottom: 50px;
+}
+
+@media (max-width: 1200px) and (orientation: landscape) {
+
+  .carousel-caption > h1 {
+    font-size: 8.3vw;
+  }
+
+  @media (max-width: 640px)  {
+
+    .carousel-caption > h1 {
+      font-size: 7vw;
+      margin-bottom: 30px;
+    }
+  }
+}
+
+@media screen and (orientation: portrait) {
+  
+  .carousel-caption > h1 {
+    font-size: 10vw;
+  }
+
+  @media (max-width: 768px) {
+
+    .carousel-caption > h1 {
+      font-size: 80px;
+    }
+  }
+
+  @media (max-width: 500px) {
+
+    .carousel-caption > h1 {
+      font-size: 12vw;
+      margin-bottom: 30px;
+      padding: 3vw;
+    }
+  }
+}
+
+
+.carousel-caption .smaller-h1 {
+  font-size: 5em;
+  top: 45%;
+}
+
+@media (max-width: 500px){
+  .carousel-caption .smaller-h1 {
+    font-size: 3em;
+  }
+}
+
+@media (max-width: 350px) {
+  .carousel-caption .smaller-h1 {
+    font-size: 2.5em;
+  }
+}
+
+.carousel-control {
+  margin-right: -50px;
+  margin-left: -50px;
+}

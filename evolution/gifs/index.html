@@ -1,3 +1,22 @@
 ---
-layout: evolution-gifs
+layout: evolution
+title: Evolution Gifs
+addedCSS: <link href="/resources/css/evolution-gifs.css" rel="stylesheet">
+addedScript: <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 ---
+
+<div id="gif-container-grid">
+
+	{% for gif in site.data.evolution-gifs %}
+
+	<div class="gif-container">
+		<a href={{ gif.pageLink }} target="_blank">
+			<img src={{ gif.gifLink }}>	
+		</a>
+	</div>
+
+	{% endfor %}
+	
+</div>
+
+<iframe class="itch-embed" frameborder="0" src="https://itch.io/embed/91201" width="552" height="167"></iframe>
