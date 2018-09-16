@@ -1,10 +1,10 @@
 <div id="menu" class="show-on-mobile">
   <div class="menu-list">
     <ul>
-      <li><a {% if layout.pageName == 'home' %} href="#" {% else %} href="index.html" {% endif %}>HOME</a></li>
-      <li><a {% if layout.pageName == 'projects' %} href="#" {% else %} href="projects.html" {% endif %}>PROJECTS</a></li> 
-      <li><a {% if layout.pageName == 'videos' %} href="#" {% else %} href="videos.html" {% endif %}>VIDEOS</a></li>
-      <li><a {% if page.pageName == 'contact' %} href="#" {% else %} href="contact.html" {% endif %}>CONTACT</a></li>
+      <li><a {% if layout.pageName == 'home' %} href="#" {% else %} href="/" {% endif %}>HOME</a></li>
+      <li><a {% if layout.pageName == 'projects' %} href="#" {% else %} href="/projects" {% endif %}>PROJECTS</a></li> 
+      <li><a {% if layout.pageName == 'videos' %} href="#" {% else %} href="/videos" {% endif %}>VIDEOS</a></li>
+      <li><a {% if page.pageName == 'contact' %} href="#" {% else %} href="/contact" {% endif %}>CONTACT</a></li>
     </ul>  
   </div>
 </div>
