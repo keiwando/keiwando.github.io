@@ -1,0 +1,61 @@
+---
+layout: nativefileso
+---
+
+<h4>Topics</h4>
+<ul>
+	<li><a href="#Setup">Setup</a></li>
+	<li><a href="#Examples">Examples</a></li>
+	<li><a href="#Limitations">Requirements & Limitations</a></li>
+</ul>
+
+<p>General info about the asset</p>
+
+
+<h3 id="Setup">Setup</h3>
+
+<p>Import the asset.</p>
+
+<h4 id="SetupFileAssociation">Setup file associations</h4>
+
+<p>TODO</p>
+
+<h3 id="Examples">Examples</h3>
+
+<pre class="prettyprint"><code>public class Test {
+
+}</code></pre>
+
+<h3 id="Limitations">Requirements & Limitations</h3>
+
+Here are the main limitations and platform requirements for the asset that you should read and take into consideration before deciding on the purchase!
+
+<div class="spacing-small"></div>
+
+<h4> Windows </h4>
+<ul class="bulleted-list">
+	<li>The Windows build requires <b>.NET 2.0</b> (not subset!) and <b>Mono</b> (IL2CPP is not supported)</li>	
+</ul>
+
+<h4> macOS </h4>
+<ul class="bulleted-list">
+	<li>The Open and Save panels don’t show custom titles on OSX 10.11 and above.</li>
+</ul>
+
+<h4> Android </h4>
+<ul class="bulleted-list">
+	<li>Supports <b>Android 4.4+</b></li>
+	<li>Android File Browser doesn’t guarantee which file type is selected (no filtering by extension and MIME types are unreliable too)</li>
+	<li>File extensions cannot be reliably associated with the application on Android so only the MIME type is used for the association. This is mainly important if your app supports a custom file type. In this case, you can set its MIME type to “application/octet-stream” or more generally associate every file type with your app (using a wildcard MIME type of “*/*” and deal with invalid file types from within the app after the files have been loaded.</li>
+</ul>
+
+<h4> iOS </h4>
+<ul class="bulleted-list">
+	<li>Supports <b>iOS 11+</b></li>
+	<li>Using “Copy to” with a UIActivityViewController only copies the first file of the selection to your app - this is an iOS limitation. Multiple files can be imported at once from within the app using the OpenFiles function.</li>
+</ul> 
+
+<h4>Mobile (iOS + Android)</h4>
+<ul class="bulleted-list">
+	<li>File associations only for files that are available locally (files are not downloaded and imported from the internet)</li>	
+</ul>

@@ -1,0 +1,33 @@
+---
+---
+
+$orange: rgba(243,156,18,1);
+$dark_grey: rgb(30, 30, 30);
+
+body {
+	background-color: white;
+}
+
+#nativefileso-navbar {
+
+	font-family: "OpenSans";
+
+	ul li a {
+		font-size: 0.85em;
+		color: $dark_grey;
+	}
+	border-bottom: 2px solid $dark_grey;
+}
+
+#nativefileso-navbar #nativefileso-title {
+	font-family: "OpenSansBold";
+	font-size: 1.0em;
+	
+	a {
+		color: $dark_grey;	
+	}
+}
+
+#nativefileso-navbar > ul > li > a:hover {
+	color: $orange;
+}

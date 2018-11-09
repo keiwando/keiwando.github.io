@@ -1,0 +1,122 @@
+.project-navbar {
+	
+	width: 90vw;
+	max-width: 900px;
+	padding-top: 40px;
+	margin: 0 auto;
+	margin-bottom: 30px;
+
+	font-size: 30px;
+
+	border-bottom: 2px solid white;
+}
+
+@media (max-width: 640px) {
+	.project-navbar {
+		width: 90%;
+		font-size: 15px;
+	}
+}
+
+.project-navbar > ul {
+	display: inline-block;
+	float: right;
+	margin-right: 15px;
+}
+
+@media (max-width: 640px) {
+	.project-navbar > ul {
+		-webkit-padding-start: 0;
+	}
+}
+
+.project-navbar > ul > li {
+  display: inline-block;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+@media (max-width: 640px) {
+	.project-navbar > ul > li {
+		font-size: 14px;
+	}
+}
+
+.project-navbar > ul > li > a {
+	transition: 0.15s;
+}
+
+.project-navbar > ul > li > a:hover {
+	color: rgb(252, 75, 75);
+	transition: 0.15s;
+}
+
+.project-navbar > ul > li + li {
+	padding-left: 10px;
+}
+
+.project-title {
+	position: relative;
+	float: left;
+	left: 15px;
+	display: inline-block;
+	font-size: 40px;
+}
+
+@media (max-width: 640px) {
+	.project-title {
+		display: block;
+	}
+}
+
+.project-page-main-content {
+
+	width: 90vw;
+	max-width: 900px;
+
+	margin: 0 auto;
+	padding-left: 15px;
+	padding-right: 15px;
+
+	color: $dark_grey;
+	text-align: left;
+	font-family: "OpenSans";
+
+	h1, h2, h3, h4, h5, h6 {
+		font-family: "OpenSansBold";
+	}
+
+	ul {
+		padding-left: 5px;
+		margin-bottom: 2em;
+
+		li {
+			margin-top: 0.5em;
+			margin-bottom: 0.5em;
+			a {
+				color: $blue;
+				font-size: 1.1em;
+			}
+		}
+	}
+
+	ul.bulleted-list {
+		list-style: disc inside;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

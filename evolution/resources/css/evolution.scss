@@ -13,69 +13,21 @@ iframe {
 }
 
 #evolution-navbar {
-	
-	width: 600px;
-	padding-top: 40px;
-	margin: 0 auto;
-	margin-bottom: 30px;
-
-	font-size: 30px;
-
-	border-bottom: 2px solid white;
-}
-
-@media (max-width: 640px) {
-	#evolution-navbar {
-		width: 90%;
-		font-size: 15px;
-	}
+	color: white;
+	max-width: 700px;
 }
 
 #evolution-navbar > ul {
 	display: inline-block;
-}
-
-@media (max-width: 640px) {
-	#evolution-navbar > ul {
-		-webkit-padding-start: 0;
-	}
-}
-
-#evolution-navbar > ul > li {
-  display: inline-block;
-  font-size: 20px;
-  line-height: 30px;
-}
-
-@media (max-width: 640px) {
-	#evolution-navbar > ul > li {
-		font-size: 14px;
-	}
-}
-
-#evolution-navbar > ul > li > a {
-	transition: 0.15s;
-}
-
-#evolution-navbar > ul > li > a:hover {
-	color: rgb(252, 75, 75);
-	transition: 0.15s;
-}
-
-#evolution-navbar > ul > li + li {
-	padding-left: 10px;
+	float: none;
+	margin-right: 0px;
 }
 
 #evolution-title {
-	position: relative;
-	left: 0px;
-	display: inline-block;
+
+	float: none;
+	left: 0;
+
 	font-family: "BebasNeue";
-	font-size: 40px;
 }
 
-@media (max-width: 640px) {
-	#evolution-title {
-		display: block;
-	}
-}

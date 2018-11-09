@@ -1,0 +1,22 @@
+---
+layoutCSS: <link href="/nativefileso/resources/css/nativefileso.css" rel="stylesheet">
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+	{% include head.html %}
+
+	<body>
+		{% include nativefileso-navbar.html %}
+
+		<div id="main-content" class="project-page-main-content">
+			{{ content }}
+		</div>
+
+		{% include scripts.html %}
+		<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+		{% include footer.html %}
+	</body>
+</html>
