@@ -1,0 +1,8 @@
+- question: Why the name "NativeFileSO"?
+  answer:   Answer
+
+- question: Which platforms are supported?
+  answer:   NativeFileSO is currently implemented for macOS, Windows, iOS and Android. You can find the minimum supported operating system versions <a href="/nativefileso#Limitations">here</a>.
+
+- question: The asset doesn't work as intended.
+  answer:   Please file a bug <a href="https://www.github.com/keiwando/nativefileso/issues">here</a> and I will try my best to fix the issue as soon as possible.

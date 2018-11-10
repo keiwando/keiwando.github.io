@@ -5,6 +5,10 @@ $question-height: 50px;
 $font-size: 20px;
 $top-bottom-pad: ($question-height - $font-size) * 0.5;
 
+#faq-title {
+	text-align: center;
+}
+
 .faq-item-container {
 	display: block;
 	position: relative;
@@ -59,4 +63,11 @@ $top-bottom-pad: ($question-height - $font-size) * 0.5;
 
 	display: block;
 	transition: 0.2s;
+}
+
+.faq-sep {
+
+	width: 100%;
+	height: 5px;
+	background-color: rgba(30, 30, 30, 0.0);
 }

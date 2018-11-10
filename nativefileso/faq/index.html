@@ -1,0 +1,15 @@
+---
+layout: nativefileso
+addedCSS: <link href="/resources/css/faq.css" rel="stylesheet">
+addedScript: <script src="/resources/js/faq.js"></script>
+---
+
+<h1 id="faq-title">FAQ</h1>
+
+{% for qa in site.data.nativefileso-faq %}
+
+{% include faq_item.html question=qa.question answer=qa.answer %}
+
+<div class="faq-sep"></div>
+
+{% endfor %}
