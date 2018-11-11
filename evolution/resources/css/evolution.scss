@@ -2,7 +2,7 @@
 ---
 
 iframe {
-	margin: 20px auto;
+	margin: 0px auto;
 }
 
 @media (max-width: 640px) {
@@ -12,29 +12,33 @@ iframe {
 	}
 }
 
-#evolution-navbar {
-	color: white;
-	max-width: 700px;
+#iframe-container {
+	margin: 20px auto;
+	width: 552px;
 }
 
-#evolution-navbar > ul {
-	display: inline-block;
-	float: none;
-	margin-right: 0px;
+.project-navbar > ul > li {
+	vertical-align: bottom;
+	line-height: 20px;
 }
 
 #evolution-title {
-
-	float: none;
-	left: 0;
 
 	font-family: "BebasNeue";
 }
 
 .evolution-main-content {
 
+	#faq-title {
+		color: white;
+	}
+
 	.faq-item-question {
 		background-color: white;
+	}
+
+	.faq-item-answer {
+		background-color: rgb(240, 240, 240);
 	}
 }
 

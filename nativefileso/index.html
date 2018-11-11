@@ -9,13 +9,20 @@ layout: nativefileso
 	<li><a href="#Limitations">Requirements & Limitations</a></li>
 </ul>-->
 
+<img src="resources/images/full_banner.jpg" class="wide-banner">
+
 <p>NativeFileSO allows for native file open and save functionality on <b>Mac, Windows, iOS and Android </b> in your Unity projects. It also enables you to associate arbitrary file types to the mobile apps.</p>
+
+<p> Make sure to read about the <a href="#"></a></p>
 
 <p>If you happen to come across an issue or a<a href="https://www.github.com/keiwando/nativefileso/issues">Bugs & Issues</a></p>
 
 <h3 id="Setup">Setup</h3>
 
 <p>Import the asset.</p>
+
+<p>Register Callback</p>
+<p>Set script execution order</p>
 
 <h4 id="SetupFileAssociation">Setup file associations</h4>
 
@@ -55,10 +62,10 @@ Here are the main limitations and platform requirements for the asset that you s
 <h4> iOS </h4>
 <ul class="bulleted-list">
 	<li>Supports <b>iOS 11+</b></li>
-	<li>Using “Copy to” with a UIActivityViewController only copies the first file of the selection to your app - this is an iOS limitation. Multiple files can be imported at once from within the app using the OpenFiles function.</li>
+	<li>Using “Copy to” with a UIActivityViewController only copies the first file of the selection to your app - this is an iOS limitation. Multiple files can be imported at once from within the app using the <a href="#">OpenFiles</a> function.</li>
 </ul> 
 
 <h4>Mobile (iOS + Android)</h4>
 <ul class="bulleted-list">
-	<li>File associations only for files that are available locally (files are not downloaded and imported from the internet)</li>	
+	<li>The file associations only work for files that exist locally on the device. (The files are not downloaded and imported from an online URL.)</li>	
 </ul>
