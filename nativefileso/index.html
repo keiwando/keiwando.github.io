@@ -4,19 +4,45 @@ layout: nativefileso
 
 <img src="resources/images/demo/full_banner.jpg" class="wide-banner">
 
-<p><b>NativeFileSO</b> is a Unity asset which allows you to open and save files using the native dialogs on <b>Windows, macOS, iOS and Android </b>, all from a simple and unified interface. It also lets you associate arbitrary file types with your iOS and Android targets, which makes your app show up in the native share dialogs when a supported file type is being shared.</p>
+<p><b>NativeFileSO</b> adds native file import and export functionality across <b>Windows, macOS, iOS</b> and <b>Android</b> to your Unity project.</p>
 
-<p> With all of the funcionality that NativeFileSO can offer, there are still some limitations due to platform specific constraints, so please make sure to carefully read the section on <a href="#Limitations">requirements & limitations</a> before deciding on a purchase.</p>
+<h4>Features:</h4>
+<ul class="bulleted-list">
+	<li>Select external files and load their byte contents.</li>
+	<li>Export/Share files to a selected path/app.</li>
+	<li>Associate file types with your app (Mobile only!).</li>
+	<li>Select save and open paths (Desktop only!)</li>
+</ul>
+
+<p> With all of the functionality that NativeFileSO can offer, there are still some limitations due to platform specific constraints, so please make sure to carefully read the section on <a href="#Limitations">requirements & limitations</a> before deciding on a purchase.</p>
 
 <p>If you happen to come across an issue with the asset, please <a href="https://www.github.com/keiwando/nativefileso/issues">file a bug</a> and I will try my best to solve the problem as quickly as I can.</p>
 
 
 <h3 id="Setup">Setup</h3>
 
-Setting up the asset requires relatively little work, however, 
+<p>Setting up the asset requires relatively little work. After <b>importing the package contents</b>, you should have the following folder hierarchy inside of your <em>Assets</em> folder:</p>
 
-<p>Import the asset.</p>
+<pre class=""><code>Assets/
+|- ...
+|- NativeFileSO/
+|  |- Editor/
+|  |- Prefabs/
+|  |- Samples/
+|  |- Scripts/
+|- Plugins/
+   |- ...
+   |- NativeFileSO/
+      |- Android/
+      |- iOS/
+      |- macOS/
+      |- Windows/
+	</code>
+</pre>
 
+<!--In order for NativeFileSO to be able to function properly, it needs to know about certain system events (such as when the app enters the focused state or when it is launched). -->
+
+<p>Drag and drop the <b>NativeFileSOUnityEvent</b> prefab from the Prefabs/ folder into your scene. This should be the first scene that is loaded when your game starts.</p>
 <p>Register Callback</p>
 <p>Set script execution order</p>
 
