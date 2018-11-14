@@ -9,7 +9,7 @@ layout: nativefileso
 <h4>Features:</h4>
 <ul class="bulleted-list">
 	<li>Select external files and load their byte contents.</li>
-	<li>Export/Share files to a selected path/app.</li>
+	<li>Export/Share files to a user-selected path/app.</li>
 	<li>Associate file types with your app (Mobile only!).</li>
 	<li>Select save and open paths (Desktop only!)</li>
 </ul>
@@ -36,27 +36,96 @@ layout: nativefileso
       |- Android/
       |- iOS/
       |- macOS/
-      |- Windows/
-	</code>
+      |- Windows/</code>
 </pre>
 
-<!--In order for NativeFileSO to be able to function properly, it needs to know about certain system events (such as when the app enters the focused state or when it is launched). -->
+<p>In order for NativeFileSO to be able to function properly, it needs to know about certain system events (such as when the app enters the focused state or when it is launched).</p>
 
 <p>Drag and drop the <b>NativeFileSOUnityEvent</b> prefab from the Prefabs/ folder into your scene. This should be the first scene that is loaded when your game starts.</p>
-<p>Register Callback</p>
-<p>Set script execution order</p>
+
+<img src="resources/images/demo/prefab.png" class="wide-banner">
+
 
 <h4 id="SetupFileAssociation">Setup file associations</h4>
 
-<p>TODO</p>
+<p>If you are not planning to associate any file types with your app, you are done with the setup and you can open and export files through the interface provided by the <code>NativeFileSO</code> class as demostrated in the <a href="#Examples">examples</a>.</p>
+
+<p>Otherwise, continue with the following steps:</p>
+
+<p>Inside of your own MonoBehaviour class that you want to deal with associated files that the user is trying to open in your app, you need to subscribe to the <code>FilesWereOpened</code> event that is raised by the shared instance of the <code>NativeFileSOMobile</code> class.</p>
+
+<pre class="prettyprint custom-prettyprint"><code>using Keiwando.NativeFileSO;
+
+public class MyFileHandler : MonoBehaviour {
+
+	void Start() {
+		NativeFileSOMobile.shared.FilesWereOpened += delegate (OpenedFile[] files) {
+			// Process the opened files
+		};		
+	}
+}</code></pre>
+
+<p>For this behaviour to work reliably, we need to make sure that the <code>FilesWereOpened</code> event is never raised before we had a chance to subscribe to it. In the Unity editor, go to <b>Edit > Project Settings > Script Execution Order</b>, add <b>Keiwando.NativeFileSO.NativeFileSOUnityEvent</b> to the list and assign it the value 32000.</p>
+
+<img src="resources/images/demo/script_order.png" class="wide-banner">
+
+<p>You associate file types with your app by including them in the <code>supportedFileTypes</code> array in the <code>SupportedFilePreferences.cs</code> file. You can use the presets or create your own instances of the <code>SupportedFileType</code> class.</p>
+
+<pre class="prettyprint custom-prettyprint"><code>public static readonly SupportedFileType[] supportedFileTypes = {
+
+	// Edit this list to include your desired file types
+
+	SupportedFileType.JPEG,
+	SupportedFileType.PlainText
+	//SupportedFileType.Any
+};</code>
+</pre>
 
 <h3 id="Examples">Examples</h3>
 
-<pre class="prettyprint custom-prettyprint"><code>public class Test {
-	// Some Comment
-	var x: String = "Hello World";
-	int i = 42;
-}</code></pre>
+<p>The <code>NativeFileSO</code> class provides the main interface for you to interact with the functionality on all platforms. The <code>NativeFileSOMacWin</code> class offers some additional functionality that is only available on desktop platforms, such as the ability to select file paths (without loading the file contents immediately).</p>
+
+<p>All of the classes you need to interact with are contained in the <code>Keiwando.NativeFileSO</code> namespace, so the following examples are assumed to contain a </p>
+
+<pre class="prettyprint custom-prettyprint"><code>using Keiwando.NativeFileSO;</code></pre>
+
+<p>statement at the top of the file.</p>
+
+<p>Visit the <a href="docs/">documentation</a> for a more detailed reference of what each class shown here does.</p>
+
+<h4>Export a file</h4>
+
+<p>The following example demonstrates how to use the <code>NativeFileSO</code> class in order to copy/export a file from an existing path to a new location chosen by the user.</p>
+
+<pre class="prettyprint custom-prettyprint"><code>string path = "path/to/existing/fileToSave.txt";
+string newFilename = "ExportedFile.txt";
+
+FileToSave file = new FileToSave(path, newFilename, SupportedFileType.PlainText);
+
+// Allows the user to choose a save location and saves the 
+// file to that location
+NativeFileSO.shared.SaveFile(file);</code>
+</pre>
+
+<h4>Open a single file</h4>
+
+<p>This snipped shows how to use the <code>NativeFileSO</code> class in order to let the user choose a text file and handle its loaded contents.</p>
+
+<pre class="prettyprint custom-prettyprint"><code>// We want the user to select a plain text file.
+SupportedFileType[] supportedFileTypes = {
+	SupportedFileType.PlainText
+};
+
+NativeFileSO.shared.OpenFile(supportedFileTypes,
+  delegate (bool fileWasOpened, OpenedFile file) {
+	if (fileWasOpened) {
+		// Process the loaded contents of "file"
+		Debug.Log(file.ToUTF8String());  
+	} else {
+		// The file selection was cancelled.	
+	}
+});</code>
+</pre>
 
 <h3>Screenshots</h3>
 
@@ -93,6 +162,8 @@ Here are the main limitations and platform requirements for the asset that you s
 	<li>Supports <b>Android 4.4+</b></li>
 	<li>The Android File Browser doesn’t guarantee which file type is selected by the user (Can't filter files by extension and MIME types are unreliable too)</li>
 	<li>File extensions cannot be reliably associated with the application on Android, so only the MIME type is used for the association. This is mainly important if your app supports a custom file type. In this case, you can set its MIME type to “application/octet-stream” or more generally associate every file type with your app (using a wildcard MIME type of “*/*”) and deal with invalid file types from within the app after the files have been loaded.</li>
+	<li>When the user opens a file with an associated type with your application,
+	the app is restarted.</li>
 </ul>
 
 <h4> iOS </h4>
