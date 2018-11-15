@@ -81,6 +81,10 @@ public class MyFileHandler : MonoBehaviour {
 };</code>
 </pre>
 
+<p>These files will be automatically associated with the iOS app, however, the Android plugin requires one additional step. After editing the <code>supportedFilesTypes</code> array, wait for the Editor to compile the scripts and then click on the <b>Tools > NativeFileSO > RefreshAndroidPlugin</b> menu item. You will need to manually do this once each time you change the list of associated file types.</p>
+
+<img src="resources/images/demo/refresh_android_plugin.png" class="wide-banner">
+
 <h3 id="Examples">Examples</h3>
 
 <p>The <code>NativeFileSO</code> class provides the main interface for you to interact with the functionality on all platforms. The <code>NativeFileSOMacWin</code> class offers some additional functionality that is only available on desktop platforms, such as the ability to select file paths (without loading the file contents immediately).</p>
@@ -146,6 +150,11 @@ NativeFileSO.shared.OpenFile(supportedFileTypes,
 Here are the main limitations and platform requirements for the asset that you should read and take into consideration before deciding on the purchase!
 
 <div class="spacing-small"></div>
+
+<h4>General</h4>
+<ul class="bulleted-list">
+	<li>IL2CPP build support is currently only guaranteed on iOS.</li>	
+</ul>
 
 <h4> Windows </h4>
 <ul class="bulleted-list">
