@@ -1,0 +1,51 @@
+$secondary-grey: #7c7c7c;
+
+#dox-entities-sidebar {
+    display: inline-block;
+    width: 220px;
+    vertical-align: top;
+    //border-right: 3px solid rgb(150, 150, 150);
+    font-size: 0.95em;
+    padding-right: 10px;
+    overflow: wrap;
+}
+
+#dox-doc-container {
+    display: inline-block;
+    width: calc(100% - 220px);
+    vertical-align: top;
+    padding-left: 20px;
+    margin-bottom: 70px;
+}
+
+h4.dox-namespace-heading {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color: $secondary-grey;
+}
+
+h1.dox-entity-title {
+
+}
+
+h2.dox {
+    margin-top: 40px;
+}
+
+pre.dox-pre, code.dox-code {
+    overflow: scroll;
+    white-space: pre;
+    overflow-wrap: normal;
+}
+
+pre code.dox-code {
+    white-space: pre;
+}
+
+pre.dox-pre {
+    margin-bottom: 30px;
+}
+
+p.dox {
+    margin-bottom: 15px;
+}
