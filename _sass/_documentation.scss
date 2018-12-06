@@ -63,4 +63,35 @@ $secondary-grey: #7c7c7c;
     p {
         margin-bottom: 15px;
     }
+
+    div.dox-child-entity-container {
+
+        pre {
+            margin-bottom: 5px;
+        }
+
+        h5 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-left: 15px;
+            margin-bottom: 15px;
+            color: rgb(50, 50, 50);
+        }
+    }
+
+    ul > li > h4 {
+        margin: 20px 10px;
+    }
+
+    .most-important-classes {
+
+        margin-bottom: 0;
+        list-style-type: circle;
+
+        li {
+            display: inline;
+        }
+    }
 }
