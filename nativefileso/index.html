@@ -16,7 +16,7 @@ layout: nativefileso
 
 <p> With all of the functionality that NativeFileSO can offer, there are still some limitations due to platform specific constraints, so please make sure to carefully read the section on <a href="#Limitations">requirements & limitations</a> before deciding on a purchase.</p>
 
-<p>If you happen to come across an issue with the asset, please <a href="https://www.github.com/keiwando/nativefileso/issues">file a bug</a> and I will try my best to solve the problem as quickly as I can.</p>
+<p>If you happen to come across an issue with the asset, please <a href="https://www.github.com/keiwando/nativefileso-issues/issues">file a bug</a> and I will try my best to solve the problem as quickly as I can.</p>
 
 
 <h3 id="Setup">Setup</h3>
@@ -39,20 +39,32 @@ layout: nativefileso
       |- Windows/</code>
 </pre>
 
-<p>In order for NativeFileSO to be able to function properly, it needs to know about certain system events (such as when the app enters the focused state or when it is launched).</p>
+<p>In order for NativeFileSO to be able to function properly, it needs to know 
+	about certain system events (such as when the app enters the focused state 
+	or when it is launched). That's what the <b>NativeFileSOUnityEvent</b> prefab is for.</p>
 
-<p>Drag and drop the <b>NativeFileSOUnityEvent</b> prefab from the Prefabs/ folder into your scene. This should be the first scene that is loaded when your game starts.</p>
+<p>Simply drag and drop the <b>NativeFileSOUnityEvent</b> prefab from the NativeFileSO/Prefabs/ 
+	folder into your scene. This should be the first scene that is loaded when your game starts.</p>
 
 <img src="resources/images/demo/prefab.png" class="wide-banner">
 
 
 <h4 id="SetupFileAssociation">Setup file associations</h4>
 
-<p>If you are not planning to associate any file types with your app, you are done with the setup and you can open and export files through the interface provided by the <code>NativeFileSO</code> class as demostrated in the <a href="#Examples">examples</a>.</p>
+<p>If you are not planning to associate any file types with your app, you are done with the setup 
+	and you can open and export files through the interface provided by the 
+	<a href="docs/KeiwandoNativeFileSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_">
+		<code>NativeFileSO</code>
+	</a> class as demostrated in the <a href="#Examples">examples</a>.</p>
 
 <p>Otherwise, continue with the following steps:</p>
 
-<p>Inside of your own MonoBehaviour class that you want to deal with associated files that the user is trying to open in your app, you need to subscribe to the <code>FilesWereOpened</code> event that is raised by the shared instance of the <code>NativeFileSOMobile</code> class.</p>
+<p>Inside of your own MonoBehaviour class that you want to deal with associated files that the 
+	user is trying to open in your app, you need to subscribe to the 
+	<a href="docs/KeiwandoNativeFileSONativeFileSOMobileFilesWereOpenedpublic_event_ActionOpenedFile_FilesWereOpened">
+		<code>FilesWereOpened</code></a> event that is raised by the shared instance of the 
+		<a href="docs/KeiwandoNativeFileSONativeFileSOMobilepublic_class_NativeFileSOMobile__INativeFileSO_">
+			<code>NativeFileSOMobile</code></a> class.</p>
 
 <pre class="prettyprint custom-prettyprint"><code>using Keiwando.NativeFileSO;
 
@@ -65,11 +77,16 @@ public class MyFileHandler : MonoBehaviour {
 	}
 }</code></pre>
 
-<p>For this behaviour to work reliably, we need to make sure that the <code>FilesWereOpened</code> event is never raised before we had a chance to subscribe to it. In the Unity editor, go to <b>Edit > Project Settings > Script Execution Order</b>, add <b>Keiwando.NativeFileSO.NativeFileSOUnityEvent</b> to the list and assign it the value 32000.</p>
+<p>For this behaviour to work reliably, we need to make sure that the 
+	<a href="docs/KeiwandoNativeFileSONativeFileSOMobileFilesWereOpenedpublic_event_ActionOpenedFile_FilesWereOpened"><code>FilesWereOpened</code></a> event is never raised before we had a chance to subscribe to it. In the Unity editor, go to <b>Edit > Project Settings > Script Execution Order</b>, add <b>Keiwando.NativeFileSO.NativeFileSOUnityEvent</b> to the list and assign it the value 32000.</p>
 
 <img src="resources/images/demo/script_order.png" class="wide-banner">
 
-<p>You associate file types with your app by including them in the <code>supportedFileTypes</code> array in the <code>SupportedFilePreferences.cs</code> file. You can use the presets or create your own instances of the <code>SupportedFileType</code> class.</p>
+<p>You associate file types with your app by including them in the 
+	<a href="docs/KeiwandoNativeFileSOSupportedFilePreferencessupportedFileTypespublic_static_readonly_SupportedFileType_supportedFileTypes"><code>supportedFileTypes</code></a> array in the 
+	<a href="docs/KeiwandoNativeFileSOSupportedFilePreferencespublic_static_class_SupportedFilePreferences_"><code>SupportedFilePreferences.cs</code></a> file. You can use the 
+	presets or create your own instances of the 
+	<a href="docs/KeiwandoNativeFileSOSupportedFileTypepublic_class_SupportedFileType_"><code>SupportedFileType</code></a> class.</p>
 
 <pre class="prettyprint custom-prettyprint"><code>public static readonly SupportedFileType[] supportedFileTypes = {
 
@@ -81,15 +98,22 @@ public class MyFileHandler : MonoBehaviour {
 };</code>
 </pre>
 
-<p>These files will be automatically associated with the iOS app, however, the Android plugin requires one additional step. After editing the <code>supportedFilesTypes</code> array, wait for the Editor to compile the scripts and then click on the <b>Tools > NativeFileSO > RefreshAndroidPlugin</b> menu item. You will need to manually do this once each time you change the list of associated file types.</p>
+<p>These files will be automatically associated with the iOS app, however, the Android plugin requires one additional step. After editing the <a href="docs/KeiwandoNativeFileSOSupportedFilePreferencessupportedFileTypespublic_static_readonly_SupportedFileType_supportedFileTypes"><code>supportedFileTypes</code></a> array, wait for the Editor to compile the scripts and then click on the <b>Tools > NativeFileSO > RefreshAndroidPlugin</b> menu item. You will need to manually do this once each time you change the list of associated file types.</p>
+
+<p>Also make sure to read the section on general <a href="#Limitations">requirements & limitations</a> and adjust your project and build settings as described for each platform.</p>
 
 <img src="resources/images/demo/refresh_android_plugin.png" class="wide-banner">
 
 <h3 id="Examples">Examples</h3>
 
-<p>The <code>NativeFileSO</code> class provides the main interface for you to interact with the functionality on all platforms. The <code>NativeFileSOMacWin</code> class offers some additional functionality that is only available on desktop platforms, such as the ability to select file paths (without loading the file contents immediately).</p>
+<p>The <a href="docs/KeiwandoNativeFileSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_">
+	<code>NativeFileSO</code>
+	</a> class provides the main interface for you to interact with the functionality on all platforms. 
+	The <a href="docs/KeiwandoNativeFileSONativeFileSOMacWinpublic_class_NativeFileSOMacWin__INativeFileSO_"><code>NativeFileSOMacWin</code></a> 
+	class offers some additional functionality that is only available on desktop platforms, such as the ability to select file paths (without loading the file contents immediately).</p>
 
-<p>All of the classes you need to interact with are contained in the <code>Keiwando.NativeFileSO</code> namespace, so the following examples are assumed to contain a </p>
+<p>All of the classes you need to interact with are contained in the 
+	<a href="docs/"><code>Keiwando.NativeFileSO</code></a> namespace, so the following examples are assumed to contain a </p>
 
 <pre class="prettyprint custom-prettyprint"><code>using Keiwando.NativeFileSO;</code></pre>
 
@@ -99,7 +123,9 @@ public class MyFileHandler : MonoBehaviour {
 
 <h4>Export a file</h4>
 
-<p>The following example demonstrates how to use the <code>NativeFileSO</code> class in order to copy/export a file from an existing path to a new location chosen by the user.</p>
+<p>The following example demonstrates how to use the <a href="docs/KeiwandoNativeFileSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_">
+	<code>NativeFileSO</code>
+	</a> class in order to copy/export a file from an existing path to a new location chosen by the user.</p>
 
 <pre class="prettyprint custom-prettyprint"><code>string path = "path/to/existing/fileToSave.txt";
 string newFilename = "ExportedFile.txt";
@@ -113,7 +139,9 @@ NativeFileSO.shared.SaveFile(file);</code>
 
 <h4>Open a single file</h4>
 
-<p>This snipped shows how to use the <code>NativeFileSO</code> class in order to let the user choose a text file and handle its loaded contents.</p>
+<p>This snipped shows how to use the <a href="docs/KeiwandoNativeFileSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_">
+	<code>NativeFileSO</code>
+	</a> class in order to let the user choose a text file and handle its loaded contents.</p>
 
 <pre class="prettyprint custom-prettyprint"><code>// We want the user to select a plain text file.
 SupportedFileType[] supportedFileTypes = {
@@ -169,6 +197,8 @@ Here are the main limitations and platform requirements for the asset that you s
 <h4> Android </h4>
 <ul class="bulleted-list">
 	<li>Supports <b>Android 4.4+</b></li>
+	<li>Requires the Gradle build system! Doesn't work with the internal build system.</li>
+	<li>Does not support minification! (Set PlayerSettings > Publishing Settings > Minify > None)</li>
 	<li>The Android File Browser doesn’t guarantee which file type is selected by the user (Can't filter files by extension and MIME types are unreliable too)</li>
 	<li>File extensions cannot be reliably associated with the application on Android, so only the MIME type is used for the association. This is mainly important if your app supports a custom file type. In this case, you can set its MIME type to “application/octet-stream” or more generally associate every file type with your app (using a wildcard MIME type of “*/*”) and deal with invalid file types from within the app after the files have been loaded.</li>
 	<li>When the user opens a file with an associated type with your application,
@@ -178,7 +208,10 @@ Here are the main limitations and platform requirements for the asset that you s
 <h4> iOS </h4>
 <ul class="bulleted-list">
 	<li>Supports <b>iOS 11+</b></li>
-	<li>Using “Copy to” with a UIActivityViewController only copies the first file of the selection to your app - this is an iOS limitation. Multiple files can be imported at once from within the app using the <a href="#">OpenFiles</a> function.</li>
+	<li>Using “Copy to” with a UIActivityViewController only copies the first file of the selection to your app - this is an iOS limitation. 
+		Multiple files can be imported at once from within the app using the 
+		<a href="docs/KeiwandoNativeFileSONativeFileSOOpenFilespublic_void_OpenFiles_(SupportedFileType_Actionbool_OpenedFile)_">
+			<code>OpenFiles</code></a> function.</li>
 </ul> 
 
 <h4>Mobile (iOS + Android)</h4>
