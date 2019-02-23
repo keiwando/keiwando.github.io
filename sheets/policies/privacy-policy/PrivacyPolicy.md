@@ -1,4 +1,4 @@
-# Sheets Privacy Policy
+# Privacy Policy
 ##### Last Updated: 22. February 2019
 
 This Privacy Policy aims to help you understand what personal information Sheets uses in order to provide its functionality, and how you can update and delete your information.
