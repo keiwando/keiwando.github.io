@@ -1,0 +1,99 @@
+---
+---
+
+#sheets-navbar {
+    font-family: "OpenSans";
+
+    a:hover {
+        color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+#sheets-navbar #sheets-title {
+	font-family: "OpenSansBold";
+	font-size: 1.0em;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 40px;
+}
+
+#sheets-icon {
+    width: 20vw;
+    height: 20vw;
+    max-width: 200px;
+    max-height: 200px;
+
+    margin-top: 50px;
+}
+
+#sheets-screenshot {
+    width: 70vw;
+    max-width: 700px;
+}
+
+#sheets-features {
+    
+    display: block;
+    width: 70vw;
+    max-width: 700px;
+    margin: 0 auto;
+    margin-top: 100px;
+
+    h2 {
+        font-family: "OpenSansBold";
+        text-align: left;
+    }
+
+    .feature-list {
+        // background-color: yellow;
+        font-family: "OpenSans";
+        margin-bottom: 40px;
+        font-size: 1.2em;
+        padding: 0;
+        list-style: none;
+
+        li {
+            padding-left: 1em; 
+            text-indent: -.7em;
+            text-align: left;
+        }
+
+        li::before {
+            content: "• ";
+            color: white;
+        }
+    }
+}
+
+#app-store-download-link img {
+    // margin-bottom: 100px;
+}
+
+#sheets-policy-links {
+    font-family: "OpenSans";
+    margin: 40px auto;
+    a {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    a:hover {
+        color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+
+.fill {
+    min-height: 100vh;
+    width: 100vw;
+    // background-image: url('../images/sheets_backdrop.jpg');
+    background-repeat: repeat-x;
+    background-position-y: -100px;
+}
+
+body {
+    background-color: #14191c;
+}

@@ -1,0 +1,25 @@
+---
+layoutCSS: <link href="/sheets/resources/css/sheets.css" rel="stylesheet">
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+	{% include head.html %}
+
+	<body>
+		<!--{% include mobile-header.html %}-->
+		{% include sheets-navbar.html %}
+
+		<div id="main-content">
+                
+			{{ content }}
+		</div>
+
+		{% include scripts.html %}
+		<!--{% include google-analytics.html %}-->
+
+		{% include footer.html %}
+	</body>
+
+</html>
