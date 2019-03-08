@@ -30,7 +30,7 @@ This section attempts to make sure that you fully understand the data required b
 
 Sheets uses the OAuth 2.0 protocol to authorize requests it makes to your Google Drive.
 
-During the setup, you will be asked to sign into your Google Account and allow Sheets to access and manage your Google Drive files. This is the only way that Sheets will be able to offer its Sync functionality, which includes checking for new files, downloading and uploading new files and synchronizing the file metadata. Other, more restricted access scopes would not allow Sheets to find your existing folder containing your PDF files and import them, and it could not automatically download new files that you add to your Google Drive folder, since you would have to manually give the app a permission for each file that should be synced.
+During the setup, you will be asked to sign into your Google Account and allow Sheets to access and manage your Google Drive files. This is the only way that Sheets will be able to offer its Sync functionality, which includes checking for new files, downloading and uploading new files and synchronizing the file metadata. Other, more restricted access scopes would not allow Sheets to find your existing folder containing your PDF files and import them, and it could not automatically download new files that you add to your Google Drive folder, since you would have to manually give the app individual permissions for each file that should be synced.
 
 If you consent and authorize Sheets to be able to access and manage the files in your Google Drive, then Google provides Sheets with an access-token.
 
