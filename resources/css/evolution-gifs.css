@@ -1,6 +1,6 @@
 @font-face {
   font-family: "BebasNeue";
-  src: url("fonts/BebasNeue.otf") format("opentype");
+  src: url("fonts/BebasNeue/BebasNeue.otf") format("opentype");
 }
 
 a:hover, a:visited, a:link, a:active {

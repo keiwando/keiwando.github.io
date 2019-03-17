@@ -25,6 +25,7 @@ github_username:  keiwando
 # Build settings
 markdown: kramdown
 theme: minima
+permalink: pretty
 #plugins:
 #  - jekyll-feed
 sass:

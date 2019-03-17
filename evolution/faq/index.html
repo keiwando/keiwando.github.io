@@ -1,13 +1,25 @@
 ---
-layout: evolution
+layout: evolution-faq
 addedCSS: <link href="/resources/css/faq.css" rel="stylesheet">
 addedScript: <script src="/resources/js/faq.js"></script>
 ---
 
-<h1 id="faq-title">FAQ</h1>
+<h2>Frequently Asked Questions</h2>
 
-{% for qa in site.data.evolution-faq %}
+{% for page in site.pages %}
+{% if page.faq == 'evolution' %}
 
-{% include faq_item.html question=qa.question answer=qa.answer %}
+<div>
+  <a href={{ page.url }}>
+    <h4>
+        {{ page.question }}
+    </h4>
+  </a>
+</div>
 
+{% endif %}
 {% endfor %}
+
+<!-- {% for qa in site.data.evolution-faq %}
+{% include faq_item.html question=qa.question answer=qa.answer %}
+{% endfor %} -->

@@ -1,6 +1,11 @@
 ---
 ---
 
+@font-face {
+	font-family: "BebasNeue";
+	src: url("fonts/BebasNeue/BebasNeue.otf") format("opentype");
+}
+
 iframe {
 	margin: 0px auto;
 }
@@ -27,18 +32,49 @@ iframe {
 	font-family: "BebasNeue";
 }
 
-.evolution-main-content {
+// MARK: - FAQ
 
-	#faq-title {
-		color: white;
+#main-content {
+	position: relative;
+
+	text-align: left;
+}
+
+#faq-container {
+
+	min-height: 100%;
+	position: absolute;
+	top: 0; left: 0; right: 0; bottom: 0;
+
+	// background-color: rgb(50, 50, 50);
+	// background-color: white;
+
+	// color: black;
+	font-family: "OpenSans"
+}
+
+#faq-content-container {
+
+	max-width: 650px;
+	margin: 0 auto;
+	padding-top: 20px;
+
+	h1, h2 {
+		padding-bottom: 20px;
+		font-family: "OpenSansBold"
 	}
 
-	.faq-item-question {
-		background-color: white;
+	a {
+		color: #85d6f7;
+		
+		h4 {
+			margin-top: 15px;
+		margin-bottom: 15px;
+		} 
 	}
 
-	.faq-item-answer {
-		background-color: rgb(240, 240, 240);
+	a: hover {
+		color: red;
 	}
 }
 
