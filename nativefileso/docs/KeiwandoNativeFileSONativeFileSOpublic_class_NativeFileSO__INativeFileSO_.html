@@ -1,0 +1,52 @@
+---
+layout: nativefileso
+---
+<div class="" id="dox-container"><div class="" id="dox-entities-sidebar"><ul class="" id=""><li><a href="KeiwandoNativeFileSOFileToSavepublic_class_FileToSave_">FileToSave</a></li><li><a href="KeiwandoNativeFileSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_">NativeFileSO</a></li><li><a href="KeiwandoNativeFileSONativeFileSOMacWinpublic_class_NativeFileSOMacWin__INativeFileSO_">NativeFileSOMacWin</a></li><li><a href="KeiwandoNativeFileSONativeFileSOMobilepublic_class_NativeFileSOMobile__INativeFileSO_">NativeFileSOMobile</a></li><li><a href="KeiwandoNativeFileSOOpenedFilepublic_class_OpenedFile_">OpenedFile</a></li><li><a href="KeiwandoNativeFileSOSupportedFilePreferencespublic_static_class_SupportedFilePreferences_">SupportedFilePreferences</a></li><li><a href="KeiwandoNativeFileSOSupportedFileTypepublic_class_SupportedFileType_">SupportedFileType</a></li></ul></div><div class="" id="dox-doc-container"><h4 class="dox-namespace-heading" id="">Keiwando.NativeFileSO</h4><code class="dox-entity-type" id="">class</code><h1 class="dox-entity-title" id="">NativeFileSO</h1><pre class=" prettyprint custom-prettyprint" id=""><code class="">public class NativeFileSO : INativeFileSO </code></pre><h2 class="" id="">Summary</h2><p> Provides methods for native file import and export functionality
+ which is shared between both mobile and desktop platforms.</p><h2 class="" id="">Examples</h2><p><p>The following example demonstrates how to use the <a href="KeiwandoNativeFileSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_"><code class="" id="">NativeFileSO</code></a>
+ class in order to copy/export a file from an existing path to a new location
+ chosen by the user.</p><pre class="dox-pre prettyprint custom-prettyprint"><code class="dox-code"> using Keiwando.NativeFileSO;
+ 
+ public class SaveTest {
+
+ 	public static void Main() {
+
+ 		string path = "path/to/existing/fileToSave.txt";
+ 		string newFilename = "ExportedFile.txt";
+			
+ 		FileToSave file = new FileToSave(path, newFilename, SupportedFileType.PlainText);
+ 		
+ 		// Allows the user to choose a save location and saves the
+ 		// file to that location
+ 		NativeFileSO.shared.SaveFile(file);
+ 	}
+ }</code></pre><p>The following example demonstrates how to use the <a href="KeiwandoNativeFileSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_"><code class="" id="">NativeFileSO</code></a>
+ class in order to let the user choose a text file and handle its loaded contents.</p><pre class="dox-pre prettyprint custom-prettyprint"><code class="dox-code"> using Keiwando.NativeFileSO;
+ 
+ public class OpenTest {
+ 	
+ 	public static void Main() {
+ 		
+ 		// We want the user to select a plain text file.
+ 		SupportedFileType[] supportedFileTypes = {
+ 			SupportedFileType.PlainText
+ 		};
+ 		
+ 		NativeFileSO.shared.OpenFile(supportedFileTypes, 
+ 									 delegate(bool fileWasOpened, OpenedFile file) {
+ 			if (fileWasOpened) {
+ 				// Process the loaded contents of "file" e.g
+ 				// using <a href="KeiwandoNativeFileSOOpenedFileToUTF8Stringpublic_string_ToUTF8String()_"><code class="" id="">OpenedFile.ToUTF8String()</code></a>
+ 			} else {
+ 				// The file selection was cancelled.
+ 			}
+ 		});
+ 	}
+ }</code></pre></p><h2 class="" id="">Remarks</h2><p><p>The dialogs shown by the Open and Save functions block any other UI
+ interactions until the user dismisses the dialog.</p><p>This class is currently compatible with Windows, macOS, iOS and Android.
+ Attempting to call the class methods on unsupported platforms will result
+ in a <code>NullReferenceException</code>.</p><p>Thread safety is not guaranteed!</p></p><h3 class="" id="">Properties</h3><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNativeFileSONativeFileSOsharedpublic_static_readonly_NativeFileSO_shared_">public static readonly NativeFileSO shared </a></h5><p> The shared instance through which the API should be accessed.</p></div><h3 class="" id="">Methods</h3><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNativeFileSONativeFileSOOpenFilepublic_void_OpenFile_(SupportedFileType_Actionbool_OpenedFile)_">public void OpenFile (SupportedFileType[], Action&lt;bool, OpenedFile&gt;) </a></h5><p> Presents a native dialog to the user which allows them to select a
+ single file to be opened. The selected file contents are then loaded 
+ into memory managed by an instance of the <a href="KeiwandoNativeFileSOOpenedFilepublic_class_OpenedFile_"><code class="" id="">OpenedFile</code></a> class.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNativeFileSONativeFileSOOpenFilespublic_void_OpenFiles_(SupportedFileType_Actionbool_OpenedFile)_">public void OpenFiles (SupportedFileType[], Action&lt;bool, OpenedFile[]&gt;) </a></h5><p> Presents a native dialog to the user which allows them to select multiple 
+ files to be opened at once. The selected file contents are then loaded 
+ into memory managed by instances of the <a href="KeiwandoNativeFileSOOpenedFilepublic_class_OpenedFile_"><code class="" id="">OpenedFile</code></a> class.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNativeFileSONativeFileSOSaveFilepublic_void_SaveFile_(FileToSave)_">public void SaveFile (FileToSave) </a></h5><p> Presents a native dialog to the user which allows them to select an export
+ location for the specified file and exports/copies the file to that location.</p></div></div></div>

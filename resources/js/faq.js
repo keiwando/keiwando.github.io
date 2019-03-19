@@ -32,4 +32,5 @@ function setupFaq() {
 
 		fold();
 	});
+
 }, false);

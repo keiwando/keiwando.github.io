@@ -5,18 +5,23 @@ $question-height: 50px;
 $font-size: 20px;
 $top-bottom-pad: ($question-height - $font-size) * 0.5;
 
+#faq-title {
+	text-align: left;
+	margin-left: 15px;
+}
+
 .faq-item-container {
 	display: block;
 	position: relative;
 	cursor: pointer;
 	margin: 0px auto;
 
-	width: 70vw;
+	//width: 70vw;
 	height: $question-height;
 	overflow: hidden;
 
 	font-size: $font-size;
-	text-align: center;
+	text-align: left;
 	word-break: break-word;
 
 	font-family: "OpenSans";
@@ -36,7 +41,7 @@ $top-bottom-pad: ($question-height - $font-size) * 0.5;
 	line-height: $font-size;
 	background-color: white;
 	color: rgb(25, 25, 25);
-	text-align: center;
+	//text-align: center;
 }
 
 .faq-item-answer {
@@ -50,7 +55,7 @@ $top-bottom-pad: ($question-height - $font-size) * 0.5;
 	padding-bottom: $top-bottom-pad;
 	
 	
-	background-color: rgb(240, 240, 240);
+	
 	//text-align: left;
 	color: rgb(25, 25, 25);	
 }
@@ -59,4 +64,11 @@ $top-bottom-pad: ($question-height - $font-size) * 0.5;
 
 	display: block;
 	transition: 0.2s;
+}
+
+.faq-sep {
+
+	width: 100%;
+	height: 5px;
+	background-color: rgba(30, 30, 30, 0.0);
 }

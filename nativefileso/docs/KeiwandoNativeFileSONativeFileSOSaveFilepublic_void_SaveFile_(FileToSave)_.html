@@ -1,0 +1,14 @@
+---
+layout: nativefileso
+---
+<div class="" id="dox-container"><div class="" id="dox-entities-sidebar"><ul class="" id=""><li><a href="KeiwandoNativeFileSOFileToSavepublic_class_FileToSave_">FileToSave</a></li><li><a href="KeiwandoNativeFileSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_">NativeFileSO</a></li><li><a href="KeiwandoNativeFileSONativeFileSOMacWinpublic_class_NativeFileSOMacWin__INativeFileSO_">NativeFileSOMacWin</a></li><li><a href="KeiwandoNativeFileSONativeFileSOMobilepublic_class_NativeFileSOMobile__INativeFileSO_">NativeFileSOMobile</a></li><li><a href="KeiwandoNativeFileSOOpenedFilepublic_class_OpenedFile_">OpenedFile</a></li><li><a href="KeiwandoNativeFileSOSupportedFilePreferencespublic_static_class_SupportedFilePreferences_">SupportedFilePreferences</a></li><li><a href="KeiwandoNativeFileSOSupportedFileTypepublic_class_SupportedFileType_">SupportedFileType</a></li></ul></div><div class="" id="dox-doc-container"><h4 class="dox-namespace-heading" id="">Keiwando.NativeFileSO.NativeFileSO</h4><code class="dox-entity-type" id="">instance method</code><h1 class="dox-entity-title" id="">SaveFile</h1><pre class=" prettyprint custom-prettyprint" id=""><code class="">public void SaveFile (FileToSave file) </code></pre><h2 class="" id="">Summary</h2><p> Presents a native dialog to the user which allows them to select an export
+ location for the specified file and exports/copies the file to that location.</p><h3 class="" id="">Parameters</h3><p><p><code>file</code></p>An instance of the <a href="KeiwandoNativeFileSOFileToSavepublic_class_FileToSave_"><code class="" id="">FileToSave</code></a> class
+ which holds information about the file to be exported.</p><h2 class="" id="">Examples</h2><p> The following example demonstrates how to export a file using a native interface.<pre class="dox-pre prettyprint custom-prettyprint"><code class="dox-code"> // We have a text file that we want to export
+ string path = "path/to/existing/fileToSave.txt";
+ string newFilename = "ExportedFile.txt";
+
+ FileToSave file = new FileToSave(path, newFilename, SupportedFileType.PlainText);
+
+ // Allows the user to choose a save location and saves the 
+ // file to that location
+ NativeFileSO.shared.SaveFile(file);</code></pre></p></div></div>
