@@ -1,0 +1,28 @@
+---
+layoutCSS: <link href="/evolution/resources/css/evolution.css" rel="stylesheet">
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+	{% include head.html %}
+
+	<body
+		{% if layout.inverted %}
+		class="inverted"
+		{% endif %}		
+	>
+		<!--{% include mobile-header.html %}-->
+		{% include evolution-navbar.html %}
+
+		<div id="main-content" class="project-page-main-content evolution-main-content">
+			{{ content }}
+		</div>
+
+		{% include scripts.html %}
+		<!--{% include google-analytics.html %}-->
+
+		{% include footer.html %}
+	</body>
+
+</html>
