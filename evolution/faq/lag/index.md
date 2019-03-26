@@ -17,7 +17,7 @@ That being said, you do have the option to trade simulation time for performance
 
 Now for a slightly more technical answer for anyone who‘s interested. 
 
-The simulator is written in Unity and uses Unity‘s physics system for all of its physics calculations. All of the body parts have dynamic Rigidbody components that are controller by this physics system.
+The simulator is written in Unity and uses Unity‘s physics system for all of its physics calculations. All of the body parts have dynamic Rigidbody components that are controlled by this physics system.
 
 Profiling the simulation clearly shows me that almost anytime there is lag, it happens because the physics system was unable to finish all of its computations in the last frame, which then again leaves even less time for the physics computations in the next frame etc. The load on the physics system is directly and mainly related to the number of rigidbodies in the scene. 
 

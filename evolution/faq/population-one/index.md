@@ -7,7 +7,7 @@ order: 3
 title: Why can’t I set the population size to 1?
 ---
 
-A population size of one isn‘t possible since that would prevent the creatures to generate any offspring through recombination. 
+A population size of one isn‘t possible since that would prevent the creatures from generating any offspring through recombination. 
 
 You need two parent creatures to recombine into two new offspring. A single creature could only use random mutation in order to introduce variation over time into its behaviour, which is significantly slower than variation through recombination (in addition to mutation). 
 

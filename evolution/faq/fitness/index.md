@@ -7,7 +7,7 @@ order: 2
 title: What does "fitness" mean?
 ---
 
-In the context of evolutionary algorithms „fitness“ is a measurement for how well a single solution solves the given problem. Evolutionary algorithms aim to find a solution with the optimal fitness. 
+In the context of evolutionary algorithms "fitness“ is a measurement for how well a single solution solves the given problem. Evolutionary algorithms aim to find a solution with the optimal fitness. 
 
 Applying this to our simulator here, the fitness of each creature is a number that represents how well it was able to perform the selected task during its simulation run. You might be wondering why it‘s a percentage and what 100% fitness is based on. 
 
