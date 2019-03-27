@@ -19,14 +19,15 @@ iframe {
 	}
 }
 
-// #iframe-container {
-// 	margin: 20px auto;
-// 	width: 552px;
-// }
+#iframe-container {
+	margin: 20px auto;
+	width: 552px;
+}
 
-// .project-navbar > ul > li {
-// 	vertical-align: bottom;
-// 	line-height: 20px;
+.project-navbar > ul > li {
+	vertical-align: bottom;
+	line-height: 20px;
+}
 
 .inverted {
 	background-color: white;
@@ -52,7 +53,7 @@ iframe {
 
 #evolution-navbar > ul {
 	display: inline-block;
-	float: none;
+	float: right;
 	margin-right: 0px;
 
 	li.current a {
@@ -69,6 +70,12 @@ iframe {
 
 #main-content {
 	position: relative;
+	padding: 0;
+
+	ul {
+		// margin-left: 15px;
+		padding-left: 25px;
+	}
 }
 
 .inverted {
@@ -97,9 +104,10 @@ iframe {
 	background-color: white;
 	max-width: 700px;
 	margin: 0px auto;
-	padding: 25px;
+	// padding: 25px;
 	padding-top: 15px;
 	padding-bottom: 100px;
+	text-indent: 0;
 
 	.faq-group {
 		margin-bottom: 50px;
@@ -124,9 +132,10 @@ iframe {
 	}
 
 	a {
-    color: rgb(30, 30, 30);
+		color: rgb(30, 30, 30);
 		
 		h4 {
+			font-family: "OpenSans";
 			margin-top: 15px;
       margin-bottom: 15px;
 		} 

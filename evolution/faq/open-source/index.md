@@ -11,7 +11,7 @@ This question is usually accompanied by the question of „Can I help with the d
 
 The project is not published under any open-source license, so it‘s not technically open source. 
 
-However, the entire source code is available on my [GitHub](github.com/keiwando/evolution).
+However, the entire source code is available on my [GitHub](https://www.github.com/keiwando/evolution).
 
 What you can do with this code:
 * Look through it
