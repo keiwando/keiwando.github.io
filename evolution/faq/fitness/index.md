@@ -16,3 +16,5 @@ To answer the second question first, it‘s quite arbitrary. Using the running t
 The fitness score is then simply the percentage of that distance that the creature was able to travel in the given time. 
 
 Calculating the performance of the creature as a single number in this way makes it easy to compare different individuals. The optimization problem becomes one-dimensional. 
+
+The fitness is then used to determine which creatures to select for reproduction. Creatures with a higher fitness score have a higher chance of being selected as parents for reproduction and since the same creature can also be selected multiple times, the fitness score of a creature effectively contributes to the number of offspring that will carry part of the genetic information of this parent creature into the next generation.
