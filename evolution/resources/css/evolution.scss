@@ -1,6 +1,13 @@
 ---
 ---
 
+$faq-border-color: rgb(170, 170, 170);
+
+@font-face {
+	font-family: "BebasNeue";
+	src: url("/resources/css/fonts/BebasNeue/BebasNeue.otf") format("opentype");
+}
+
 iframe {
 	margin: 0px auto;
 }
@@ -22,23 +29,153 @@ iframe {
 	line-height: 20px;
 }
 
+.inverted {
+	background-color: white;
+
+	.project-navbar {
+		border-bottom: 2px solid rgb(30, 30, 30);
+		border-bottom-color: rgb(30, 30, 30);
+	}
+}
+
+#evolution-navbar {
+	color: white;
+	max-width: 700px;
+}
+
+#evolution-navbar.inverted a {
+	color: rgb(30, 30, 30);
+}
+
+#evolution-navbar.inverted a:hover {
+	color: rgba(243,156,18,1);
+}
+
+#evolution-navbar > ul {
+	display: inline-block;
+	float: right;
+	margin-right: 0px;
+
+	li.current a {
+		color: rgba(243,156,18,1);
+	}
+}
+
 #evolution-title {
 
 	font-family: "BebasNeue";
 }
 
-.evolution-main-content {
+// MARK: - FAQ
 
-	#faq-title {
-		color: white;
+#main-content {
+	position: relative;
+	padding: 0;
+
+	ul {
+		// margin-left: 15px;
+		padding-left: 25px;
+	}
+}
+
+.inverted {
+	#main-content {
+		color: rgb(30, 30, 30);
+	}
+}
+
+#faq-container {
+
+	min-height: 100%;
+	text-align: left;
+	
+	// position: absolute;
+	// top: 0; left: 0; right: 0; bottom: 0;
+
+	// background-color: rgb(50, 50, 50);
+	// background-color: white;
+
+	// color: black;
+	font-family: "OpenSans";
+}
+
+#faq-content-container {
+
+	background-color: white;
+	max-width: 700px;
+	margin: 0px auto;
+	// padding: 25px;
+	padding-top: 15px;
+	padding-bottom: 100px;
+	text-indent: 0;
+
+	.faq-group {
+		margin-bottom: 50px;
 	}
 
-	.faq-item-question {
-		background-color: white;
+	.evolution-faq-link-container {
+		margin: 0 auto;
+		margin-top: -1px;
+		max-width: 650px;
+		border-top: 1px solid $faq-border-color; //rgb(100, 100, 100);
+		border-bottom: 1px solid $faq-border-color; //rgb(100, 100, 100);
 	}
 
-	.faq-item-answer {
-		background-color: rgb(240, 240, 240);
+	h1, h2, h3 {
+		padding-bottom: 30px;
+		max-width: 650px;
+		font-family: "OpenSansBold";
+	}
+
+	h3 {
+		padding-bottom: 10px;
+	}
+
+	a {
+		color: rgb(30, 30, 30);
+		
+		h4 {
+			font-family: "OpenSans";
+			margin-top: 15px;
+      margin-bottom: 15px;
+		} 
+	}
+
+	a:hover {
+    color: rgba(243,156,18,1);
+	}
+}
+
+#evolution-faq-answer-container {
+	max-width: 650px;
+	margin: 0 auto;
+	font-size: 1.3em;
+
+	p {
+		margin-bottom: 25px;
+	}
+
+	ul, ol {
+		margin-top: 30px;
+		margin-bottom: 30px;
+
+		li {
+			margin-top: 10px;
+			margin-bottom: 10px;
+		}
+	}
+
+	ul {
+		list-style-type: circle;
+	}
+
+	a {
+		color: rgb(60, 133, 167);
+	}
+
+	code, pre {
+		border: 0px;
+		margin-bottom: 20px;
 	}
 }
 

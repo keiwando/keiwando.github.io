@@ -1,4 +1,10 @@
-<div id="evolution-navbar" class="project-navbar">
+<div id="evolution-navbar" 
+	{% if layout.inverted %}
+	class="project-navbar inverted"
+	{% else %}
+	class="project-navbar"
+	{% endif %}
+>
 
 	<div id="evolution-title" class="project-title"><a href="/evolution">Evolution</a></div>
 
@@ -6,7 +12,12 @@
 		<li><a href="https://keiwan.itch.io/evolution">Play</a></li>
 		<li><a href="/evolution/gifs/">Gifs</a></li>
 		<li><a href="https://keiwan.itch.io/evolution/community">Community</a></li>
-		<li><a href="/evolution/faq/">FAQ</a></li>
+		<li
+			{% if page.url contains "faq" %}
+			class="current"
+			{% endif %}
+			><a href="/evolution/faq/">FAQ</a>
+		</li>
 		<li><a href="/contact">Contact</a></li>
 	</ul>
 </div>

@@ -7,7 +7,11 @@ layoutCSS: <link href="/evolution/resources/css/evolution.css" rel="stylesheet">
 
 	{% include head.html %}
 
-	<body>
+	<body
+		{% if layout.inverted %}
+		class="inverted"
+		{% endif %}		
+	>
 		<!--{% include mobile-header.html %}-->
 		{% include evolution-navbar.html %}
 

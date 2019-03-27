@@ -1,13 +1,37 @@
 ---
-layout: evolution
+layout: evolution/evolution-faq
 addedCSS: <link href="/resources/css/faq.css" rel="stylesheet">
 addedScript: <script src="/resources/js/faq.js"></script>
 ---
 
-<h1 id="faq-title">FAQ</h1>
+<h1>Frequently Asked Questions</h1>
 
-{% for qa in site.data.evolution-faq %}
+{% assign faq = site.pages | where: "faq", "evolution" | where: "published", "true"%}
+{% assign mechanics = faq | where: "category", "mechanics" | sort: "order" %}
+{% assign general = faq | where: "category", "general" | sort: "order" %}
+{% assign issues = faq | where: "category", "issues" | sort: "order" %}
 
-{% include faq_item.html question=qa.question answer=qa.answer %}
 
-{% endfor %}
+<div class="faq-group">
+  <h3>Simulation Mechanics</h3>
+
+  {% for page in mechanics %}
+  {% include faq-item.html page=page %}
+  {% endfor %}
+</div>
+
+<div class="faq-group">
+  <h3>General</h3>
+
+  {% for page in general %}
+  {% include faq-item.html page=page %}
+  {% endfor %}
+</div>
+
+<div class="faq-group">
+  <h3>Issues</h3>
+
+  {% for page in issues %}
+  {% include faq-item.html page=page %}
+  {% endfor %}
+</div>
