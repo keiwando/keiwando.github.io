@@ -1,10 +1,10 @@
 ---
-layout: default
+layout: empty
 permalink: /404.html
 ---
 
 <style type="text/css" media="screen">
-  .container {
+  /* .container {
     margin: 10px auto;
     margin-top: 200px;
     max-width: 600px;
@@ -15,12 +15,35 @@ permalink: /404.html
     font-size: 4em;
     line-height: 1;
     letter-spacing: -1px;
+  } */
+  canvas {
+    position: fixed;
+    float: left;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    margin: 0 auto;
+    padding: 0;
   }
+  /* #main-content {
+    position: relative;
+    background-color: red;
+    height: 100vh;
+  }
+  body {
+    min-height: 100vh;
+    background-color: blue;
+  } */
 </style>
 
-<div class="container">
+<canvas></canvas>
+<script src="./waves-404.js" type="module"></script>
+
+
+<!-- <div class="container">
   <h1>404</h1>
 
   <p><strong>Page not found :(</strong></p>
   <p>The requested page could not be found.</p>
-</div>
+</div> -->
