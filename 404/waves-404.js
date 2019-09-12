@@ -11,7 +11,7 @@ const Colors = {
   darkBlue: [0.0275, 0.2235294118, 0.2509803922, 1]
 }
 
-const WATER_RESOLUTION = 3
+const WATER_RESOLUTION = 40
 
 const identityMat = createScaleMat(1, 1, 1)
 
@@ -247,12 +247,12 @@ class Wave404Renderer {
     //   0, 0, 0, 1
     // ])
     // this.projMat = createProjection(0.1, 10, 0.5 * canvas.width, 0.5 * canvas.height)
-    this.projMat = createProjection(0.1, 10, 0.4, 0.4)
+    this.projMat = createProjection(0.1, 10, 0.1, 0.1)
     // this.projMat = identityMat
     console.log(this.projMat)
 
     this.viewMat = createLookAt(
-      new Vector3(0, 1, -1),
+      new Vector3(0, 0.2, -1),
       new Vector3(0, 0, 0),
       new Vector3(0, 1, 1)
     )
@@ -419,6 +419,7 @@ function renderLoop (now = 0) {
   if (!time) 
     time = now
   var elapsed = now - time
+  time = now
 
   renderer.render(elapsed)
   requestAnimationFrame(renderLoop)

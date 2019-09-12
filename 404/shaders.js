@@ -65,6 +65,7 @@ const waterVertex = `
   attribute vec4 a_position;
 
   varying vec4 pos;
+  varying float offset;
 
   float rand(vec2 co){
 	
@@ -72,13 +73,11 @@ const waterVertex = `
   }
 
   void main() {
-    gl_Position = a_position.xzyw;
-    pos = u_proj * (u_view * (u_model * a_position));
-    // pos = (u_view * (u_model * a_position));
-    // pos.z = abs(pos.z);
-    gl_Position = pos;
-    // gl_Position.z = abs(gl_Position.z);
-    // gl_Position = mix(a_position.xzyw, pos, u_time * 0.000001);
+    
+    offset = sin((u_time + rand(a_position.zx) * 10000.0) * 0.001) * 0.005 * rand(a_position.xz);
+    pos = a_position + vec4(0, offset, 0, 0);
+
+    gl_Position = u_proj * (u_view * (u_model * pos));
   }
 `
 
@@ -89,26 +88,11 @@ const waterFragment = `
   const vec4 DARK_BLUE = vec4(0.0275, 0.2235294118, 0.2509803922, 1);
 
   varying vec4 pos;
+  varying float offset;
     
   void main() {
 
-    gl_FragColor = DARK_BLUE;
-    // gl_FragColor = vec4(pos.xyz, 1.0) + vec4(0.2, 0.2, 0.2, 0);
-
-    // x = red
-    // gl_FragColor = vec4(pos.x, 0.0, 0.0, 1.0);
-
-    // y = green
-    // gl_FragColor = vec4(0.0, pos.y, 0.0, 1.0);
-
-    // z = blue
-    // gl_FragColor = vec4(0.0, 0.0, pos.z, 1.0);
-    // gl_FragColor = vec4(0.0, 0.0, abs(pos.z), 1.0);
-
-    // w = red
-    // gl_FragColor = vec4(pos.w, 0.0, 0.0, 1.0);
-
-    // gl_FragColor = DARK_BLUE;
+    gl_FragColor = DARK_BLUE + 20.0 * vec4(offset, offset, offset, 0);
   }
 
 `
