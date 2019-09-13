@@ -2,21 +2,22 @@ import {
   waterVertex, waterFragment, 
   unlitColorVertex, unlitColorFragment, 
   unlitTextureVertex, unlitTextureFragment
-} from './shaders.js'
+} from './waves-shaders.js'
 
 const Colors = {
   lightPink: [0.9803921569, 0.8705882353, 0.8705882353, 1],
   darkPink: [1, 0.7411764706, 0.7490196078, 1],
+  darkerPink: [0.969, 0.58, 0.635, 1],
   lightBlue: [0.3058823529, 0.8588235294, 0.9294117647, 1],
   darkBlue: [0.0275, 0.2235294118, 0.2509803922, 1]
 }
 
-const WATER_RESOLUTION = 40
+const WATER_RESOLUTION = 100
 
 const identityMat = createScaleMat(1, 1, 1)
 
-const skyScaleMat = createScaleMat(2, 1.75, 2)
-const skyTranslationMat = createTranslationMat(0, 0.25, 0)
+const skyScaleMat = createScaleMat(2, 1, 2)
+const skyTranslationMat = createTranslationMat(0, 1, 0)
 
 /**
  * @returns {Float32Array}
@@ -69,12 +70,6 @@ function createLookAt(position, target, up) {
  */
 function createProjection(n, f, r, t) {
 
-  // return new Float32Array([
-  //   n / r, 0, 0, 0,
-  //   0, n / t, 0, 0,
-  //   0, 0, -(f + n)/(f - n), -2 * f * n / (f - n),
-  //   0, 0, -1, 0
-  // ])
   return new Float32Array([
     n / r, 0, 0, 0,
     0, n / t, 0, 0,
@@ -232,38 +227,20 @@ class Wave404Renderer {
     this.waterGeometry = this._createWaterGeometry()
     this.waterGeometry.upload(this.gl)
 
-    // console.log(this._skyGeometry._bufferData.length)
-
     canvas.width = canvas.clientWidth
     canvas.height = canvas.clientHeight
 
     /** @member {number} */
     this.time = 0
 
-    // this.projMat = new Float32Array([
-    //   2 / canvas.width, 0, 0, 0,
-    //   0, 2 / canvas.height, 0, 0,
-    //   0, 0, 1, 0,
-    //   0, 0, 0, 1
-    // ])
-    // this.projMat = createProjection(0.1, 10, 0.5 * canvas.width, 0.5 * canvas.height)
-    this.projMat = createProjection(0.1, 10, 0.1, 0.1)
-    // this.projMat = identityMat
-    console.log(this.projMat)
+    const canvasAspect = canvas.width / canvas.height
+    this.projMat = createProjection(0.1, 10, 0.1, 0.1 / canvasAspect)
 
     this.viewMat = createLookAt(
-      new Vector3(0, 0.2, -1),
+      new Vector3(0, 0.2, -2),
       new Vector3(0, 0, 0),
       new Vector3(0, 1, 1)
     )
-    // this.viewMat = identityMat
-    // this.viewMat = new Float32Array([
-    //   1, 0, 0, 0,
-    //   0, 0, 1, 0,
-    //   0, 1, 0, 0,
-    //   0, 0, 0, 1
-    // ])
-    console.log(this.viewMat)
   }
 
   render(deltaTime) {
@@ -317,21 +294,18 @@ class Wave404Renderer {
 
     gl.uniformMatrix4fv(gl.getUniformLocation(program, "u_proj"), false, this.projMat)
     gl.uniformMatrix4fv(gl.getUniformLocation(program, "u_view"), false, this.viewMat)
-    gl.uniformMatrix4fv(gl.getUniformLocation(program, "u_model"), false, createScaleMat(2, 2, 2))
-    // gl.uniformMatrix4fv(gl.getUniformLocation(program, "u_model"), false, identityMat)
+    gl.uniformMatrix4fv(gl.getUniformLocation(program, "u_model"), false, createScaleMat(10, 4, 4))
     
     gl.uniform1f(gl.getUniformLocation(program, "u_time"), this.time)
 
     gl.drawElements(gl.TRIANGLES, this.waterGeometry._indices.length, gl.UNSIGNED_SHORT, 0)
-
-    // Render overlay 404 message
 
     this.time += deltaTime
   }
 
   /** @returns {Geometry} */
   _createSkyGeometry() {
-    return this._createVerticalGradientQuad(Colors.darkPink, Colors.lightPink)
+    return this._createVerticalGradientQuad(Colors.darkerPink, Colors.lightPink)
   }
 
   /** @returns {Geometry} */
@@ -425,3 +399,8 @@ function renderLoop (now = 0) {
   requestAnimationFrame(renderLoop)
 }
 renderLoop()
+
+// Safari doesn't immediately render the canvas without these lines.
+const parent = canvas.parentNode
+parent.removeChild(canvas)
+parent.appendChild(canvas)

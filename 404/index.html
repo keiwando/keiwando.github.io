@@ -4,18 +4,7 @@ permalink: /404.html
 ---
 
 <style type="text/css" media="screen">
-  /* .container {
-    margin: 10px auto;
-    margin-top: 200px;
-    max-width: 600px;
-    text-align: center;
-  }
-  h1 {
-    margin: 30px 0;
-    font-size: 4em;
-    line-height: 1;
-    letter-spacing: -1px;
-  } */
+
   canvas {
     position: fixed;
     float: left;
@@ -26,24 +15,47 @@ permalink: /404.html
     margin: 0 auto;
     padding: 0;
   }
-  /* #main-content {
-    position: relative;
-    background-color: red;
-    height: 100vh;
+
+  #link-container {
+    z-index: 1000;
+    position: absolute;
+    bottom: 50px;
+    text-align: center;
+    width: 100vw;
+    height: 50px;
+    margin: 0 auto;
+    padding: 0;
   }
-  body {
-    min-height: 100vh;
-    background-color: blue;
-  } */
+
+  a#home-link {
+    color:rgba(255, 255, 255, 0.1);
+    display: inline-block;
+    margin: 0 auto;
+    font-size: 50px;
+    font-family: 'OpenSansBold';
+    transition: 0.5s;
+  }
+
+  a#home-link:hover {
+    cursor: pointer;
+    color:rgba(255, 255, 255, 0.5);
+    transition: 0.5s;
+  }
+
+  #label-404 {
+    position: relative;
+    top: 40px;
+    z-index: 10000;
+    font-size: 40vh;
+    color: rgba(255, 255, 255, 0.1);
+    margin: 0 auto;
+  }
 </style>
 
+<h1 id="label-404">404</h1>
 <canvas></canvas>
-<script src="./waves-404.js" type="module"></script>
+<div id=link-container>
+  <a id="home-link" href="/">Home</a>
+</div>
 
-
-<!-- <div class="container">
-  <h1>404</h1>
-
-  <p><strong>Page not found :(</strong></p>
-  <p>The requested page could not be found.</p>
-</div> -->
+<script src="/resources/js/waves-404.js" type="module"></script>
