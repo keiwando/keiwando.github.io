@@ -67,6 +67,7 @@ const waterVertex = `
   varying vec4 v_pos;
   varying vec4 pos;
   varying float offset;
+  varying float v_distance;
 
   float rand(vec2 co){
 	
@@ -81,6 +82,7 @@ const waterVertex = `
     
     gl_Position = u_proj * (u_view * (u_model * pos));
     v_pos = a_position;
+    v_distance = 1.0 - distanceWeight;
   }
 `
 
@@ -89,10 +91,18 @@ const waterFragment = `
 
   const vec4 LIGHT_BLUE = vec4(0.3058823529, 0.8588235294, 0.9294117647, 1);
   const vec4 DARK_BLUE = vec4(0.0275, 0.2235294118, 0.2509803922, 1);
+  const vec4 FOG_COLOR = vec4(0.9803921569, 0.8705882353, 0.8705882353, 1);
+
+  const float FOG_DENSITY = 0.8;
 
   varying vec4 v_pos;
   varying vec4 pos;
   varying float offset;
+  varying float v_distance;
+
+  float exponentialFogWeight(float distance) {
+    return 1.0 - (1.0 / (exp(pow(distance, 2.0) * FOG_DENSITY)));
+  }
     
   void main() {
 
@@ -100,9 +110,12 @@ const waterFragment = `
     float centerDistance = distance(v_pos.xz, vec2(0.0, 0.1));
     float centerWeight = 0.3 * (1.0 - smoothstep(0.0, centerRadius, centerDistance));
 
+    float fogWeight = exponentialFogWeight(v_distance);
+
     vec4 spikeColorOffset = vec4(1.0) * pow(offset * 100.0, 3.0);
     float negOffset = abs(min(0.0, offset));
-    gl_FragColor = mix(DARK_BLUE, LIGHT_BLUE, (20.0 * offset) + 0.4) + spikeColorOffset + 1.2 * vec4(centerWeight) - vec4(vec3(200.0 * pow(negOffset, 1.1) * centerWeight), 0.0);
+    vec4 colorWithoutFog = mix(DARK_BLUE, LIGHT_BLUE, (20.0 * offset) + 0.4) + spikeColorOffset + 1.2 * vec4(centerWeight) - vec4(vec3(200.0 * pow(negOffset, 1.1) * centerWeight), 0.0);
+    gl_FragColor = mix(colorWithoutFog, FOG_COLOR, fogWeight);
 
   }
 
