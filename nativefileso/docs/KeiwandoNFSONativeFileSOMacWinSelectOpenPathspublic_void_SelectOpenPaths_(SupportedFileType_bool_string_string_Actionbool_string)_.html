@@ -1,0 +1,12 @@
+---
+layout: nativefileso
+---
+<div class="" id="dox-container"><div class="" id="dox-entities-sidebar"><ul class="" id=""><li><a href="KeiwandoNFSOFileToSavepublic_class_FileToSave_">FileToSave</a></li><li><a href="KeiwandoNFSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_">NativeFileSO</a></li><li><a href="KeiwandoNFSONativeFileSOMacWinpublic_class_NativeFileSOMacWin__INativeFileSO_">NativeFileSOMacWin</a></li><li><a href="KeiwandoNFSONativeFileSOMobilepublic_class_NativeFileSOMobile__INativeFileSO_">NativeFileSOMobile</a></li><li><a href="KeiwandoNFSOOpenedFilepublic_class_OpenedFile_">OpenedFile</a></li><li><a href="KeiwandoNFSOSupportedFilePreferencespublic_static_class_SupportedFilePreferences_">SupportedFilePreferences</a></li><li><a href="KeiwandoNFSOSupportedFileTypepublic_class_SupportedFileType_">SupportedFileType</a></li></ul></div><div class="" id="dox-doc-container"><h4 class="dox-namespace-heading" id="">Keiwando.NFSO.NativeFileSOMacWin</h4><code class="dox-entity-type" id="">instance method</code><h1 class="dox-entity-title" id="">SelectOpenPaths</h1><pre class=" prettyprint custom-prettyprint" id=""><code class="">public void SelectOpenPaths (SupportedFileType[] fileTypes, bool canSelectMultiple, string title, string directory, Action&lt;bool, string[]&gt; onCompletion) </code></pre><h2 class="" id="">Summary</h2><p> Presents a native dialog to the user which allows them to select multiple
+ file paths for opening files.</p><h3 class="" id="">Parameters</h3><p><p><code>fileTypes</code></p>The file types used to filter the available files shown 
+ to the user.</p><p><p><code>canSelectMultiple</code></p>Determines whether multiple files can be selected 
+ and loaded at once.</p><p><p><code>title</code></p>The title of the dialog. Note: The title is not
+ shown on macOS 10.11 and above.</p><p><p><code>directory</code></p>The default directory in which file navigation
+ should start. If this value is empty, the panel will remember the 
+ last visited directory.</p><p><p><code>onCompletion</code></p>A callback for when the presented dialog has been dismissed. 
+ The first parameter of the callback specifies whether 
+ a path was selected or the selection was cancelled.</p><h2 class="" id="">Remarks</h2><p> On macOS, this will present a non-floating panel.</p></div></div>

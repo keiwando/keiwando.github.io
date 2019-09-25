@@ -1,0 +1,64 @@
+---
+layout: nativefileso
+---
+<div class="" id="dox-container"><div class="" id="dox-entities-sidebar"><ul class="" id=""><li><a href="KeiwandoNFSOFileToSavepublic_class_FileToSave_">FileToSave</a></li><li><a href="KeiwandoNFSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_">NativeFileSO</a></li><li><a href="KeiwandoNFSONativeFileSOMacWinpublic_class_NativeFileSOMacWin__INativeFileSO_">NativeFileSOMacWin</a></li><li><a href="KeiwandoNFSONativeFileSOMobilepublic_class_NativeFileSOMobile__INativeFileSO_">NativeFileSOMobile</a></li><li><a href="KeiwandoNFSOOpenedFilepublic_class_OpenedFile_">OpenedFile</a></li><li><a href="KeiwandoNFSOSupportedFilePreferencespublic_static_class_SupportedFilePreferences_">SupportedFilePreferences</a></li><li><a href="KeiwandoNFSOSupportedFileTypepublic_class_SupportedFileType_">SupportedFileType</a></li></ul></div><div class="" id="dox-doc-container"><h4 class="dox-namespace-heading" id="">Keiwando.NFSO</h4><code class="dox-entity-type" id="">class</code><h1 class="dox-entity-title" id="">NativeFileSOMacWin</h1><pre class=" prettyprint custom-prettyprint" id=""><code class="">public class NativeFileSOMacWin : INativeFileSO </code></pre><h2 class="" id="">Summary</h2><p> Provides methods for native file open and save functionality which is
+ shared between Windows and macOS.</p><h2 class="" id="">Examples</h2><p> The following example demonstrates how to use the <a href="KeiwandoNFSONativeFileSOMacWinpublic_class_NativeFileSOMacWin__INativeFileSO_"><code class="" id="">NativeFileSOMacWin</code></a>
+ class in order to allow the user to select multiple paths of files to be opened.<pre class="dox-pre prettyprint custom-prettyprint"><code class="dox-code"> using Keiwando.NFSO;
+ 
+ public class OpenPathsTest {
+
+ 	public static void Main() {
+
+ 		// We want the user to select paths to plain text files.
+ 		SupportedFileType[] supportedFileTypes = {
+ 			SupportedFileType.PlainText
+ 		};
+ 
+ 		bool multiSelect = true; // Can select multiple paths at once
+ 		string title = "Custom Title"; // The title of the panel
+ 		string directory = ""; // Remember and reset to the previously selected directory
+ 		NativeFileSOMacWin.shared.SelectOpenPaths(supportedFileTypes, 
+ 		  mutltiSelect, title, directory,
+ 		  delegate(bool pathsWereSelected, string[] paths) {
+ 			if (pathsWereSelected) {
+ 				// Process the information within the paths array.
+ 			} else {
+ 				// The file selection was cancelled.
+ 			}
+ 		});
+		}
+ }</code></pre>
+ 
+ See also <a href="KeiwandoNFSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_"><code class="" id="">NativeFileSO</code></a> for examples of how to use the more
+ general API that also applies to mobile platforms.</p><h2 class="" id="">Remarks</h2><p><p>Compared to the <a href="KeiwandoNFSONativeFileSOpublic_class_NativeFileSO__INativeFileSO_"><code class="" id="">NativeFileSO</code></a> class, the <a href="KeiwandoNFSONativeFileSOMacWinpublic_class_NativeFileSOMacWin__INativeFileSO_"><code class="" id="">NativeFileSOMacWin</code></a>
+ class provides additional methods which cannot be implemented in the same 
+ way on mobile platforms due to the different available native APIs.</p><p>For example, on iOS and Android, the path to a selected file to be opened 
+ is only temporarily valid due to native security features and access
+ restrictions. Therefore, the entire file has to be copied into memory before
+ its data can be handed over to the caller of the method.</p><p>On desktop platforms, however, it is possible to provide methods that
+ simply return the chosen file path for a save or open operation. This 
+ then allows for more custom processing of the selected files. For example,
+ the file contents can be loaded and processed in smaller chunks which is more 
+ memory efficient and a preferred solution compared to loading the entire
+ file contents into memory, which should only be done if necessary.</p><p>This class is currently compatible with Windows and macOS. Attempting
+ Attempting to call the class methods on unsupported platforms will result
+ in a <code>NullReferenceException</code>.</p><p>Thread safety is not guaranteed!</p><p>Note for macOS: The Open and Save API methods that take a completion 
+ callback display the NSOpenPanel modally as a sheet, which makes it 
+ anchored to the top of the window and non-draggable. The ..Sync variants
+ of those calls, however, use a floating panel which is detached from the
+ main application window and can be dragged around by the user.</p><p>If the visual style of the panel is of importance to you, simply
+ call the respective method.</p></p><h3 class="" id="">Properties</h3><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinsharedpublic_static_NativeFileSOMacWin_shared_">public static NativeFileSOMacWin shared </a></h5><p>  The shared instance through which the API should be accessed.</p></div><h3 class="" id="">Methods</h3><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinFileFromPathpublic_static_OpenedFile_FileFromPath_(string)_">public static OpenedFile FileFromPath (string) </a></h5><p> Loads the contents of a file at the specified path into an instance
+ of the <a href="KeiwandoNFSOOpenedFilepublic_class_OpenedFile_"><code class="" id="">OpenedFile</code></a> class.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinFilesFromPathspublic_static_OpenedFile_FilesFromPaths_(string)_">public static OpenedFile[] FilesFromPaths (string[]) </a></h5><p> Loads the contents of multiple files at the specified paths into instances
+ of the <a href="KeiwandoNFSOOpenedFilepublic_class_OpenedFile_"><code class="" id="">OpenedFile</code></a> class.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinSaveFileToPathpublic_static_void_SaveFileToPath_(FileToSave_string)_">public static void SaveFileToPath (FileToSave, string) </a></h5><p> Copies the specified file to the given path.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinOpenFilepublic_void_OpenFile_(SupportedFileType_Actionbool_OpenedFile)_">public void OpenFile (SupportedFileType[], Action&lt;bool, OpenedFile&gt;) </a></h5><p> Presents a native dialog to the user which allows them to select a
+ single file to be opened. The selected file contents are then loaded 
+ into memory managed by an instance of the <a href="KeiwandoNFSOOpenedFilepublic_class_OpenedFile_"><code class="" id="">OpenedFile</code></a> class.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinOpenFilespublic_void_OpenFiles_(SupportedFileType_Actionbool_OpenedFile)_">public void OpenFiles (SupportedFileType[], Action&lt;bool, OpenedFile[]&gt;) </a></h5><p> Presents a native dialog to the user which allows them to select multiple 
+ files to be opened at once. The selected file contents are then loaded 
+ into memory managed by instances of the <a href="KeiwandoNFSOOpenedFilepublic_class_OpenedFile_"><code class="" id="">OpenedFile</code></a> class.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinSaveFilepublic_void_SaveFile_(FileToSave)_">public void SaveFile (FileToSave) </a></h5><p> Presents a native dialog to the user which allows them to select a save
+ location for the specified file and copies the file to that location.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinOpenFilespublic_void_OpenFiles_(SupportedFileType_bool_string_string_Actionbool_OpenedFile)_">public void OpenFiles (SupportedFileType[], bool, string, string, Action&lt;bool, OpenedFile[]&gt;) </a></h5><p> Presents a native dialog to the user which allows them to select multiple
+ files to be opened and loads the selected files into instances of the <a href="KeiwandoNFSOOpenedFilepublic_class_OpenedFile_"><code class="" id="">OpenedFile</code></a> class.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinOpenFilesSyncpublic_OpenedFile_OpenFilesSync_(SupportedFileType_bool_string_string)_">public OpenedFile[] OpenFilesSync (SupportedFileType[], bool, string, string) </a></h5><p> Presents a native dialog to the user which allows them to select multiple
+ files to be opened and loads the selected files into instances of the <a href="KeiwandoNFSOOpenedFilepublic_class_OpenedFile_"><code class="" id="">OpenedFile</code></a> class.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinSelectOpenPathspublic_void_SelectOpenPaths_(SupportedFileType_bool_string_string_Actionbool_string)_">public void SelectOpenPaths (SupportedFileType[], bool, string, string, Action&lt;bool, string[]&gt;) </a></h5><p> Presents a native dialog to the user which allows them to select multiple
+ file paths for opening files.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinSelectOpenPathsSyncpublic_string_SelectOpenPathsSync_(SupportedFileType_bool_string_string)_">public string[] SelectOpenPathsSync (SupportedFileType[], bool, string, string) </a></h5><p> Presents a native dialog to the user which allows them to select multiple
+ file paths for opening files.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinSaveFilepublic_void_SaveFile_(FileToSave_string_string)_">public void SaveFile (FileToSave, string, string) </a></h5><p> Presents a native dialog to the user which allows them to select a save
+ location for the specified file and copies the file to that location.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinSelectSavePathpublic_void_SelectSavePath_(FileToSave_string_string_Actionbool_string)_">public void SelectSavePath (FileToSave, string, string, Action&lt;bool, string&gt;) </a></h5><p> Presents a native dialog to the user which allows them to select a save
+ location for the specified file.</p></div><div class="dox-child-entity-container" id=""><h5 class="" id=""><a href="KeiwandoNFSONativeFileSOMacWinSelectSavePathSyncpublic_string_SelectSavePathSync_(FileToSave_string_string)_">public string SelectSavePathSync (FileToSave, string, string) </a></h5><p> Presents a native dialog to the user which allows them to select a save
+ location for the specified file.</p></div></div></div>

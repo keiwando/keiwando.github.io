@@ -14,9 +14,7 @@ layout: nativefileso
 	<li>Select save and open paths (Desktop only!)</li>
 </ul>
 
-<p> With all of the functionality that NativeFileSO can offer, there are still some limitations due to platform specific constraints, so please make sure to carefully read the section on <a href="#Limitations">requirements & limitations</a> before deciding on a purchase.</p>
-
-<p>If you happen to come across an issue with the asset, please <a href="https://www.github.com/keiwando/nativefileso-issues/issues">file a bug</a> and I will try my best to solve the problem as quickly as I can.</p>
+<p> With all of the functionality that NativeFileSO can offer, there are still some limitations due to platform specific constraints, so please make sure to carefully read the section on <a href="#Limitations">requirements & limitations</a>.</p>
 
 
 <h3 id="Setup">Setup</h3>
@@ -66,7 +64,7 @@ layout: nativefileso
 		<a href="docs/KeiwandoNativeFileSONativeFileSOMobilepublic_class_NativeFileSOMobile__INativeFileSO_">
 			<code>NativeFileSOMobile</code></a> class.</p>
 
-<pre class="prettyprint custom-prettyprint"><code>using Keiwando.NativeFileSO;
+<pre class="prettyprint custom-prettyprint"><code>using Keiwando.NFSO;
 
 public class MyFileHandler : MonoBehaviour {
 
@@ -78,7 +76,7 @@ public class MyFileHandler : MonoBehaviour {
 }</code></pre>
 
 <p>For this behaviour to work reliably, we need to make sure that the 
-	<a href="docs/KeiwandoNativeFileSONativeFileSOMobileFilesWereOpenedpublic_event_ActionOpenedFile_FilesWereOpened"><code>FilesWereOpened</code></a> event is never raised before we had a chance to subscribe to it. In the Unity editor, go to <b>Edit > Project Settings > Script Execution Order</b>, add <b>Keiwando.NativeFileSO.NativeFileSOUnityEvent</b> to the list and assign it the value 32000.</p>
+	<a href="docs/KeiwandoNativeFileSONativeFileSOMobileFilesWereOpenedpublic_event_ActionOpenedFile_FilesWereOpened"><code>FilesWereOpened</code></a> event is never raised before we had a chance to subscribe to it. In the Unity editor, go to <b>Edit > Project Settings > Script Execution Order</b>, add <b>Keiwando.NFSO.NativeFileSOUnityEvent</b> to the list and assign it the value 32000.</p>
 
 <img src="resources/images/demo/script_order.png" class="wide-banner">
 
@@ -113,9 +111,9 @@ public class MyFileHandler : MonoBehaviour {
 	class offers some additional functionality that is only available on desktop platforms, such as the ability to select file paths (without loading the file contents immediately).</p>
 
 <p>All of the classes you need to interact with are contained in the 
-	<a href="docs/"><code>Keiwando.NativeFileSO</code></a> namespace, so the following examples are assumed to contain a </p>
+	<a href="docs/"><code>Keiwando.NFSO</code></a> namespace, so the following examples are assumed to contain a </p>
 
-<pre class="prettyprint custom-prettyprint"><code>using Keiwando.NativeFileSO;</code></pre>
+<pre class="prettyprint custom-prettyprint"><code>using Keiwando.NFSO;</code></pre>
 
 <p>statement at the top of the file.</p>
 
@@ -175,7 +173,7 @@ NativeFileSO.shared.OpenFile(supportedFileTypes,
 
 <h3 id="Limitations">Requirements & Limitations</h3>
 
-Here are the main limitations and platform requirements for the asset that you should read and take into consideration before deciding on the purchase!
+Here are the main limitations and platform requirements for the asset that you should read and take into consideration before deciding on whether you would like to integrate NativeFileSO into your own project.
 
 <div class="spacing-small"></div>
 
