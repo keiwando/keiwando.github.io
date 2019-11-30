@@ -89,30 +89,14 @@ function pack(canvas) {
 
   let squares = []
   let width = Math.max(512, canvas.width / RENDERING_SCALE)
-  // debugger
   // Sizes are already sorted
-
-  // sizeLoop:
-  // for (let size of sizes) {
-
-  //   for (let y = 0; y < MAX_WIDTH; y++) {
-  //     for (let x = 0; x < width; x++) {
-  //       // if (!isPointInASquare(x, y, squares)) {
-  //       let square = { x, y, size }
-  //       if (!wouldSquareIntersect(square, squares)) {
-  //         squares.push(square)
-  //         continue sizeLoop
-  //       }
-  //     }
-  //   }
-  // }
 
   sizeLoop:
   for (let size of sizes) {
 
     for (let y = 0; y + size < MAX_WIDTH; y++) {
       for (let x = 0; x + size < width; x++) {
-        // if (!isPointInASquare(x, y, squares)) {
+
         let square = { x, y, size }
         let i = -1
         while ((i = firstIndexOfIntersection(square, squares)) != -1) {
@@ -170,5 +154,23 @@ slider.oninput = () => {
 slider.value = MAX_WIDTH
 
 slider.oninput()
+pack(canvas)
+refreshLabel()
+
+// Find optimal width
+let optimalPixels = MAX_WIDTH * MAX_WIDTH
+let optimalWidth = 0
+for (let width = MIN_WIDTH; width <= MAX_WIDTH; width++) {
+  slider.value = width
+  const w = Math.floor(canvas.width / RENDERING_SCALE)
+  const h = Math.floor(canvas.height / RENDERING_SCALE)
+  const px = w * h
+  if (px < optimalPixels) {
+    optimalPixels = px
+    optimalWidth = width
+  }
+}
+
+slider.value = optimalWidth
 pack(canvas)
 refreshLabel()

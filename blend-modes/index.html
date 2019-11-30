@@ -1,0 +1,153 @@
+---
+layout: empty
+---
+
+<style type="text/css" media="screen">
+
+  body {
+      font-family: "OpenSansBold";
+      max-width: 1500px;
+      margin: 0 auto;
+  }
+
+  canvas {
+      margin: 0 auto;
+      width: 800;
+      height: 600;
+      display: block;
+  }
+
+  ul {
+    width: 300px;
+    display: absolute;
+    float: left;
+    left: 100px;
+    text-align: left;
+  }
+
+  #inputs {
+    width: 300px;
+    margin-left: 50px;
+    display: absolute;
+    float: left;
+  }
+
+  #output {
+    width: 1000px;
+    display: absolute;
+    float: right;
+    margin-right: 50px;
+  }
+
+  textarea {
+    
+    resize: none;
+    color: black;
+  }
+
+  input[type="text"] {
+    margin-top: 20px;
+    min-width: 1000px;
+    color: black;
+    font-family: monospace;
+  }
+
+  li:hover {
+    cursor: pointer;
+  }
+
+  h4 {
+      color: white;
+      margin: 40px;
+  }
+
+</style>
+
+<h3>Blend Modes</h3>
+
+
+<div>
+  <div id="inputs">
+    <ul>
+      <li blendMode="0">Normal</li>
+      <li blendMode="1">Erase</li>
+    </ul>
+    
+    <ul>
+      <li blendMode="2">Darken</li>
+      <li blendMode="3">Multiply</li>
+      <li blendMode="4">Color Burn</li>
+      <li blendMode="5">Linear Burn</li>
+      <li blendMode="6">Darken Color</li>
+    </ul>
+    
+    <ul>
+      <li blendMode="7">Lighten</li>
+      <li blendMode="8">Screen</li>
+      <li blendMode="9">Color Dodge</li>
+      <li blendMode="10">Add</li>
+      <li blendMode="11">Lighten Color</li>
+    </ul>
+    
+    <ul>
+      <li blendMode="12">Overlay</li>
+      <li blendMode="13">Soft Light</li>
+      <li blendMode="14">Hard Light</li>
+      <li blendMode="15">Vivid Light</li>
+      <li blendMode="16">Linear Light</li>
+      <li blendMode="17">Pin Light</li>
+      <li blendMode="18">Hard Mix</li>
+    </ul>
+    
+    <ul>
+      <li blendMode="19">Difference</li>
+      <li blendMode="20">Exclusion</li>
+      <li blendMode="21">Subtract</li>
+      <li blendMode="22">Divide</li>
+    </ul>
+    
+    <ul>
+      <li blendMode="23">Hue</li>
+      <li blendMode="24">Saturation</li>
+      <li blendMode="25">Color</li>
+      <li blendMode="26">Luminosity</li>
+    </ul>
+
+    <!-- COLOR SELECTION -->
+
+    <br/>
+    <br/>
+
+    <h5>Source</h5>
+
+    <input type="range" min="0", max="1" step="0.001" class="srcColorInput" colorIndex="0"/>
+    <input type="range" min="0", max="1" step="0.001" class="srcColorInput" colorIndex="1"/>
+    <input type="range" min="0", max="1" step="0.001" class="srcColorInput" colorIndex="2"/>
+    <input type="range" min="0", max="1" step="0.001" class="srcColorInput" colorIndex="3"/>
+
+    <canvas id="sourceCanvas" width="100" height="100"></canvas>
+
+    <br/>
+    <br/>
+
+    <h5>Destination</h5>
+
+    <input type="range" min="0", max="1" step="0.001" class="dstColorInput" colorIndex="0"/>
+    <input type="range" min="0", max="1" step="0.001" class="dstColorInput" colorIndex="1"/>
+    <input type="range" min="0", max="1" step="0.001" class="dstColorInput" colorIndex="2"/>
+    <input type="range" min="0", max="1" step="0.001" class="dstColorInput" colorIndex="3"/>
+
+    <canvas id="dstCanvas" width="100" height="100"></canvas>
+
+  </div>
+
+  <div id="output">
+      <h4 id="label"></h4>
+      <canvas id="canvas"></canvas>
+      <input id="blendCodeInput" type="text" />
+  </div>
+</div>
+
+
+
+<script src="./blendModes.js"></script>
