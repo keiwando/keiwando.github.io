@@ -1,5 +1,5 @@
 ---
-layout: empty
+layout: empty-with-footer
 ---
 
 <style type="text/css" media="screen">
@@ -16,10 +16,10 @@ layout: empty
   body {
     font-family: "OpenSansBold";
     max-width: 1500px;
-    margin: 100px auto;
   }
 
-  #main-content {
+  #main-content-inner {
+    margin: 100px auto;
     position: absolute;
     left: 100px;
   }
@@ -163,13 +163,15 @@ layout: empty
 
 </style>
 
-<div id="canvas-container" class="unselectable">
-  <canvas id="canvas"></canvas>
-  <div id="saturation-brightness-handle"></div>
+<div id="main-content-inner" >
+  <div id="canvas-container" class="unselectable">
+    <canvas id="canvas"></canvas>
+    <div id="saturation-brightness-handle"></div>
+  </div>
+  <input id="hue-slider" type="range" min="0" max="1" step="0.001" />
+  <div id='formats-container'></div>
+  
+  <h3 id="copied-notification" class='notificationHidden'>Copied!</h3>
 </div>
-<input id="hue-slider" type="range" min="0" max="1" step="0.001" />
-<div id='formats-container'></div>
-
-<h3 id="copied-notification" class='notificationHidden'>Copied!</h3>
 
 <script src="./colorPicker.js" type="module"></script>
