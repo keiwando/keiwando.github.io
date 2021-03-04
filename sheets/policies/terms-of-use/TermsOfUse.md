@@ -7,7 +7,7 @@ By installing and using the Software you agree to be bounds by the terms of this
 
 ## Privacy Policy
 
-Our [Privacy Policy](http://www.keiwando.com/sheets/policies/privacy-policy) explains what happens with your personal information when you use the Software. You have understood that by continuing to use the Software, you also agree to this Privacy Policy.
+Our [Privacy Policy](https://www.keiwando.com/sheets/policies/privacy-policy) explains what happens with your personal information when you use the Software. You have understood that by continuing to use the Software, you also agree to this Privacy Policy.
 
 ## Limited License
 
@@ -66,6 +66,6 @@ You should periodically check for changes to this Agreement.
 
 If you have any issue or dispute, you agree to raise it and try to resolve it with us informally.
 
-If you have any questions about this Agreement, please [contact us](http://www.keiwando.com/contact).
+If you have any questions about this Agreement, please [contact us](https://keiwando.com/contact).
 
 By email: keiwan.donyagard@gmail.com

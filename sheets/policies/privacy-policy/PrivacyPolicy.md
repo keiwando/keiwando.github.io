@@ -44,7 +44,7 @@ If you wish to use the Sync functionality after this point in time, you will be 
 
 If you want to change the Google Account associated with Sheets, you can also simply redo the setup from within the app settings. This will overwrite the authorization data of the previous setup.
 
-If you have any further questions about this or are having trouble performing any of the mentioned steps above, please [contact us](http://www.keiwando.com/contact).
+If you have any further questions about this or are having trouble performing any of the mentioned steps above, please [contact us](https://keiwando.com/contact).
 
 ## Transfer of Data
 
@@ -115,7 +115,7 @@ You should periodically check for changes to this Privacy Policy.
 
 ## Contact Us
 
-If you have any questions about this Privacy Policy, please [contact us](http://www.keiwando.com/contact).
+If you have any questions about this Privacy Policy, please [contact us](https://keiwando.com/contact).
 
 By email: keiwan.donyagard@gmail.com
 

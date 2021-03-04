@@ -18,7 +18,7 @@ title: Keiwando
 description: >- # this means to ignore newlines until "baseurl:"
   This is my personal website.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://keiwando.com" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://keiwando.com" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: keiwando
 github_username:  keiwando
 

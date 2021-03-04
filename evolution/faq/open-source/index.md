@@ -22,7 +22,7 @@ What you cannot do:
 * Relicense the code
 * Sell or otherwise redistribute a build of the software
 
-If you have a use case for the code that is not listed here and you are unsure whether or not you can use it, feel free to contact me and just [ask](http://www.keiwando.com/contact).
+If you have a use case for the code that is not listed here and you are unsure whether or not you can use it, feel free to contact me and just [ask](https://keiwando.com/contact).
 
 Let‘s now get to the question of „Can I help with the development?“ in case you were wondering that too. I get asked this quite frequently and it takes a little bit of an explanation. 
 
