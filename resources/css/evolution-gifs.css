@@ -20,8 +20,8 @@ h1 {
 
 	display: grid;
 	grid-gap: 2em;
- 	grid-template-columns: repeat(4, 1fr);
-	grid-auto-flow: row dense;
+	grid-template-columns: repeat(auto-fit, minmax(max(12%, 150px), 2fr));
+	/* grid-auto-flow: row dense; */
 
 	padding-left: 5vw;
 	padding-right: 5vw;
@@ -31,7 +31,6 @@ h1 {
 
 	width: auto;
 	height: auto;
-	min-height: 12vw;
 }
 
 .gif-container a img {
@@ -44,31 +43,13 @@ h1 {
 }
 
 .itch-embed {
+	display: block;
+	margin: 0px auto;
 	margin-top: 20px;
+	margin-bottom: 20px;
 	max-width: 100%;
 }
 
-@media(max-width: 500px) {
-
-	#gif-container-grid {
-	
-	 	grid-template-columns: repeat(2, 1fr);
-		grid-gap: 1em;
-	}
-
-	.gif-container {
-		min-height: 24vw;
-	}
-}
-
-@media(min-width: 2500px) {
-
-	#gif-container-grid {
-	
-	 	grid-template-columns: repeat(5, 1fr);
-	}
-
-	.gif-container {
-		min-height: 9vw;
-	}
+#main-content {
+	max-width: 90%;
 }
