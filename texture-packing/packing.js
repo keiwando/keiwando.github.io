@@ -1,19 +1,12 @@
 
 const RENDERING_SCALE = 0.3
 
-const MIN_WIDTH = 512
 const MAX_WIDTH = 4902
 const SQUARE_RATIO = 0.9
-const PADDING = 0
+let padding = 2
+let max_square_size = 512
 
-let sizes = [];
-(function(){
-  let x = 512
-  while (x > 0) {
-    sizes.push(x)
-    x = Math.floor(x * SQUARE_RATIO)
-  }
-})()
+
 
 // struct Square {
 //   int x;
@@ -82,18 +75,30 @@ function firstIndexOfIntersection(sq, squares) {
   return -1
 }
 
+let sizes = [];
+
+function refreshSizes() {
+  sizes = []
+  let x = max_square_size
+  while (x > 0) {
+    sizes.push(x + 2 * padding)
+    x = Math.floor(x * SQUARE_RATIO)
+  }
+}
+
 /**
  * @param {HTMLCanvasElement} canvas
  */
 function pack(canvas) {
 
+  refreshSizes()
+
   let squares = []
-  let width = Math.max(512, canvas.width / RENDERING_SCALE)
+  let width = Math.max(max_square_size, canvas.width / RENDERING_SCALE)
   // Sizes are already sorted
 
   sizeLoop:
   for (let size of sizes) {
-
     for (let y = 0; y + size < MAX_WIDTH; y++) {
       for (let x = 0; x + size < width; x++) {
 
@@ -130,47 +135,76 @@ function pack(canvas) {
 
 
 const canvas = document.getElementById('canvas')
+const maxSizeInput = document.getElementById('max-size-input')
+const paddingInput = document.getElementById('padding-input')
+const widthInput = document.getElementById('width-input')
 const slider = document.getElementById('width-slider')
 const label = document.getElementById('label')
 
+let atlasWidth = 800
 canvas.width = 800
 canvas.height = 600
 
-slider.min = MIN_WIDTH
+slider.min = max_square_size
 slider.max = MAX_WIDTH
 
 function refreshLabel() {
-  const width = Math.floor(canvas.width / RENDERING_SCALE)
+  const width = atlasWidth
   const height = Math.floor(canvas.height / RENDERING_SCALE)
   label.innerText = `width: ${width}px | height: ${height}px | pixels: ${width * height}`
 }
 
-slider.oninput = () => {
-  canvas.width = parseInt(slider.value * RENDERING_SCALE)
+function refresh() {
   pack(canvas)
   refreshLabel()
+  slider.min = max_square_size
+  widthInput.value = atlasWidth
+} 
+
+function findAndDisplayOptimalWidth() {
+  // Find optimal width
+  let optimalPixels = MAX_WIDTH * MAX_WIDTH
+  let optimalWidth = 0
+  for (let width = max_square_size; width <= MAX_WIDTH; width++) {
+    slider.value = width
+    const w = Math.floor(canvas.width / RENDERING_SCALE)
+    const h = Math.floor(canvas.height / RENDERING_SCALE)
+    const px = w * h
+    if (px < optimalPixels) {
+      optimalPixels = px
+      optimalWidth = width
+    }
+  }
+
+  refresh()
 }
 
+refreshSizes()
+findAndDisplayOptimalWidth()
+
+maxSizeInput.value = max_square_size
+paddingInput.value = padding
+widthInput.value = MAX_WIDTH
 slider.value = MAX_WIDTH
 
-slider.oninput()
-pack(canvas)
-refreshLabel()
-
-// Find optimal width
-let optimalPixels = MAX_WIDTH * MAX_WIDTH
-let optimalWidth = 0
-for (let width = MIN_WIDTH; width <= MAX_WIDTH; width++) {
-  slider.value = width
-  const w = Math.floor(canvas.width / RENDERING_SCALE)
-  const h = Math.floor(canvas.height / RENDERING_SCALE)
-  const px = w * h
-  if (px < optimalPixels) {
-    optimalPixels = px
-    optimalWidth = width
-  }
+slider.oninput = () => {
+  atlasWidth = parseInt(slider.value)
+  canvas.width = parseInt(atlasWidth * RENDERING_SCALE)
+  refresh()
+}
+maxSizeInput.onchange = () => {
+  max_square_size = parseInt(maxSizeInput.value)
+  refresh()
+}
+paddingInput.onchange = () => {
+  padding = parseInt(paddingInput.value)
+  refresh()
+}
+widthInput.onchange = () => {
+  slider.value = widthInput.value
+  slider.oninput()
+  // canvas.width = parseInt(widthInput.value)
+  // refresh()
 }
 
-slider.value = optimalWidth
-pack(canvas)
-refreshLabel()
+slider.oninput()
