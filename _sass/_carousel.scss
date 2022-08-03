@@ -48,6 +48,10 @@
   background-image: url("../images/LOB1.jpg");
 }
 
+.carousel-inner #toonsquid-slide {
+  background-image: url("../images/toonsquid_bg.jpg");
+}
+
 @media screen and (orientation: portrait) {
   .carousel-inner #lob-slide {
     background-image: url("../images/lob_backdrop_vert_ipad.jpg");

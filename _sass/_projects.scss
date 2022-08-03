@@ -288,6 +288,16 @@ a:focus {
 
 
 /** Specific project styles */
+
+#toonsquid-project .image-container {
+	background-color: #141414;
+}
+
+#toonsquid-project .description-container {
+	background-color: #F39C12;
+	// background-color: #8DBED0;
+}
+
 #lob-project .image-container {
 	background-image: url('../images/lob_background_blurred_small.jpg');
 }

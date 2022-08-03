@@ -1,3 +1,10 @@
+- id: toonsquid-project
+  link: https://toonsquid.com
+  filters: ios-filter
+  imgSrc: /resources/images/toonsquid.png
+  description: ToonSquid
+  subtitle-description: Animation
+
 - id: lob-project
   link: https://keiwan.itch.io/library-of-babel-3d
   filters: multiplatform-filter ios-filter android-filter
@@ -19,12 +26,12 @@
   description: Evolution
   subtitle-description: Neural Network. Genetic Algorithm.
 
-- id: quicksort-project
-  link: https://keiwan.itch.io/quicksort
-  filters: multiplatform-filter ios-filter
-  imgSrc: /resources/images/quicksort-icon-small.jpg
-  description: Quicksort
-  subtitle-description: Sorting. Leaderboards.
+- id: sunnygolf-project
+  link: https://keiwan.itch.io/sunnygolf
+  filters: web-filter multiplatform-filter
+  imgSrc: /resources/images/sunnygolf-icon.png
+  description: SunnyGolf
+  subtitle-description: 2D Minigolf
 
 # - id: rocket-project
 #   link: https://keiwan.itch.io/rocket
@@ -32,11 +39,11 @@
 #   description: Rocket Space Launch
 #   subtitle-description: Boost. Stars. Fuel.
 
-- id: musicgenerator-project
-  link: http://musicgenerator.pythonanywhere.com
-  filters: web-filter
-  description: Music Generator
-  subtitle-description: Random
+# - id: musicgenerator-project
+#   link: http://musicgenerator.pythonanywhere.com
+#   filters: web-filter
+#   description: Music Generator
+#   subtitle-description: Random
 
 - id: personal-website-project
   link: "#"
@@ -44,12 +51,12 @@
   description: This Website
   subtitle-description: Recursion
 
-- id: sunnygolf-project
-  link: https://keiwan.itch.io/sunnygolf
-  filters: web-filter multiplatform-filter
-  imgSrc: /resources/images/sunnygolf-icon.png
-  description: SunnyGolf
-  subtitle-description: 2D Minigolf
+- id: quicksort-project
+  link: https://keiwan.itch.io/quicksort
+  filters: multiplatform-filter ios-filter
+  imgSrc: /resources/images/quicksort-icon-small.jpg
+  description: Quicksort
+  subtitle-description: Sorting. Leaderboards.
 
 - id: color-picker-project
   link: https://keiwando.com/color-picker
