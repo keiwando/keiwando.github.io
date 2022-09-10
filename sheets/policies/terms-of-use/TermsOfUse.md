@@ -1,7 +1,7 @@
 # Terms of Use
 ##### Last Updated: 22. February 2019
 
-This document represents our Terms of Use ("Agreement") regarding our Sheets - Sheet Music Viewer application ("Software"). The terms "we" and "our" as used in this Agreement and the Privacy Policy refer to Keiwan Donyagard-Vajed.
+This document represents our Terms of Use ("Agreement") regarding our Sheets - Sheet Music Viewer application ("Software"). The terms "we" and "our" as used in this Agreement and the Privacy Policy refer to Keiwan Donyagard Vajed.
 
 By installing and using the Software you agree to be bounds by the terms of this Agreement. If you do not agree to this, please uninstall and do not use the Software.
 
@@ -11,7 +11,7 @@ Our [Privacy Policy](https://www.keiwando.com/sheets/policies/privacy-policy) ex
 
 ## Limited License
 
-Keiwan Donyagard-Vajed grants you a personal, worldwide, non-exclusive, non-transferable and revocable license to use the Software provided to you soley as permitted by this Agreement. We reserve all rights not expressly granted to you by this Agreement.
+Keiwan Donyagard Vajed grants you a personal, worldwide, non-exclusive, non-transferable and revocable license to use the Software provided to you soley as permitted by this Agreement. We reserve all rights not expressly granted to you by this Agreement.
 
 This license does not include the right to license, sell, transfer, assign, distribute, host or otherwise commercially exploit the Software.
 
