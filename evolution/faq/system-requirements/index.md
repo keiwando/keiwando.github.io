@@ -10,15 +10,15 @@ title: What are the System Requirements to run Evolution?
 Evolution is currently available for macOS, Windows, Linux*, iOS, Android and Web.
 
 Miminum Versions:
-* Android 4.4
-* iOS 11
+* Android 7.0
+* iOS 13
 
 * Tested on Windows 10
-* Tested on macOS 10.13
+* Tested on macOS 12.4
 
 „Tested on“ doesn‘t mean that you need this version to run it. It‘s probably going to run on older operating systems as well, I just haven‘t tried. 
 
-Evolution requires quite a bit of computational power to run without significant slowdowns. It runs almost exclusively on the CPU. 
+Evolution requires quite a bit of computational power to run without significant slowdowns. It runs almost exclusively on the CPU.
 
 You are going to want to have at least 1Gb of RAM, but even more is recommended if you are planning to run your simulations for a long time. 
 
