@@ -265,10 +265,15 @@ function refresh() {
 
   refreshCanvas(canvas, hsvColor, rgbColor);
  
-  const sbX = (1 - hsvColor.v) * CANVAS_HEIGHT - 0.5 * SB_HANDLE_SIZE;
-  const sbY =  COLOR_PREVIEW_WIDTH + hsvColor.s * SATURATION_BRIGHTNESS_WIDTH - 0.5 * SB_HANDLE_SIZE;
-  sbHandle.style.top = `${Math.round(sbX)}px`;
-  sbHandle.style.left = `${Math.round(sbY)}px`;
+  const canvasRect = canvas.getBoundingClientRect();
+  const sbX =  COLOR_PREVIEW_WIDTH + hsvColor.s * SATURATION_BRIGHTNESS_WIDTH - 0.5 * SB_HANDLE_SIZE;
+  const sbY = (1 - hsvColor.v) * CANVAS_HEIGHT - 0.5 * SB_HANDLE_SIZE;
+  const body = document.body;
+  const docEl = document.documentElement;
+  const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
+  const scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
+  sbHandle.style.left = `${Math.round(sbX) + canvasRect.left + scrollLeft}px`;
+  sbHandle.style.top = `${Math.round(sbY) + canvasRect.top + scrollTop}px`;
 
   document.documentElement.style.setProperty(
     '--hue-slider-thumb-color', 

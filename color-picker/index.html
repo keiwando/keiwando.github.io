@@ -19,12 +19,13 @@ layout: empty-with-footer
   }
 
   #main-content {
+    display: inline-block;
     min-height: 100vh;
+    overflow-y: scroll;
   }
 
   #main-content-inner {
     margin: 100px auto;
-    position: absolute;
     max-width: 1500px;
     left: 100px;
   }
@@ -47,7 +48,6 @@ layout: empty-with-footer
   }
 
   input[type=range] {
-    position: absolute;
     margin: 0 auto;
     margin-top: 40px;
     margin-bottom: 30px;
@@ -96,7 +96,8 @@ layout: empty-with-footer
   }
 
   #formats-container {
-    margin-top: 100px;
+    margin: 0 auto;
+    margin-top: 50px;
     max-width: 800px;
     padding: 20px;
     height: auto;
@@ -168,8 +169,8 @@ layout: empty-with-footer
 
 </style>
 
-<div id="main-content-inner" >
-  <div id="canvas-container" class="unselectable">
+<div id="main-content-inner" class="unselectable">
+  <div id="canvas-container">
     <canvas id="canvas"></canvas>
     <div id="saturation-brightness-handle"></div>
   </div>
