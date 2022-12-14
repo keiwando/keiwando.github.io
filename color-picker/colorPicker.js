@@ -493,3 +493,7 @@ setupFormats()
 
 refresh();
 hueSlider.oninput();
+
+setTimeout(() => {
+  refresh();
+}, 100);
