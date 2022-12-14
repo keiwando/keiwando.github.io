@@ -12,12 +12,12 @@
   description: Library of Babel
   subtitle-description: The Universe
 
-- id: sheets-project
-  link: /sheets #https://itunes.apple.com/us/app/sheets-sheet-music-viewer/id1166607048?l=de&ls=1&mt=8
-  filters: ios-filter
-  imgSrc: /resources/images/sheets-icon-2.png
-  description: Sheets
-  subtitle-description: Sheet Music
+# - id: sheets-project
+#   link: /sheets #https://itunes.apple.com/us/app/sheets-sheet-music-viewer/id1166607048?l=de&ls=1&mt=8
+#   filters: ios-filter
+#   imgSrc: /resources/images/sheets-icon-2.png
+#   description: Sheets
+#   subtitle-description: Sheet Music
 
 - id: evolution-project
   link: /evolution #https://keiwan.itch.io/evolution
