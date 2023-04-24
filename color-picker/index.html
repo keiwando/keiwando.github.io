@@ -33,7 +33,6 @@ layout: empty-with-footer
   canvas {
     width: 800px;
     height: 300px;
-    /* background-color: red; */
   }
 
   #saturation-brightness-handle {
@@ -53,6 +52,7 @@ layout: empty-with-footer
     margin-bottom: 30px;
     max-width: 800px;
     background-color: transparent;
+    -webkit-appearance: none;
   }
 
   input[type=range]:focus {
@@ -60,6 +60,7 @@ layout: empty-with-footer
   }
 
   input[type=range]::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
     width: 100%;
     cursor: pointer;
     background: linear-gradient(90deg, rgb(255, 0, 0) 0%, rgb(255, 30.599999999999998, 0) 2%, rgb(255, 61.199999999999996, 0) 4%, rgb(255, 91.8, 0) 6%, rgb(255, 122.39999999999999, 0) 8%, rgb(255, 153.00000000000003, 0) 10%, rgb(255, 183.6, 0) 12%, rgb(255, 214.20000000000002, 0) 14.000000000000002%, rgb(255, 244.79999999999998, 0) 16%, rgb(234.6, 255, 0) 18%, rgb(203.99999999999994, 255, 0) 20%, rgb(173.39999999999998, 255, 0) 22%, rgb(142.8, 255, 0) 24%, rgb(112.19999999999999, 255, 0) 26%, rgb(81.59999999999997, 255, 0) 28.000000000000004%, rgb(51.00000000000004, 255, 0) 30%, rgb(20.40000000000002, 255, 0) 32%, rgb(0, 255, 10.20000000000001) 34%, rgb(0, 255, 40.80000000000004) 36%, rgb(0, 255, 71.40000000000006) 38%, rgb(0, 255, 102.00000000000009) 40%, rgb(0, 255, 132.6) 42%, rgb(0, 255, 163.20000000000005) 44%, rgb(0, 255, 193.80000000000007) 46%, rgb(0, 255, 224.39999999999998) 48%, rgb(0, 255, 255) 50%, rgb(0, 224.39999999999998, 255) 52%, rgb(0, 193.79999999999995, 255) 54%, rgb(0, 163.19999999999993, 255) 56.00000000000001%, rgb(0, 132.6000000000001, 255) 57.99999999999999%, rgb(0, 102.00000000000009, 255) 60%, rgb(0, 71.40000000000006, 255) 62%, rgb(0, 40.80000000000004, 255) 64%, rgb(0, 10.20000000000001, 255) 66%, rgb(20.40000000000002, 0, 255) 68%, rgb(50.999999999999815, 0, 255) 70%, rgb(81.60000000000008, 0, 255) 72%, rgb(112.19999999999987, 0, 255) 74%, rgb(142.80000000000013, 0, 255) 76%, rgb(173.39999999999992, 0, 255) 78%, rgb(204.00000000000017, 0, 255) 80%, rgb(234.6, 0, 255) 82%, rgb(255, 0, 244.79999999999998) 84%, rgb(255, 0, 214.19999999999996) 86%, rgb(255, 0, 183.59999999999994) 88%, rgb(255, 0, 152.99999999999991) 90%, rgb(255, 0, 122.39999999999988) 92%, rgb(255, 0, 91.80000000000008) 94%, rgb(255, 0, 61.20000000000005) 96%, rgb(255, 0, 30.600000000000026) 98%, rgb(255, 0, 0) 100%);
@@ -78,6 +79,8 @@ layout: empty-with-footer
     -webkit-appearance: none;
     border-radius: 50%;
     box-shadow: 0px 0 0 3px white, inset 0px 0 0 10px var(--hue-slider-thumb-color);
+    width: 15px;
+    height: 15px;
   }
 
   input[type=range]::-moz-range-thumb {
@@ -160,6 +163,7 @@ layout: empty-with-footer
     border-radius: 5px;
     transition: 0s;
     opacity: 1;
+    pointer-events: none;
   }
 
   #copied-notification.notificationHidden {
