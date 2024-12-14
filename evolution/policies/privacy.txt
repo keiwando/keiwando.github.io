@@ -1,0 +1,110 @@
+Privacy Policy
+
+
+
+Last Updated: 13. May 2019
+
+This Privacy Policy aims to help you understand what personal information Evolution uses in order to provide its functionality, and how you can update and delete your information.
+
+
+Definitions
+
+
+
+Evolution
+
+The "Evolution" application, which this Privacy Policy applies to. On the iOS App Store the application is called "Evolution - Learning Creatures".
+
+
+Device
+
+The hardware you have installed Evolution onto (e.g. your iOS or Android device).
+
+
+Personal Data
+
+Personal Data means data about a living individual who can be identified from those data (or from those and other information either in our possession or likely to come into our possession)
+
+
+Data Collection and Use
+
+We do not collect, process or share any Personal Data from your usage of the Evolution app.
+
+
+Transfer of Data
+
+Evolution doesn't transfer any Personal Data from the Device to any other location.
+
+
+Security of Data
+
+The security of your data is very important to us, which is why Evolution only uses the minimal amount of data required to provide its functionalities.
+Please keep in mind that no transmission method of data over the internet is 100% secure and while we strive to keep your data as secure as possible, we cannot guarantee its absolute security.
+
+
+Your Data Protection Rights Under General Data Protection Regulation (GDPR)
+
+If you are a resident of the European Economic Area (EEA), you have certain data protection rights. If you want to be informed about, correct, amend, delete or limit the use of your Personal Data, please contact us.
+In certain circumstances, you have the following data protection rights:
+
+
+The right to access, update or to delete the information we have on you
+
+If you are unsure about this point, please contact us. We do not collect any personal information when you use Evolution.
+
+
+The right of rectification
+
+You have the right to have your information rectified if that information is inaccurate or incomplete.
+
+
+The right to object
+
+You have the right to object to the processing of your Personal Data.
+
+
+The right of restriction
+
+You have the right to request that the processing of your personal information is restricted.
+
+
+The right to data portability
+
+You have the right to be provided with a copy of personal information we have on you in a structured, machine-readable and commonly used format.
+
+
+The right to withdraw consent
+
+You have the right to withdraw your consent at any time.
+
+
+Service Providers
+
+
+
+Unity3D
+
+Evolution is made with the Unity3D game engine. Please refer to Unity's Privacy Policy (https://unity3d.com/legal/privacy-policy) for more information on how Unity might collect and process your data while you use Evolution.
+
+
+Apple
+
+Apple might collect data while you are using Evolution on your Apple device. You can find more details on that in their Privacy Policy (https://www.apple.com/legal/privacy/)
+
+
+Links to Other Sites
+
+Evolution may contain links to other sites that are not operated by us. If you click on any of these links, you will be redirected to that third party's site. You should always review the Privacy Policy of each site you visit.
+We hold no responsibility for the content or policies of any such third party site or service.
+
+
+Changes to this Privacy Policy
+
+We may update this Privacy Policy from time to time. We will notify you of any changes by updating the "Last Updated" date at the top of this Privacy Policy.
+You should periodically check for changes to this Privacy Policy.
+
+
+Contact Us
+
+If you have any questions about this Privacy Policy, please contact us.
+By email: keiwan.donyagard@gmail.com

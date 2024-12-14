@@ -1,0 +1,118 @@
+Privacy Policy
+
+
+
+Last Updated: 13 October 2024
+
+This Privacy Policy aims to help you understand what personal information keiwando.com uses in order to provide its functionality.
+
+
+Definitions
+
+
+
+Website
+
+The keiwando.com website and all pages under the keiwando.com domain.
+
+
+Personal Data
+
+Personal Data means data about a living individual who can be identified from those data (or from those and other information either in our possession or likely to come into our possession). This can for example be a name or an e-mail address or IP address.
+
+
+We / Us
+
+The owner and operator of the Website, Keiwan Donyagard Vajed.
+
+
+Data Collection and Use
+
+We do not collect, process or share any Personal Data from your usage of the Website, other than the necessary data that is processed by our web hosting and e-mail hosting providers in order to ensure the availability, security and functionality of the Website. You can find more information on this under the "Hosting" section of this policy.
+
+
+Request by e-mail
+
+If you contact us by e-mail, your request and any personal data you have chosen to include in your request will be stored and processed by us for the purpose of processing your request.
+The data is processed on the basis of Art. 6(1)(f) GDPR on the basis of our legitimate interest in the effective handling of inquiries submitted to us. Your e-mail address is for example used in order to contact you for potential follow-up questions regarding a technical issue that you have encountered in one of our software applications. The data will not be used to contact you for reasons that are unrelated to your inquiries.
+The data you send us is not passed on without your consent.
+The data is stored until you request us to delete it, revoke your consent to the storage or until the purpose for the data storage lapses. That applies unless we have other legally permissible reasons for storing your Personal Data such as statutory retention periods, in which case the deletion of your data will take place once such retention periods have expired.
+
+
+Cookies
+
+This Website does not use any cookies.
+
+
+Hosting
+
+
+
+GitHub
+
+We host our Website with GitHub on the basis of Art. 6(1)(f) GDPR. We have a legitimate interest in the reliability, availability and security of our Website.
+The provider is GitHub, Inc. 88 Colin P. Kelly Jr. St. San Francisco, CA 94107, United States (in the following referred to as GitHub).
+For details regarding GitHub's privacy policy, please refer to the following link:
+https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement
+You can find the data processing agreement (DPA) that we have concluded with GitHub here:
+https://github.com/customer-terms/github-data-protection-agreement
+This contract mandates that the processing of Personal Data of visitors to our Website is in compliance with the GDPR.
+
+
+Security of Data
+
+The security of your data is very important to us, which is why the Website only uses the minimal amount of data required to provide its functionalities and does neither collect nor share any Personal Data of its users.
+Personal Data collected (e.g. through inquiries you send us via our contact e-mail address) is treated as confidential information and in compliance with the General Data Protection Regulation as mentioned above (see "Request by e-mail" section).
+
+
+Your Data Protection Rights Under General Data Protection Regulation (GDPR)
+
+If you are a resident of the European Economic Area (EEA), you have certain data protection rights. If you want to be informed about, correct, amend, delete or limit the use of your Personal Data, please contact us.
+In certain circumstances, you have the following data protection rights:
+
+
+The right to access, update or to delete the information we have on you
+
+If you are unsure about this point, please contact us. We do not collect any personal information when you use the Website.
+
+
+The right of rectification
+
+You have the right to have your information rectified if that information is inaccurate or incomplete.
+
+
+The right to object
+
+You have the right to object to the processing of your Personal Data.
+
+
+The right of restriction
+
+You have the right to request that the processing of your personal information is restricted.
+
+
+The right to data portability
+
+You have the right to be provided with a copy of personal information we have on you in a structured, machine-readable and commonly used format.
+
+
+The right to withdraw consent
+
+You have the right to withdraw your consent at any time.
+
+
+Links to Other Sites
+
+The Website may contain links that redirect to sites that are not under the keiwando.com domain. We do not take responsibility for the data processing and collection practices of such third-party websites. Please refer to the privacy policies of those third-party websites for more information.
+
+
+Changes to this Privacy Policy
+
+We may update this Privacy Policy from time to time. We will notify you of any changes by updating the "Last Updated" date at the top of this Privacy Policy.
+You should periodically check for changes to this Privacy Policy.
+
+
+Contact Us
+
+If you have any questions about this Privacy Policy, please contact us.
+By email: keiwan.donyagard@gmail.com
