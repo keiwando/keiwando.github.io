@@ -1,6 +1,6 @@
 Privacy Policy
 
-Last Updated: 13. May 2019
+Last Updated: 25. March 2025
 This Privacy Policy aims to help you understand what personal information Quicksort uses in order to provide its functionality, and how you can update and delete your information.
 
 
@@ -18,24 +18,30 @@ Personal Data
 Personal Data means data about a living individual who can be identified from those data (or from those and other information either in our possession or likely to come into our possession).
 
 
+Device
+
+Device means any device on which the Quicksort app is installed such as a computer, a cellphone or a digital tablet.
+
+
+We / Us
+
+The developer of Quicksort, Keiwan Donyagard Vajed.
+
+
 Data Collection and Use
 
 We do not collect, process or share any Personal Data from your usage of the Quicksort app.
-Quicksort uses dreamlo.com (https://dreamlo.com/) to offer a global online leaderboard, which your highscores will be submitted to fully anonymised under the name "Anonymus". You can choose to change this display name to whatever you like. This name can potentially be viewed by anyone else who uses the Quicksort game. Be mindful of which name you choose for your highscore submissions and don't include any personal or secret information.
-Each submitted piece of data consists of a display name which defaults to "Anonymus", a number representing the player's score and a randomly generated piece of text used by the app to distinguish different score submissions with the same display name.
+If you choose to contact us directly via e-mail, we collect your e-mail address and any information you voluntarily provide to us in order to communicate with you and respond to your inquiry.
 
 
 Transfer of Data
 
-The transmission of the highscore data is handled by Unity's own WWW API (https://docs.unity3d.com/2018.3/Documentation/ScriptReference/WWW.html) class.
-The highscore data is stored on servers run and managed by Carmine T. Guida (http://www.carmine.com). We cannot guarantee the security of this data.
+No personal data is transferred from your device to any third party servers or services when you use Quicksort. All of your scores and progress is stored locally on your device only.
 
 
 Security of Data
 
-The security of your data is very important to us, which is why Quicksort only uses the minimal amount of data required to provide its basic and optional functionalities.
-The transmission of the highscore data is handled by Unity's own WWW API (https://docs.unity3d.com/2018.3/Documentation/ScriptReference/WWW.html) class.
-Please keep in mind that no transmission method of data over the internet is 100% secure and while we strive to keep your data as secure as possible, we cannot guarantee its absolute security.
+The security of your data is very important to us, which is why Quicksort only uses the minimal amount of data required to provide its basic and optional functionalities and does not collect any personal data whatsoever.
 
 
 Your Data Protection Rights Under General Data Protection Regulation (GDPR)
@@ -46,7 +52,7 @@ In certain circumstances, you have the following data protection rights:
 
 The right to access, update or to delete the information we have on you
 
-You can change the name associated with your highscore in the global leaderboards from within the app. If you are unable to perform this action yourself, or if you wish to have your information removed from the leaderboards, please contact us to assist you.
+You have the right to access, update or to delete the information we have on you, such as information you voluntarily provide to us via e-mail.
 
 
 The right of rectification
@@ -86,12 +92,6 @@ Quicksort is made with the Unity3D game engine. Please refer to Unity's Privacy 
 Apple
 
 Apple might collect data while you are using Quicksort on your Apple device. You can find more details on that in their Privacy Policy (https://www.apple.com/legal/privacy/).
-
-
-Links to Other Sites
-
-Quicksort may contain links to other sites that are not operated by us. If you click on any of these links, you will be redirected to that third party's site. You should always review the Privacy Policy of each site you visit.
-We hold no responsibility for the content or policies of any such third party site or service.
 
 
 Changes to this Privacy Policy
