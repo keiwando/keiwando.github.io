@@ -1,6 +1,6 @@
 Privacy Policy
 
-Last Updated: 25. March 2025
+Last Updated: 20. March 2025
 This Privacy Policy aims to help you understand what personal information Quicksort uses in order to provide its functionality, and how you can update and delete your information.
 
 
@@ -36,7 +36,7 @@ If you choose to contact us directly via e-mail, we collect your e-mail address 
 
 Transfer of Data
 
-No personal data is transferred from your device to any third party servers or services when you use Quicksort. All of your scores and progress is stored locally on your device only.
+No personal data is transferred from your device to any third party servers or services when you use Quicksort. All of your scores and progress are stored locally on your device only.
 
 
 Security of Data
